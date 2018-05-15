@@ -1,0 +1,23 @@
+import Colors from './Colors';
+import { Platform } from 'react-native';
+import normalize from '../helpers/normalizeText';
+
+const Styles = {
+    nav: {
+        header: {
+            backgroundColor: Colors.navigation,
+            height: 70,
+            borderBottomWidth: 0,
+        },
+        title: { 
+            color: Colors.white, 
+            fontSize: normalize(17),
+        },
+    },
+    container: {
+        flex: 1,
+        backgroundColor: Colors.background,
+    },
+}
+
+export default Styles;
