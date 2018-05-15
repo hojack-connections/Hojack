@@ -18,6 +18,11 @@ const Styles = {
         flex: 1,
         backgroundColor: Colors.background,
     },
+    arrow: {
+        position: 'absolute',
+        right: 10,
+        top: 15,
+    },
 }
 
 export default Styles;

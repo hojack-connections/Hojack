@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 // import * as navigationActions from '../actions/navigationActions';
-import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 
 
@@ -29,10 +28,11 @@ class EventsScreen extends Component {
     }
 
     _onItemClick(item) {
-        switch (item.tag) {
-            case 'a':
+        switch (item.id) {
+            case 0:
                 break;
             default:
+                break;
         }
     }
 
@@ -40,16 +40,19 @@ class EventsScreen extends Component {
         // const { navigationData, videoData, connectivity } = this.props;
         const eventsData = [
             {
+                id: '0',
                 date: 'February 15, 2018',
                 title: 'E-Week - Albany, NY',
                 attendees: 52,
             },
             {
+                id: '1',
                 date: 'February 13, 2018',
                 title: 'CHA - Rochester, NY',
                 attendees: 6,
             },
             {
+                id: '2',
                 date: 'February 13, 2018',
                 title: 'City of Albany Engineering Dept.',
                 attendees: 7,
@@ -59,41 +62,34 @@ class EventsScreen extends Component {
         return (
             <View style={Styles.container}>
                 <View style={styles.totalEventsContainer}>
-                    <Text style={{ color: '#895353' }}>
-                        Total Attendees:
-                        1,249
-                    </Text>
-                    <Text style={{ color: '#538989' }}>
-                        Total Events:
-                        410
-                    </Text>
+                    <Text style={{ color: '#895353' }}>Total Attendees: 1,249</Text>
+                    <Text style={{ color: '#538989' }}>Total Events: 410</Text>
                 </View>
-                <View style={{ height: 44, backgroundColor: Colors.white, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', }}>
-                    <Text>
-                        All Attendees
-                    </Text>
-                    <Text style={{ color: '#34bd3e' }}>
-                        1,249
-                    </Text>
+                <View style={styles.allEventsContainer}>
+                    <Text>All Attendees</Text>
+                    <Text style={{ color: '#34bd3e' }}>1,249</Text>
+                    <Icon name="chevron-right" size={16} color={'#797979'} style={Styles.arrow} />
                 </View>
-                {/* <FlatList
-                    data={navigationData}
-                    keyExtractor={(item, index) => item.tag}
-                    renderItem={({ item, separators }) => {
+                <FlatList
+                    data={eventsData}
+                    keyExtractor={(item, index) => item.id}
+                    renderItem={({ item }) => {
                         return (
                             <TouchableHighlight onPress={() => this._onItemClick(item)}>
-                                <View style={styles.listItemContainer}>                                        
-                                    <Text style={styles.categoryTitle}>{item.title}</Text>
-                                    <Icon name="chevron-right" size={20} color={Colors.yellow} />
+                                <View style={styles.listItemContainer}>
+                                    <Text style={styles.eventDate}>{item.date}</Text>
+                                    <View style={styles.seperator}/>
+                                    <View style={styles.subDetails}>
+                                        <Text style={styles.categoryTitle}>{item.title}</Text>
+                                        <Text style={styles.attendees}>{item.attendees}</Text>
+                                    </View>
+                                    <Icon name="chevron-right" size={16} color={'#797979'} style={styles.arrow} />
                                 </View>
                             </TouchableHighlight>
                         );
                     }}
-                    ItemSeparatorComponent={() => (
-                        <View style={Styles.seperator}/>
-                    )}
                     onEndReached={this.reloadData}
-                /> */}
+                />
             </View>
         )
     }
@@ -107,7 +103,48 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         alignItems: 'center',
     },
-    
+    allEventsContainer: {
+        paddingHorizontal: 30,
+        height: 44,
+        marginBottom: 10,
+        backgroundColor: Colors.white,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    listItemContainer: {
+        // paddingHorizontal: 30, 
+        paddingVertical: 10, 
+        backgroundColor: Colors.white,
+        height: 70,
+        marginBottom: 10, 
+    },
+    eventDate: {
+        marginLeft: 20,
+        fontWeight: '700',
+    },
+    seperator: {
+        backgroundColor: Colors.black,
+        height: 1,
+        width: '99%',
+        marginLeft: 5,
+        marginTop: 5, 
+    },
+    subDetails: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 30,
+        paddingVertical: 10, 
+    },
+    attendees: {
+        color: '#ff575c',
+    },
+    arrow: {
+        position: 'absolute',
+        right: 10,
+        top: 44,
+    },
 });
 
 const mapStateToProps = state => ({

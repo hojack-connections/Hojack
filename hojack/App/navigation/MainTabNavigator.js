@@ -72,7 +72,7 @@ export default TabNavigator(
             },
             style: {
                 backgroundColor: Colors.background,
-                height: 75,
+                height: 74,
             }
         },
         initialRouteName: 'Events'
