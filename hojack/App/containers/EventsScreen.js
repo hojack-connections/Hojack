@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, View, Text, StyleSheet, FlatList, Image, TouchableHighlight } from 'react-native';
+import { Platform, View, Text, StyleSheet, FlatList, TouchableHighlight, } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';

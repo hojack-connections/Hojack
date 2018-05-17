@@ -58,6 +58,11 @@ class EventSummaryScreen extends Component {
 
     }
 
+    onAttendees(event) {
+        console.log('onAttendees');
+        this.props.navigation.navigate('EventAttendeesScreen', { event });
+    }
+
     render() {
         return (
             <ScrollView style={styles.container}>
@@ -70,9 +75,9 @@ class EventSummaryScreen extends Component {
                     <UserInput label={'Zip Code:'} onChangeText={(zipcode) => this.setState({ zipcode })} />
                     <UserInput label={'Course #:'} onChangeText={(courseNo) => this.setState({ courseNo })} />
                     <UserInput label={'Course Name:'} onChangeText={(courseName) => this.setState({ courseName })} />
-                    <UserInput label={'Attendees:'} readOnly arrow value={this.state.attendees.toString()} onChangeText={(attendees) => this.setState({ attendees })} />
+                    <UserInput label={'Attendees:'} readOnly arrow value={this.state.attendees.toString()} onClickEvent={() => this.onAttendees(this.props.navigation.state.params.event)} />
                 </View>
-                <TouchableOpacity style={styles.buttonContainer} onClick={() => this.onDelete()}>
+                <TouchableOpacity style={styles.buttonContainer} onPress={() => this.onDelete()}>
                     <View style={styles.deleteButton}>
                         <Text style={styles.buttonTitle}>Delete Event</Text>
                     </View>
@@ -99,7 +104,7 @@ const styles = StyleSheet.create({
     deleteButton: {
         backgroundColor: '#ff575c', 
         borderRadius: 10, 
-        width: '80%', 
+        width: '90%', 
         height: 60, 
         alignItems: 'center', 
         justifyContent: 'center', 

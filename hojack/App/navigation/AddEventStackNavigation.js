@@ -5,7 +5,7 @@ import AddEventScreen from '../containers/AddEventScreen';
 import { Colors, Styles } from '../Themes/';
 
 
-const EventStackNavigation = StackNavigator({
+const AddEventStackNavigation = StackNavigator({
     AddEventScreen: { screen: AddEventScreen },
 }, {
     header: {
@@ -17,4 +17,4 @@ const EventStackNavigation = StackNavigator({
     }),
 });
 
-export default EventStackNavigation;
+export default AddEventStackNavigation;

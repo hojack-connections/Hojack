@@ -45,7 +45,7 @@ class AddEventScreen extends Component {
                     <UserInput label={'Course #:'} onChangeText={(courseNo) => this.setState({ courseNo })} />
                     <UserInput label={'Course Name:'} onChangeText={(courseName) => this.setState({ courseName })} />
                 </View>
-                <TouchableOpacity style={styles.buttonContainer} onClick={() => this.onClickSave()}>
+                <TouchableOpacity style={styles.buttonContainer} onPress={() => this.onClickSave()}>
                     <View style={styles.saveButton}>
                         <Icon name={'check-circle'} size={25} color={Colors.white} />
                         <Text style={styles.buttonTitle}>Save Event</Text>
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     saveButton: {
         backgroundColor: '#00eaea', 
         borderRadius: 10, 
-        width: '80%', 
+        width: '90%', 
         height: 60, 
         alignItems: 'center', 
         justifyContent: 'center', 

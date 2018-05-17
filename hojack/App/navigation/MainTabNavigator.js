@@ -6,7 +6,7 @@ import normalize from '../helpers/normalizeText';
 
 import EventsStackNavigation from './EventsStackNavigation';
 import AttendeesStackNavigation from './AttendeesStackNavigation';
-import EventStackNavigation from './EventStackNavigation';
+import AddEventStackNavigation from './AddEventStackNavigation';
 import ShareStackNavigation from './ShareStackNavigation';
 import SubmitStackNavigation from './SubmitStackNavigation';
 
@@ -21,8 +21,8 @@ export default TabNavigator(
         Attendees: {
             screen: AttendeesStackNavigation,
         },
-        Event: {
-            screen: EventStackNavigation,
+        AddEvent: {
+            screen: AddEventStackNavigation,
         },
         Share: {
             screen: ShareStackNavigation,
@@ -44,7 +44,7 @@ export default TabNavigator(
                     case 'Attendees':
                         iconName = 'users';
                         break;
-                    case 'Event':
+                    case 'AddEvent':
                         iconName = 'plus-circle';
                         break;
                     case 'Share':
@@ -57,6 +57,14 @@ export default TabNavigator(
                 return (
                     <Icon name={iconName} size={30} color={iconColor} />
                 );
+            },
+            tabBarLabel: () => {
+                const { routeName } = navigation.state;
+                var label = routeName;
+                if (routeName === 'AddEvent') {
+                    label = 'Event';
+                }
+                return label;
             },
         }),
         tabBarComponent: TabBarBottom,
