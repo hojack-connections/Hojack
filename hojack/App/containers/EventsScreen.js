@@ -27,13 +27,8 @@ class EventsScreen extends Component {
         // this.props.actions.navigationRequest();
     }
 
-    _onItemClick(item) {
-        switch (item.id) {
-            case 0:
-                break;
-            default:
-                break;
-        }
+    _onItemClick(event) {
+        this.props.navigation.navigate('EventSummaryScreen', { event });
     }
 
     render() {
@@ -42,19 +37,19 @@ class EventsScreen extends Component {
             {
                 id: '0',
                 date: 'February 15, 2018',
-                title: 'E-Week - Albany, NY',
+                name: 'E-Week - Albany, NY',
                 attendees: 52,
             },
             {
                 id: '1',
                 date: 'February 13, 2018',
-                title: 'CHA - Rochester, NY',
+                name: 'CHA - Rochester, NY',
                 attendees: 6,
             },
             {
                 id: '2',
                 date: 'February 13, 2018',
-                title: 'City of Albany Engineering Dept.',
+                name: 'City of Albany Engineering Dept.',
                 attendees: 7,
             },
         ];
@@ -80,7 +75,7 @@ class EventsScreen extends Component {
                                     <Text style={styles.eventDate}>{item.date}</Text>
                                     <View style={styles.seperator}/>
                                     <View style={styles.subDetails}>
-                                        <Text style={styles.categoryTitle}>{item.title}</Text>
+                                        <Text style={styles.categoryTitle}>{item.name}</Text>
                                         <Text style={styles.attendees}>{item.attendees}</Text>
                                     </View>
                                     <Icon name="chevron-right" size={16} color={'#797979'} style={styles.arrow} />

@@ -1,17 +1,17 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
 
-import EventScreen from '../containers/EventScreen';
+import AddEventScreen from '../containers/AddEventScreen';
 import { Colors, Styles } from '../Themes/';
 
 
 const EventStackNavigation = StackNavigator({
-    EventScreen: { screen: EventScreen },
+    AddEventScreen: { screen: AddEventScreen },
 }, {
     header: {
         visible: true,
     },
-    initialRouteName: 'EventScreen',
+    initialRouteName: 'AddEventScreen',
     navigationOptions: ({ navigation }) => ({
         headerStyle: Styles.nav.header,
     }),
