@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableHighlight, Image, Platform, } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableHighlight, Platform, } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { connect } from 'react-redux';
 
 import { Colors, Styles } from '../Themes/';
-
 
 class AttendeesScreen extends Component {
     static navigationOptions = ({ navigation }) => ({
@@ -12,13 +11,8 @@ class AttendeesScreen extends Component {
         headerTitleStyle: Styles.nav.title,
     });
     
-    _onItemClick(item) {
-        switch (item.id) {
-            case 0:
-                break;
-            default:
-                break;
-        }
+    _onItemClick(attendee) {
+        this.props.navigation.navigate('AttendeeSummaryScreen', { attendee });
     }
 
     render() {

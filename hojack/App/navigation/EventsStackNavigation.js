@@ -3,12 +3,18 @@ import { StackNavigator, NavigationActions } from 'react-navigation';
 
 import EventsScreen from '../containers/EventsScreen';
 import EventSummaryScreen from '../containers/EventSummaryScreen';
+import EventAttendeesScreen from '../containers/EventAttendeesScreen';
+import AttendeeSummaryScreen from '../containers/AttendeeSummaryScreen';
+import AddAttendeeScreen from '../containers/AddAttendeeScreen';
 
 import { Colors, Styles } from '../Themes/';
 
 const EventsStackNavigation = StackNavigator({
     EventsScreen: { screen: EventsScreen },
     EventSummaryScreen: { screen: EventSummaryScreen },
+    EventAttendeesScreen: { screen: EventAttendeesScreen },
+    AttendeeSummaryScreen: { screen: AttendeeSummaryScreen },
+    AddAttendeeScreen: { screen: AddAttendeeScreen },
 }, {
     header: {
         visible: true,
