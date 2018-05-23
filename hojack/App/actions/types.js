@@ -8,5 +8,9 @@ function createRequestTypes(base) {
     return res;
 }
 
-// Connectivity events
-export const UPDATE_CONNECTIVITY = 'UPDATE_CONNECTIVITY';
+// Login Actions
+export const LOGIN = createRequestTypes('LOGIN');
+export const LOGOUT = createRequestTypes('LOGOUT');
+
+// Signup Actions
+export const SIGNUP = createRequestTypes('SIGNUP');

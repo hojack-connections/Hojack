@@ -4,7 +4,6 @@ import { Platform, } from 'react-native';
 
 import MainTabNavigator from './MainTabNavigator';
 
-
 const RootStackNavigator = StackNavigator(
   {
     Main: {
@@ -14,7 +13,7 @@ const RootStackNavigator = StackNavigator(
   {
     navigationOptions: () => ({
       headerTitleStyle: {
-        
+
       },
     }),
   }

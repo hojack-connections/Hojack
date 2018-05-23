@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import navigation from './navigation';
+import auth from './auth';
 
 const reducer = combineReducers({
-    navigation,
+    auth,
 });
 
 export default reducer;

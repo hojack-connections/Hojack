@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Platform, } from 'react-native';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as authActions from '../actions/authActions';
 import MainTabNavigator from '../navigation/MainTabNavigator';
 
 import normalize from '../helpers/normalizeText';
@@ -17,7 +19,7 @@ class LoginScreen extends Component {
     }
 
     onLogin() {
-        this.props.navigation.navigate();
+        this.props.actions.loginRequest(this.state);
     }
 
     onBacktoSignup() {
@@ -111,7 +113,14 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-    // connectivity: state.connectivity.connectivity,
+    error: state.auth.error,
+    isFetching: state.auth.isFetching,
 });
 
-export default connect(mapStateToProps, null)(LoginScreen);
+function mapDispatchToProps(dispatch) {
+    return {
+      actions: bindActionCreators({ ...authActions, }, dispatch),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

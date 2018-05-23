@@ -12,7 +12,6 @@ import SubmitStackNavigation from './SubmitStackNavigation';
 
 import { Colors, Styles } from '../Themes/';
 
-
 export default TabNavigator(
     {
         Events: {

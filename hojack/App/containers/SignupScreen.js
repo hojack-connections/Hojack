@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Platform, } from 'react-native';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as authActions from '../actions/authActions';
 
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
@@ -10,15 +12,15 @@ class SignupScreen extends Component {
         super(props);
 
         this.state = {
-            firstName: '',
-            lastName: '',
+            firstname: '',
+            lastname: '',
             email: '',
             password: '',
         }
     }
 
     onSignup() {
-
+        this.props.actions.signupRequest(this.state);
     }
 
     onGotoLogin() {
@@ -33,8 +35,8 @@ class SignupScreen extends Component {
                         <Text style={styles.label}>First Name</Text>
                         <TextInput 
                             style={styles.input} 
-                            value={this.state.firstName}
-                            onChangeText={(firstName) => this.setState({ firstName })}
+                            value={this.state.firstname}
+                            onChangeText={(firstname) => this.setState({ firstname })}
                             underlineColorAndroid="transparent"
                         />
                     </View>
@@ -42,8 +44,8 @@ class SignupScreen extends Component {
                         <Text style={styles.label}>Last Name</Text>
                         <TextInput 
                             style={styles.input} 
-                            value={this.state.lastName}
-                            onChangeText={(lastName) => this.setState({ lastName })}
+                            value={this.state.lastname}
+                            onChangeText={(lastname) => this.setState({ lastname })}
                             underlineColorAndroid="transparent"
                         />
                     </View>
@@ -126,7 +128,14 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-    // connectivity: state.connectivity.connectivity,
+    error: state.auth.error,
+    isFetching: state.auth.isFetching,
 });
 
-export default connect(mapStateToProps, null)(SignupScreen);
+function mapDispatchToProps(dispatch) {
+    return {
+      actions: bindActionCreators({ ...authActions, }, dispatch),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignupScreen);

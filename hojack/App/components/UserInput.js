@@ -40,7 +40,10 @@ class UserInput extends Component {
                                 editable={!readOnly} 
                                 textAlign={'left'} 
                                 value={this.props.value}
-                                onChangeText={this.props.onChangeText}                            
+                                onChangeText={this.props.onChangeText}
+                                autoCapitalize={'none'}
+                                autoCorrect={false} 
+                                underlineColorAndroid="transparent"
                             />
                     }
                     {
