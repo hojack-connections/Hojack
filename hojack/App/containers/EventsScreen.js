@@ -12,6 +12,7 @@ class EventsScreen extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Events',
         headerTitleStyle: Styles.nav.title,
+        headerBackTitle: 'Back',
     });
     
     constructor(props) {

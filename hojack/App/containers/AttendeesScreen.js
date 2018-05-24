@@ -9,6 +9,7 @@ class AttendeesScreen extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'All Attendees',
         headerTitleStyle: Styles.nav.title,
+        headerBackTitle: 'Back',
     });
     
     _onItemClick(attendee) {

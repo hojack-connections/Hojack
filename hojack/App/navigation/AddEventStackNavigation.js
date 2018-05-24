@@ -1,11 +1,11 @@
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
 import AddEventScreen from '../containers/AddEventScreen';
 import { Colors, Styles } from '../Themes/';
 
 
-const AddEventStackNavigation = StackNavigator({
+const AddEventStackNavigation = createStackNavigator({
     AddEventScreen: { screen: AddEventScreen },
 }, {
     header: {

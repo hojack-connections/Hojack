@@ -1,6 +1,6 @@
 import React from 'react';
 import { Platform, View } from 'react-native';
-import { TabNavigator, TabBarBottom } from 'react-navigation';
+import { createBottomTabNavigator, TabBarBottom } from 'react-navigation';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import normalize from '../helpers/normalizeText';
 
@@ -12,7 +12,18 @@ import SubmitStackNavigation from './SubmitStackNavigation';
 
 import { Colors, Styles } from '../Themes/';
 
-export default TabNavigator(
+const homeTabbarVisible = (navigation) => {
+    const routes = navigation.state.routes;
+    if (routes && routes.length > 0) {
+        const route = routes[routes.length - 1];
+        if (route.routeName === 'EventSummaryScreen' || route.routeName === 'EventAttendeesScreen' || route.routeName === 'AttendeeSummaryScreen' || route.routeName === 'AddAttendeeScreen') {
+            return false;
+        }
+    }
+    return true;
+}
+
+export default createBottomTabNavigator(
     {
         Events: {
             screen: EventsStackNavigation,
@@ -20,7 +31,7 @@ export default TabNavigator(
         Attendees: {
             screen: AttendeesStackNavigation,
         },
-        AddEvent: {
+        Event: {
             screen: AddEventStackNavigation,
         },
         Share: {
@@ -32,6 +43,7 @@ export default TabNavigator(
     },
     {
         navigationOptions: ({ navigation }) => ({
+            tabBarVisible: homeTabbarVisible(navigation),
             tabBarIcon: ({ focused }) => {
                 const { routeName } = navigation.state;
                 let iconName, iconColor;
@@ -43,7 +55,7 @@ export default TabNavigator(
                     case 'Attendees':
                         iconName = 'users';
                         break;
-                    case 'AddEvent':
+                    case 'Event':
                         iconName = 'plus-circle';
                         break;
                     case 'Share':
@@ -57,17 +69,7 @@ export default TabNavigator(
                     <Icon name={iconName} size={30} color={iconColor} />
                 );
             },
-            tabBarLabel: () => {
-                const { routeName } = navigation.state;
-                var label = routeName;
-                if (routeName === 'AddEvent') {
-                    label = 'Event';
-                }
-                return label;
-            },
         }),
-        tabBarComponent: TabBarBottom,
-        tabBarPosition: 'bottom',
         animationEnabled: false,
         swipeEnabled: false,
         tabBarOptions: {

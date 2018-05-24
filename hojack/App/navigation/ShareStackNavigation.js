@@ -1,11 +1,11 @@
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
 import ShareScreen from '../containers/ShareScreen';
 import { Colors, Styles } from '../Themes/';
 
 
-const ShareStackNavigation = StackNavigator({
+const ShareStackNavigation = createStackNavigator({
     ShareScreen: { screen: ShareScreen },
 }, {
     header: {

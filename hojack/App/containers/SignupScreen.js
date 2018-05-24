@@ -28,45 +28,59 @@ class SignupScreen extends Component {
     }
 
     render() {
+        const { error } = this.props;
         return (
             <View style={Styles.container}>
                 <View style={styles.subContainer}>
                     <View style={styles.inputField}>
-                        <Text style={styles.label}>First Name</Text>
+                        <Text style={styles.label}>First Name: </Text>
                         <TextInput 
                             style={styles.input} 
                             value={this.state.firstname}
                             onChangeText={(firstname) => this.setState({ firstname })}
+                            autoCorrect={false}
                             underlineColorAndroid="transparent"
                         />
                     </View>
                     <View style={styles.inputField}>
-                        <Text style={styles.label}>Last Name</Text>
+                        <Text style={styles.label}>Last Name: </Text>
                         <TextInput 
                             style={styles.input} 
                             value={this.state.lastname}
                             onChangeText={(lastname) => this.setState({ lastname })}
+                            autoCorrect={false}
                             underlineColorAndroid="transparent"
                         />
                     </View>
                     <View style={styles.inputField}>
-                        <Text style={styles.label}>Email</Text>
+                        <Text style={styles.label}>Email: </Text>
                         <TextInput 
                             style={styles.input} 
                             value={this.state.email}
                             onChangeText={(email) => this.setState({ email })}
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
                             underlineColorAndroid="transparent"
                         />
                     </View>
                     <View style={styles.inputField}>
-                        <Text style={styles.label}>Password</Text>
+                        <Text style={styles.label}>Password: </Text>
                         <TextInput 
                             secureTextEntry={true}
                             style={styles.input} 
                             value={this.state.password}
                             onChangeText={(password) => this.setState({ password })}
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
                             underlineColorAndroid="transparent"
                         />
+                    </View>
+                    <View style={styles.errorField}>
+                        <Text style={styles.errorLabel}>
+                        {
+                            error && error.data
+                        }
+                        </Text>
                     </View>
                     <TouchableOpacity style={styles.buttonContainer} onPress={() => this.onSignup()}>
                         <View style={styles.signupButton}>
@@ -105,6 +119,13 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: normalize(16),
+    },
+    errorField: {
+        justifyContent: 'center',
+    },
+    errorLabel: {
+        fontSize: normalize(14),
+        color: 'red',
     },
     buttonContainer: { 
         justifyContent: 'center', 

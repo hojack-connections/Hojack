@@ -16,8 +16,8 @@ function signup(payload) {
         return response;
     })
     .catch(error => {
-        console.log('signup error = ', error);
-        throw error;
+        console.log('signup error = ', error.response);
+        throw error.response;
     });
 }
 
@@ -28,8 +28,8 @@ function login(payload) {
         return response;
     })
     .catch(error => {
-        console.log('login response = ', error);
-        throw error;
+        console.log('login response = ', error.response);
+        throw error.response;
     });
 }
 

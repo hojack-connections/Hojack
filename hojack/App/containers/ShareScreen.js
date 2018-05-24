@@ -10,6 +10,7 @@ class ShareScreen extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Share',
         headerTitleStyle: Styles.nav.title,
+        headerBackTitle: 'Back',
     });
     
     render() {

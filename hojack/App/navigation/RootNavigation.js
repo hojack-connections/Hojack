@@ -1,10 +1,10 @@
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import { Platform, } from 'react-native';
 
 import MainTabNavigator from './MainTabNavigator';
 
-const RootStackNavigator = StackNavigator(
+const RootStackNavigator = createStackNavigator(
   {
     Main: {
       screen: MainTabNavigator,

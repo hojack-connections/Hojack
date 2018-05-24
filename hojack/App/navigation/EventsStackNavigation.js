@@ -1,5 +1,5 @@
 import React from 'react';
-import { StackNavigator, NavigationActions } from 'react-navigation';
+import { createStackNavigator, NavigationActions } from 'react-navigation';
 
 import EventsScreen from '../containers/EventsScreen';
 import EventSummaryScreen from '../containers/EventSummaryScreen';
@@ -9,7 +9,7 @@ import AddAttendeeScreen from '../containers/AddAttendeeScreen';
 
 import { Colors, Styles } from '../Themes/';
 
-const EventsStackNavigation = StackNavigator({
+const EventsStackNavigation = createStackNavigator({
     EventsScreen: { screen: EventsScreen },
     EventSummaryScreen: { screen: EventSummaryScreen },
     EventAttendeesScreen: { screen: EventAttendeesScreen },
@@ -22,6 +22,7 @@ const EventsStackNavigation = StackNavigator({
     initialRouteName: 'EventsScreen',
     navigationOptions: ({ navigation }) => ({
         headerStyle: Styles.nav.header,
+        tabBarVisible: false,
     }),
 });
 

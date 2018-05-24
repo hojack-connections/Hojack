@@ -9,7 +9,6 @@ import { Colors, Styles } from '../Themes/';
 class SubmitScreen extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Submit',
-        headerTitleStyle: Styles.nav.title,
     });
     
     render() {

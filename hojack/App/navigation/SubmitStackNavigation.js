@@ -1,17 +1,18 @@
 import React from 'react';
-import { StackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 
 import SubmitScreen from '../containers/SubmitScreen';
+import SubmitSettingsScreen from '../containers/SubmitSettingsScreen';
 import { Colors, Styles } from '../Themes/';
 
 
-const SubmitStackNavigation = StackNavigator({
-    SubmitScreen: { screen: SubmitScreen },
+const SubmitStackNavigation = createStackNavigator({
+    SubmitSettingsScreen: { screen: SubmitSettingsScreen },
 }, {
     header: {
         visible: true,
     },
-    initialRouteName: 'SubmitScreen',
+    initialRouteName: 'SubmitSettingsScreen',
     navigationOptions: ({ navigation }) => ({
         headerStyle: Styles.nav.header,
     }),
