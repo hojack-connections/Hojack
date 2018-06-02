@@ -25,7 +25,7 @@ export const GET_EVENT_ATTENDEES    = createRequestTypes('GET_EVENT_ATTENDEES');
 export const SUBMIT_EVENT           = createRequestTypes('SUBMIT_EVENT');
 
 // Attendee Actions
-export const ADD_ATTENDEE           = createRequestTypes('ADD_ATTENDEE');
+export const CREATE_ATTENDEE        = createRequestTypes('CREATE_ATTENDEE');
 export const UPDATE_ATTENDEE        = createRequestTypes('UPDATE_ATTENDEE');
 export const DELETE_ATTENDEE        = createRequestTypes('DELETE_ATTENDEE');
 export const GET_ATTENDEE           = createRequestTypes('GET_ATTENDEE');

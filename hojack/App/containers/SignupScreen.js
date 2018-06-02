@@ -19,6 +19,12 @@ class SignupScreen extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (!this.props.isRegistered && nextProps.isRegistered) {
+            this.props.navigation.navigate('LoginScreen');
+        }
+    }
+
     onSignup() {
         this.props.actions.signupRequest(this.state);
     }
@@ -119,6 +125,7 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: normalize(16),
+        width: 120,
     },
     errorField: {
         justifyContent: 'center',
@@ -151,6 +158,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
     error: state.auth.error,
     isFetching: state.auth.isFetching,
+    isRegistered: state.auth.isRegistered,
 });
 
 function mapDispatchToProps(dispatch) {

@@ -21,18 +21,18 @@ const BASE_URL = 'http://localhost:7001/api/events';
 
 function create_event(payload) {
     return axios.post(BASE_URL, payload)
-    .then(response => {
-        console.log('create_event response = ', response);
-        return response;
-    })
-    .catch(error => {
-        console.log('create_event error = ', error.response);
-        throw error.response;
-    });
+        .then(response => {
+            console.log('create_event response = ', response);
+            return response;
+        })
+        .catch(error => {
+            console.log('create_event error = ', error.response);
+            throw error.response;
+        });
 }
 
 function update_event(payload) {
-    return axios.put(BASE_URL + '/' + payload.id)
+    return axios.put(BASE_URL + '/' + payload.id, { token: payload.token })
     .then(response => {
         console.log('update_event response = ', response);
         return response;
@@ -56,7 +56,7 @@ function delete_event(payload) {
 }
 
 function get_all_events(payload) {
-    return axios.get(BASE_URL)
+    return axios.get(BASE_URL, { params: {token: payload.token} })
     .then(response => {
         console.log('get_all_events response = ', response);
         return response;
@@ -68,7 +68,7 @@ function get_all_events(payload) {
 }
 
 function get_event(payload) {
-    return axios.get(BASE_URL + '/' + payload.id)
+    return axios.get(BASE_URL + '/' + payload.id, { params: {token: payload.token} })
     .then(response => {
         console.log('get_event response = ', response);
         return response;
@@ -80,7 +80,7 @@ function get_event(payload) {
 }
 
 function get_event_attendees(payload) {
-    return axios.get(BASE_URL + '/' + payload.id + '/attendees')
+    return axios.get(BASE_URL + '/' + payload.id + '/attendees', { params: {token: payload.token} })
     .then(response => {
         console.log('get_event_attendees response = ', response);
         return response;

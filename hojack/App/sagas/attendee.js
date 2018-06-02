@@ -54,7 +54,7 @@ function delete_attendee(payload) {
 }
 
 function get_all_attendees(payload) {
-  return axios.get(BASE_URL)
+  return axios.get(BASE_URL, { params: {token: payload.token} })
   .then(response => {
       console.log('get_all_attendees response = ', response);
       return response;
@@ -66,7 +66,7 @@ function get_all_attendees(payload) {
 }
 
 function get_attendee(payload) {
-  return axios.get(BASE_URL + '/' + payload.id)
+  return axios.get(BASE_URL + '/' + payload.id, { params: {token: payload.token} })
   .then(response => {
       console.log('get_attendee response = ', response);
       return response;

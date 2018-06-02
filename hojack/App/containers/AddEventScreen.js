@@ -3,6 +3,8 @@ import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Platform, } from 
 import UserInput from '../components/UserInput';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as eventActions from '../actions/eventActions';
 
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
@@ -26,10 +28,16 @@ class AddEventScreen extends Component {
             courseNo: '',
             courseName: '',
         };
+
+        this.onClickSave = this.onClickSave.bind(this);
     }
 
     onClickSave() {
-        
+        const payload = {
+            ...this.state,
+            token: this.props.token,
+        }
+        this.props.actions.createEventRequest(payload);
     }
 
     render() {
@@ -86,7 +94,13 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-    // connectivity: state.connectivity.connectivity,
+    token: state.auth.token,
 });
 
-export default connect(mapStateToProps, null)(AddEventScreen);
+function mapDispatchToProps(dispatch) {
+    return {
+      actions: bindActionCreators({ ...eventActions, }, dispatch),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddEventScreen);

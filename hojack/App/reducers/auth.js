@@ -3,11 +3,13 @@ import * as types from '../actions/types';
 const initialState = {
     isFetching: false,
     isLogged: false,
+    isRegistered: false,
+    token: null,
     error: '',
 }
 
 export default function auth(state = initialState, action) {
-    switch (action.type) {
+    switch (action.type) {        
         case types.SIGNUP.REQUEST:
             return {
                 ...state,
@@ -18,7 +20,7 @@ export default function auth(state = initialState, action) {
             return {
                 ...state,
                 isFetching: false,
-                isLogged: true,
+                isRegistered: true,
             }
         case types.SIGNUP.FAILURE:
             return {
@@ -37,6 +39,7 @@ export default function auth(state = initialState, action) {
                 ...state,
                 isFetching: false,
                 isLogged: true,
+                token: action.response.token,
             }
         case types.LOGIN.FAILURE:
             return {

@@ -39,14 +39,14 @@ class EventSummaryScreen extends Component {
     componentWillMount() {
         this.setState({
             name: this.props.navigation.state.params.event.name,
-            date: this.props.navigation.state.params.event.date,
-            address: '',
-            city: '',
-            state: '',
-            zipcode: '',
-            courseNo: '',
-            courseName: '',
-            attendees: this.props.navigation.state.params.event.attendees,
+            date: new Date(this.props.navigation.state.params.event.date),
+            address: this.props.navigation.state.params.event.address,
+            city: this.props.navigation.state.params.event.city,
+            state: this.props.navigation.state.params.event.state,
+            zipcode: this.props.navigation.state.params.event.zipcode,
+            courseNo: this.props.navigation.state.params.event.courseNo,
+            courseName: this.props.navigation.state.params.event.courseName,
+            attendees: this.props.navigation.state.params.attendees,
         });
     }
 
@@ -59,23 +59,23 @@ class EventSummaryScreen extends Component {
     }
 
     onAttendees(event) {
-        console.log('onAttendees');
-        this.props.navigation.navigate('EventAttendeesScreen', { event });
+        this.props.navigation.navigate('EventAttendeesScreen', { event, attendees: this.state.attendees });
     }
 
     render() {
+        console.log(this.props.navigation.state.params);
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.inputFields}>
                     <UserInput label={'Event Name:'} value={this.state.name} onChangeText={(name) => this.setState({ name })} />
                     <UserInput label={'Date:'} datePicker value={this.state.date} onDateChanged={(date) => this.setState({ date })} />
-                    <UserInput label={'Address:'} onChangeText={(address) => this.setState({ address })} />
-                    <UserInput label={'City:'} onChangeText={(city) => this.setState({ city })} />
-                    <UserInput label={'State:'} onChangeText={(state) => this.setState({ state })} />
-                    <UserInput label={'Zip Code:'} onChangeText={(zipcode) => this.setState({ zipcode })} />
-                    <UserInput label={'Course #:'} onChangeText={(courseNo) => this.setState({ courseNo })} />
-                    <UserInput label={'Course Name:'} onChangeText={(courseName) => this.setState({ courseName })} />
-                    <UserInput label={'Attendees:'} readOnly arrow value={this.state.attendees.toString()} onClickEvent={() => this.onAttendees(this.props.navigation.state.params.event)} />
+                    <UserInput label={'Address:'} value={this.state.address} onChangeText={(address) => this.setState({ address })} />
+                    <UserInput label={'City:'} value={this.state.city} onChangeText={(city) => this.setState({ city })} />
+                    <UserInput label={'State:'} value={this.state.state} onChangeText={(state) => this.setState({ state })} />
+                    <UserInput label={'Zip Code:'} value={this.state.zipcode} onChangeText={(zipcode) => this.setState({ zipcode })} />
+                    <UserInput label={'Course #:'} value={this.state.courseNo} onChangeText={(courseNo) => this.setState({ courseNo })} />
+                    <UserInput label={'Course Name:'} value={this.state.courseName} onChangeText={(courseName) => this.setState({ courseName })} />
+                    <UserInput label={'Attendees:'} readOnly arrow value={this.state.attendees ? this.state.attendees.length.toString() : '0'} onClickEvent={() => this.onAttendees(this.props.navigation.state.params.event)} />
                 </View>
                 <TouchableOpacity style={styles.buttonContainer} onPress={() => this.onDelete()}>
                     <View style={styles.deleteButton}>

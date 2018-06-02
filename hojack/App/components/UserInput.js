@@ -27,16 +27,15 @@ class UserInput extends Component {
                                         display: 'none',
                                     },
                                     dateInput: {
-                                        marginLeft: 15,
                                         borderWidth: 0,
-                                        alignItems: 'flex-end',
+                                        alignItems: 'flex-start',
                                     },
                                 }}
                                 onDateChange={this.props.onDateChanged}
                             />
                         :
                             <TextInput 
-                                style={{ marginLeft: 15, flex: 1, marginRight: readOnly ? 30 : 10, }} 
+                                style={{ flex: 1, marginRight: readOnly ? 30 : 10, }} 
                                 editable={!readOnly} 
                                 textAlign={'left'} 
                                 value={this.props.value}
@@ -69,6 +68,7 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 16, 
         fontWeight: '700',
+        width: 120,
     },
     arrow: {
         position: 'absolute',

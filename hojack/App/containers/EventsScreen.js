@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { Platform, View, Text, StyleSheet, FlatList, TouchableHighlight, } from 'react-native';
+import moment from 'moment';
+import axios from 'axios';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import * as eventActions from '../actions/eventActions';
+import * as attendeeActions from '../actions/attendeeActions';
 
-// import * as navigationActions from '../actions/navigationActions';
 import { Colors, Styles } from '../Themes/';
 
 
@@ -17,6 +20,10 @@ class EventsScreen extends Component {
     
     constructor(props) {
         super(props);
+
+        this.state = {
+            attendees: {},
+        };
         this.reloadData = this.reloadData.bind(this);
     }
 
@@ -24,60 +31,58 @@ class EventsScreen extends Component {
         this.reloadData();
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (JSON.parse(JSON.stringify(this.props.events)) !== JSON.parse(JSON.stringify(nextProps.events))) {
+            nextProps.events.map(event => {
+                axios.get('http://localhost:7001/api/events/' + event._id + '/attendees',  { params: {token: this.props.token} })
+                .then(response => {
+                    console.log('attendee of event', response.data);
+                    let attendees = this.state.attendees;
+                    attendees[event._id] = response.data;
+                    this.setState({ attendees });
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+            });
+        }
+    }
+
     reloadData() {
-        // this.props.actions.navigationRequest();
+        this.props.actions.getEventsRequest({ token: this.props.token });
+        this.props.actions.getAttendeesRequest({ token: this.props.token });
     }
 
     _onItemClick(event) {
-        this.props.navigation.navigate('EventSummaryScreen', { event });
+        this.props.navigation.navigate('EventSummaryScreen', { event, attendees: this.state.attendees[event._id] });
     }
 
     render() {
-        // const { navigationData, videoData, connectivity } = this.props;
-        const eventsData = [
-            {
-                id: '0',
-                date: 'February 15, 2018',
-                name: 'E-Week - Albany, NY',
-                attendees: 52,
-            },
-            {
-                id: '1',
-                date: 'February 13, 2018',
-                name: 'CHA - Rochester, NY',
-                attendees: 6,
-            },
-            {
-                id: '2',
-                date: 'February 13, 2018',
-                name: 'City of Albany Engineering Dept.',
-                attendees: 7,
-            },
-        ];
+        const { events, attendees } = this.props;
         
         return (
             <View style={Styles.container}>
                 <View style={styles.totalEventsContainer}>
-                    <Text style={{ color: '#895353' }}>Total Attendees: 1,249</Text>
-                    <Text style={{ color: '#538989' }}>Total Events: 410</Text>
+                    <Text style={{ color: '#895353' }}>Total Attendees: {attendees.length}</Text>
+                    <Text style={{ color: '#538989' }}>Total Events: {events.length}</Text>
                 </View>
                 <View style={styles.allEventsContainer}>
                     <Text>All Attendees</Text>
-                    <Text style={{ color: '#34bd3e' }}>1,249</Text>
+                    <Text style={{ color: '#34bd3e' }}>{attendees.length.toLocaleString()}</Text>
                     <Icon name="chevron-right" size={16} color={'#797979'} style={Styles.arrow} />
                 </View>
                 <FlatList
-                    data={eventsData}
-                    keyExtractor={(item, index) => item.id}
+                    data={events}
+                    keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => {
                         return (
                             <TouchableHighlight onPress={() => this._onItemClick(item)}>
                                 <View style={styles.listItemContainer}>
-                                    <Text style={styles.eventDate}>{item.date}</Text>
+                                    <Text style={styles.eventDate}>{moment(item.date).format('MMM DD, YYYY')}</Text>
                                     <View style={styles.seperator}/>
                                     <View style={styles.subDetails}>
                                         <Text style={styles.categoryTitle}>{item.name}</Text>
-                                        <Text style={styles.attendees}>{item.attendees}</Text>
+                                        <Text style={{ color: item.isSubmitted ? '#34bd3e' : '#ff575c' }}>{this.state.attendees[item._id] ? this.state.attendees[item._id].length : 0}</Text>
                                     </View>
                                     <Icon name="chevron-right" size={16} color={'#797979'} style={styles.arrow} />
                                 </View>
@@ -133,9 +138,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
         paddingVertical: 10, 
     },
-    attendees: {
-        color: '#ff575c',
-    },
     arrow: {
         position: 'absolute',
         right: 10,
@@ -144,11 +146,13 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-    // navigationData: state.navigation.data,
+    token: state.auth.token,
+    events: state.event.events,
+    attendees: state.attendee.attendees,
 });
 
 const mapDispatchToProps = dispatch => ({
-    // actions: bindActionCreators({...navigationActions, }, dispatch),
+    actions: bindActionCreators({...eventActions, ...attendeeActions, }, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventsScreen);

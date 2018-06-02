@@ -17,38 +17,22 @@ class AttendeesScreen extends Component {
     }
 
     render() {
-        const attendeesList = [
-            {
-                id: '0',
-                name: 'Rick Bortle',
-                exist: true,
-            },
-            {
-                id: '1',
-                name: 'Bill Brasky',
-                exist: true,
-            },
-            {
-                id: '2',
-                name: 'Greg Chalmers',
-                exist: false,
-            },
-        ];
+        const { attendees } = this.props;
 
         return (
             <View style={Styles.container}>
                 <View style={styles.totalEventsContainer}>
-                    <Text style={{ color: '#895353' }}>Total Attendees: 1,249</Text>
+                    <Text style={{ color: '#895353' }}>Total Attendees: {attendees.length}</Text>
                 </View>
                 <FlatList
-                    data={attendeesList}
+                    data={attendees}
                     keyExtractor={(item, index) => item.id}
                     renderItem={({ item }) => {
                         return (
                             <TouchableHighlight onPress={() => this._onItemClick(item)}>
                                 <View style={styles.listItemContainer}>
-                                    <Icon name={item.exist ? "check-square" : "minus-square"} size={18} color={item.exist ? '#34bd3e' : '#ff575c'} />
-                                    <Text style={styles.name}>{item.name}</Text>
+                                    <Icon name={item.isFilled ? "check-square" : "minus-square"} size={18} color={item.isFilled ? '#34bd3e' : '#ff575c'} />
+                                    <Text style={styles.name}>{item.firstname} {item.lastname}</Text>
                                     <Icon name="chevron-right" size={16} color={'#797979'} style={styles.arrow} />
                                 </View>
                             </TouchableHighlight>
@@ -90,7 +74,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
-    // connectivity: state.connectivity.connectivity,
+    attendees: state.attendee.attendees,
 });
 
 export default connect(mapStateToProps, null)(AttendeesScreen);

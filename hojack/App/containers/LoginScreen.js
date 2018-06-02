@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: normalize(16),
+        width: 120,
     },
     errorField: {
         justifyContent: 'center',

@@ -6,96 +6,97 @@ const initialState = {
     isDeleting: false,
     isFetching: false,
     error: '',
-    createdEvent: {},
-    event: {},
-    events: [],
+    created: false,
+    attendee: {},
+    attendees: [],
 }
 
-export default function event(state = initialState, action) {
+export default function attendee(state = initialState, action) {
     switch (action.type) {
-        case types.CREATE_EVENT.REQUEST:
+        case types.CREATE_ATTENDEE.REQUEST:
             return {
                 ...state,
                 isCreating: true,
+                created: false,
                 error: '',
             }
-        case types.CREATE_EVENT.SUCCESS:
+        case types.CREATE_ATTENDEE.SUCCESS:
             return {
                 ...state,
                 isCreating: false,
-                createdEvent: action.response,
+                created: true,
             }
-        case types.CREATE_EVENT.FAILURE:
+        case types.CREATE_ATTENDEE.FAILURE:
             return {
                 ...state,
                 isCreating: false,
                 error: action.err,
             }
-        case types.UPDATE_EVENT.REQUEST:
+        case types.UPDATE_ATTENDEE.REQUEST:
             return {
                 ...state,
                 isUpdating: true,
                 error: '',
             }
-        case types.UPDATE_EVENT.SUCCESS:
+        case types.UPDATE_ATTENDEE.SUCCESS:
             return {
                 ...state,
                 isUpdating: false,
             }
-        case types.UPDATE_EVENT.FAILURE:
+        case types.UPDATE_ATTENDEE.FAILURE:
             return {
                 ...state,
                 isUpdating: false,
                 error: action.err,
             }
-        case types.DELETE_EVENT.REQUEST:
+        case types.DELETE_ATTENDEE.REQUEST:
             return {
                 ...state,
                 isDeleting: true,
                 error: '',
             }
-        case types.DELETE_EVENT.SUCCESS:
+        case types.DELETE_ATTENDEE.SUCCESS:
             return {
                 ...state,
                 isDeleting: false,
             }
-        case types.DELETE_EVENT.FAILURE:
+        case types.DELETE_ATTENDEE.FAILURE:
             return {
                 ...state,
                 isDeleting: false,
                 error: action.err,
             }
-        case types.GET_EVENT.REQUEST:
+        case types.GET_ATTENDEE.REQUEST:
             return {
                 ...state,
                 isFetching: true,
                 error: '',
             }
-        case types.GET_EVENT.SUCCESS:
+        case types.GET_ATTENDEE.SUCCESS:
             return {
                 ...state,
                 isFetching: false,
-                event: action.response,
+                attendee: action.response,
             }
-        case types.GET_EVENT.FAILURE:
+        case types.GET_ATTENDEE.FAILURE:
             return {
                 ...state,
                 isFetching: false,
                 error: action.err,
             }
-        case types.GET_EVENTS.REQUEST:
+        case types.GET_ATTENDEES.REQUEST:
             return {
                 ...state,
                 isFetching: true,
                 error: '',
             }
-        case types.GET_EVENTS.SUCCESS:
+        case types.GET_ATTENDEES.SUCCESS:
             return {
                 ...state,
                 isFetching: false,
-                events: action.response,
+                attendees: action.response,
             }
-        case types.GET_EVENTS.FAILURE:
+        case types.GET_ATTENDEES.FAILURE:
             return {
                 ...state,
                 isFetching: false,

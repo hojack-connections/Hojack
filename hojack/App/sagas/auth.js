@@ -1,4 +1,5 @@
 import React from 'react';
+import { AsyncStorage } from 'react-native';
 import { take, takeLatest, put, fork, call } from 'redux-saga/effects';
 import * as types from '../actions/types';
 import { 

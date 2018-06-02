@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, TouchableHighlight, Image, Platform, } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
@@ -19,50 +20,32 @@ class EventAttendeesScreen extends Component {
     }
 
     _onAddClick() {
-        this.props.navigation.navigate('AddAttendeeScreen');
+        this.props.navigation.navigate('AddAttendeeScreen', { event: this.props.navigation.state.params.event._id });
     }
 
     render() {
-        const { event } = this.props.navigation.state.params;
-
-        const attendeesList = [
-            {
-                id: '0',
-                firstName: 'Rick Bortle',
-                exist: true,
-            },
-            {
-                id: '1',
-                firstName: 'Bill Brasky',
-                exist: true,
-            },
-            {
-                id: '2',
-                firstName: 'Greg Chalmers',
-                exist: false,
-            },
-        ];
+        const { event, attendees } = this.props.navigation.state.params;
 
         return (
             <View style={Styles.container}>
                 <View style={styles.totalEventsContainer}>
-                    <Text style={{ color: '#895353' }}>Total Attendees: {event.attendees}</Text>
+                    <Text style={{ color: '#895353' }}>Total Attendees: {attendees.length}</Text>
                 </View>
                 <View style={styles.eventNameContainer}>
                     <Text style={{ color: Colors.black, fontSize: 16, fontWeight: '700', }}>{event.name}</Text>
                 </View>
                 <View style={styles.eventDateContainer}>
-                    <Text style={{ color: Colors.black, fontSize: 14, fontWeight: '700', }}>{event.date}</Text>
+                    <Text style={{ color: Colors.black, fontSize: 14, fontWeight: '700', }}>{moment(event.date).format('MMM DD, YYYY')}</Text>
                 </View>
                 <FlatList
-                    data={attendeesList}
-                    keyExtractor={(item, index) => item.id}
+                    data={attendees}
+                    keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => {
                         return (
                             <TouchableHighlight onPress={() => this._onItemClick(item)}>
                                 <View style={styles.listItemContainer}>
-                                    <Icon name={item.exist ? "check-square" : "minus-square"} size={18} color={item.exist ? '#34bd3e' : '#ff575c'} />
-                                    <Text style={styles.name}>{item.firstName}</Text>
+                                    <Icon name={item.isFilled ? "check-square" : "minus-square"} size={18} color={item.isFilled ? '#34bd3e' : '#ff575c'} />
+                                    <Text style={styles.name}>{item.firstname} {item.lastname}</Text>
                                     <Icon name="chevron-right" size={16} color={'#797979'} style={styles.arrow} />
                                 </View>
                             </TouchableHighlight>
