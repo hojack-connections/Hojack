@@ -7,12 +7,14 @@ import PropTypes from 'prop-types';
 import {
   StyleSheet,
   View,
+  StatusBar,
 } from 'react-native';
 import RootNavigation from './navigation/MainTabNavigator';
 import AuthStackNavigation from './navigation/AuthStackNavigation';
 import { connect } from 'react-redux';
 import { YellowBox } from 'react-native';
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+StatusBar.setBarStyle('light-content', true);
 
 type Props = {
   isLogged: PropTypes.bool,
