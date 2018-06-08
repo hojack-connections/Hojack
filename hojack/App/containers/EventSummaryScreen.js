@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Platform, } from 'react-native';
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Platform, Alert, } from 'react-native';
 import UserInput from '../components/UserInput';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { connect } from 'react-redux';
@@ -63,15 +63,25 @@ class EventSummaryScreen extends Component {
     }
 
     onDelete() {
-        axios.delete('http://localhost:7001/api/events/' + this.props.navigation.state.params.id, {params: { token: this.props.token, }})
-        .then(response => {
-            console.log('delete_event response = ', response);
-            this.props.actions.removeEvent({ index: this.props.navigation.state.params.index, id: this.props.navigation.state.params.id });
-            this.props.navigation.dispatch(NavigationActions.back());
-        })
-        .catch(error => {
-            console.log('delete_event response = ', error.response);
-        });
+        Alert.alert(
+            'Confirm',
+            'Do you really want to remove this event?',
+            [
+              {text: 'No', onPress: () => {}, style: 'cancel'},
+              {text: 'Yes', onPress: () => {
+                axios.delete('http://localhost:7001/api/events/' + this.props.navigation.state.params.id, {params: { token: this.props.token, }})
+                .then(response => {
+                    console.log('delete_event response = ', response);
+                    this.props.actions.removeEvent({ index: this.props.navigation.state.params.index, id: this.props.navigation.state.params.id });
+                    this.props.navigation.dispatch(NavigationActions.back());
+                })
+                .catch(error => {
+                    console.log('delete_event response = ', error.response);
+                });
+              }},
+            ],
+            { cancelable: false }
+        );
     }
 
     onAttendees(index, id) {

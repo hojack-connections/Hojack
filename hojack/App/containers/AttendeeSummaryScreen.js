@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Platform, Image, } from 'react-native';
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Platform, Image, Alert, } from 'react-native';
 import axios from 'axios';
 import UserInput from '../components/UserInput';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -27,20 +27,30 @@ class AttendeeSummaryScreen extends Component {
     }
 
     onDelete() {
-        axios.delete('http://localhost:7001/api/attendees/' + this.props.attendee._id, {params: { token: this.props.token, }})
-        .then(response => {
-            console.log('delete_attendee response = ', response);
-            this.props.actions.removeAttendee({ event: this.props.navigation.state.params.id, attendee: this.props.navigation.state.params.attendee, attendeeIndex: this.props.navigation.state.params.attendeeIndex, });
-            this.props.navigation.dispatch(NavigationActions.back());
-        })
-        .catch(error => {
-            console.log('delete_attendee response = ', error.response);
-        });
+        Alert.alert(
+            'Confirm',
+            'Do you really want to remove this attendee?',
+            [
+              {text: 'No', onPress: () => {}, style: 'cancel'},
+              {text: 'Yes', onPress: () => {
+                axios.delete('http://localhost:7001/api/attendees/' + this.props.attendee._id, {params: { token: this.props.token, }})
+                .then(response => {
+                    console.log('delete_attendee response = ', response);
+                    this.props.actions.removeAttendee({ event: this.props.navigation.state.params.id, attendee: this.props.navigation.state.params.attendee, attendeeIndex: this.props.navigation.state.params.attendeeIndex, });
+                    this.props.navigation.dispatch(NavigationActions.back());
+                })
+                .catch(error => {
+                    console.log('delete_attendee response = ', error.response);
+                });
+              }},
+            ],
+            { cancelable: false }
+        );
     }
 
     render() {
         const { event, attendee } = this.props;
-        
+
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.inputFields}>
