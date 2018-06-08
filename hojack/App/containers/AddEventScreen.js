@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Platform, } from 'react-native';
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Platform, Alert, } from 'react-native';
 import UserInput from '../components/UserInput';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { connect } from 'react-redux';
@@ -32,6 +32,12 @@ class AddEventScreen extends Component {
         this.onClickSave = this.onClickSave.bind(this);
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (!this.props.created && nextProps.created) { // created event successfully
+            Alert.alert('Success', 'Created new event successfully!');
+        }
+    }
+
     onClickSave() {
         const payload = {
             ...this.state,
@@ -52,6 +58,13 @@ class AddEventScreen extends Component {
                     <UserInput label={'Zip Code:'} onChangeText={(zipcode) => this.setState({ zipcode })} />
                     <UserInput label={'Course #:'} onChangeText={(courseNo) => this.setState({ courseNo })} />
                     <UserInput label={'Course Name:'} onChangeText={(courseName) => this.setState({ courseName })} />
+                </View>
+                <View style={styles.errorField}>
+                    <Text style={styles.errorLabel}>
+                    {
+                        this.props.error && this.props.error.data
+                    }
+                    </Text>
                 </View>
                 <TouchableOpacity style={styles.buttonContainer} onPress={() => this.onClickSave()}>
                     <View style={styles.saveButton}>
@@ -91,10 +104,20 @@ const styles = StyleSheet.create({
         fontSize: normalize(20), 
         color: Colors.white, 
     },
+    errorField: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    errorLabel: {
+        fontSize: normalize(14),
+        color: 'red',
+    },
 });
 
 const mapStateToProps = state => ({
     token: state.auth.token,
+    error: state.event.error,
+    created: state.event.created,
 });
 
 function mapDispatchToProps(dispatch) {

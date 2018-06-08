@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import SignatureCapture from 'react-native-signature-capture';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { NavigationActions } from 'react-navigation'
+import { NavigationActions } from 'react-navigation';
 import * as attendeeActions from '../actions/attendeeActions';
 
 import normalize from '../helpers/normalizeText';
@@ -35,7 +35,6 @@ class AddAttendeeScreen extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (!this.props.created && nextProps.created) { // created attendee successfully
-            console.log('goback');
             this.props.navigation.dispatch(NavigationActions.back());
         }
     }
@@ -48,7 +47,7 @@ class AddAttendeeScreen extends Component {
         const payload = {
             ...this.state,
             signature: result.encoded,
-            event: this.props.navigation.state.params.event,
+            event: this.props.navigation.state.params.id,
             token: this.props.token,
         };
         this.props.actions.createAttendeeRequest(payload);

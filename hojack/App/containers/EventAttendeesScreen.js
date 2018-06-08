@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, TouchableHighlight,
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import _ from 'lodash';
 
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
@@ -15,16 +16,24 @@ class EventAttendeesScreen extends Component {
         headerBackTitle: 'Back',
     });
     
-    _onItemClick(attendee) {
-        this.props.navigation.navigate('AttendeeSummaryScreen', { attendee });
+    constructor(props) {
+        super(props);
+
+        this._onItemClick = this._onItemClick.bind(this);
+        this._onAddClick = this._onAddClick.bind(this);
     }
 
-    _onAddClick() {
-        this.props.navigation.navigate('AddAttendeeScreen', { event: this.props.navigation.state.params.event._id });
+    _onItemClick(attendee, index) {
+        const attendeeIndex = _.findIndex(this.props.globalAttendees, item => item._id === attendee._id);
+        this.props.navigation.navigate('AttendeeSummaryScreen', { event: this.props.navigation.state.params.index, id: this.props.event._id, attendee: index, attendeeIndex, });
+    }
+
+    _onAddClick(id) {
+        this.props.navigation.navigate('AddAttendeeScreen', { id });
     }
 
     render() {
-        const { event, attendees } = this.props.navigation.state.params;
+        const { event, attendees } = this.props;
 
         return (
             <View style={Styles.container}>
@@ -40,9 +49,9 @@ class EventAttendeesScreen extends Component {
                 <FlatList
                     data={attendees}
                     keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => {
+                    renderItem={({ item, index }) => {
                         return (
-                            <TouchableHighlight onPress={() => this._onItemClick(item)}>
+                            <TouchableHighlight onPress={() => this._onItemClick(item, index)}>
                                 <View style={styles.listItemContainer}>
                                     <Icon name={item.isFilled ? "check-square" : "minus-square"} size={18} color={item.isFilled ? '#34bd3e' : '#ff575c'} />
                                     <Text style={styles.name}>{item.firstname} {item.lastname}</Text>
@@ -52,7 +61,7 @@ class EventAttendeesScreen extends Component {
                         );
                     }}
                 />
-                <TouchableOpacity style={styles.buttonContainer} onPress={() => this._onAddClick()}>
+                <TouchableOpacity style={styles.buttonContainer} onPress={() => this._onAddClick(event._id)}>
                     <View style={styles.addButton}>
                         <Icon name={'plus-circle'} size={25} color={Colors.white} />
                         <Text style={styles.buttonTitle}>Add Attendee</Text>
@@ -129,4 +138,10 @@ const styles = StyleSheet.create({
     },
 });
 
-export default EventAttendeesScreen;
+const mapStateToProps = (state, props) => ({
+    event: state.event.events[props.navigation.state.params.index] || {},
+    attendees: state.attendee.eventAttendees[props.navigation.state.params.id] || [],
+    globalAttendees: state.attendee.attendees,
+});
+
+export default connect(mapStateToProps, null)(EventAttendeesScreen);

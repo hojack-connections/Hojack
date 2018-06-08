@@ -3,6 +3,11 @@ import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Platform, } from 
 import UserInput from '../components/UserInput';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as eventActions from '../actions/eventActions';
+import { NavigationActions } from 'react-navigation';
+import axios from 'axios';
+import _ from 'lodash';
 
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
@@ -32,21 +37,24 @@ class EventSummaryScreen extends Component {
             zipcode: '',
             courseNo: '',
             courseName: '',
-            attendees: '0',
+            attendees: [],
         };
+
+        this.onSubmit = this.onSubmit.bind(this);
+        this.onDelete = this.onDelete.bind(this);
+        this.onAttendees = this.onAttendees.bind(this);
     }
 
     componentWillMount() {
         this.setState({
-            name: this.props.navigation.state.params.event.name,
-            date: new Date(this.props.navigation.state.params.event.date),
-            address: this.props.navigation.state.params.event.address,
-            city: this.props.navigation.state.params.event.city,
-            state: this.props.navigation.state.params.event.state,
-            zipcode: this.props.navigation.state.params.event.zipcode,
-            courseNo: this.props.navigation.state.params.event.courseNo,
-            courseName: this.props.navigation.state.params.event.courseName,
-            attendees: this.props.navigation.state.params.attendees,
+            name: this.props.event.name,
+            date: new Date(this.props.event.date),
+            address: this.props.event.address,
+            city: this.props.event.city,
+            state: this.props.event.state,
+            zipcode: this.props.event.zipcode,
+            courseNo: this.props.event.courseNo,
+            courseName: this.props.event.courseName,
         });
     }
 
@@ -55,15 +63,24 @@ class EventSummaryScreen extends Component {
     }
 
     onDelete() {
-
+        axios.delete('http://localhost:7001/api/events/' + this.props.navigation.state.params.id, {params: { token: this.props.token, }})
+        .then(response => {
+            console.log('delete_event response = ', response);
+            this.props.actions.removeEvent({ index: this.props.navigation.state.params.index, id: this.props.navigation.state.params.id });
+            this.props.navigation.dispatch(NavigationActions.back());
+        })
+        .catch(error => {
+            console.log('delete_event response = ', error.response);
+        });
     }
 
-    onAttendees(event) {
-        this.props.navigation.navigate('EventAttendeesScreen', { event, attendees: this.state.attendees });
+    onAttendees(index, id) {
+        this.props.navigation.navigate('EventAttendeesScreen', { index, id });
     }
 
     render() {
-        console.log(this.props.navigation.state.params);
+        const { event, attendees } = this.props;
+
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.inputFields}>
@@ -75,7 +92,7 @@ class EventSummaryScreen extends Component {
                     <UserInput label={'Zip Code:'} value={this.state.zipcode} onChangeText={(zipcode) => this.setState({ zipcode })} />
                     <UserInput label={'Course #:'} value={this.state.courseNo} onChangeText={(courseNo) => this.setState({ courseNo })} />
                     <UserInput label={'Course Name:'} value={this.state.courseName} onChangeText={(courseName) => this.setState({ courseName })} />
-                    <UserInput label={'Attendees:'} readOnly arrow value={this.state.attendees ? this.state.attendees.length.toString() : '0'} onClickEvent={() => this.onAttendees(this.props.navigation.state.params.event)} />
+                    <UserInput label={'Attendees:'} readOnly arrow value={attendees.length.toString()} onClickEvent={() => this.onAttendees(this.props.navigation.state.params.index, event._id)} />
                 </View>
                 <TouchableOpacity style={styles.buttonContainer} onPress={() => this.onDelete()}>
                     <View style={styles.deleteButton}>
@@ -117,8 +134,14 @@ const styles = StyleSheet.create({
     },
 });
 
-const mapStateToProps = state => ({
-    // connectivity: state.connectivity.connectivity,
+const mapStateToProps = (state, props) => ({
+    token: state.auth.token,
+    event: state.event.events[props.navigation.state.params.index] || {},
+    attendees: state.attendee.eventAttendees[props.navigation.state.params.id] || [],
 });
 
-export default connect(mapStateToProps, null)(EventSummaryScreen);
+const mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators({ ...eventActions, }, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(EventSummaryScreen);

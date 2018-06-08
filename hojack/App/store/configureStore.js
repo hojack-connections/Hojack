@@ -7,7 +7,8 @@ import sagas from '../sagas';
 
 const config = {
     key: 'primary',
-    storage
+    storage,
+    blacklist: ['attendee', 'event']
 };
 
 export default function configureStore() {

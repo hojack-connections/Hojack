@@ -1,5 +1,19 @@
 import * as types from './types';
 
+export function loadAttendees(payload) {
+  return {
+    type: types.LOAD_ATTENDEES,
+    payload,
+  }
+}
+
+export function removeAttendee(payload) {
+  return {
+    type: types.REMOVE_ATTENDEE,
+    payload,
+  }
+}
+
 export function createAttendeeRequest(payload) {
     return {
         type: types.CREATE_ATTENDEE.REQUEST,
@@ -7,9 +21,10 @@ export function createAttendeeRequest(payload) {
     }
 }
 
-export function createAttendeeSuccess(response) {
+export function createAttendeeSuccess(id, response) {
     return {
         type: types.CREATE_ATTENDEE.SUCCESS,
+        id,
         response,
     }
 }
@@ -17,48 +32,6 @@ export function createAttendeeSuccess(response) {
 export function createAttendeeFailure(err) {
     return {
         type: types.CREATE_ATTENDEE.FAILURE,
-        err,
-    }
-}
-
-export function updateAttendeeRequest(payload) {
-    return {
-        type: types.UPDATE_ATTENDEE.REQUEST,
-        payload,
-    }
-}
-
-export function updateAttendeeSuccess(response) {
-    return {
-        type: types.UPDATE_ATTENDEE.SUCCESS,
-        response,
-    }
-}
-
-export function updateAttendeeFailure(err) {
-    return {
-        type: types.UPDATE_ATTENDEE.FAILURE,
-        err,
-    }
-}
-
-export function deleteAttendeeRequest(payload) {
-    return {
-        type: types.DELETE_ATTENDEE.REQUEST,
-        payload,
-    }
-}
-
-export function deleteAttendeeSuccess(response) {
-    return {
-        type: types.DELETE_ATTENDEE.SUCCESS,
-        response,
-    }
-}
-
-export function deleteAttendeeFailure(err) {
-    return {
-        type: types.DELETE_ATTENDEE.FAILURE,
         err,
     }
 }

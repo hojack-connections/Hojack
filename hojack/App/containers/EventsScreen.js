@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Platform, View, Text, StyleSheet, FlatList, TouchableHighlight, } from 'react-native';
 import moment from 'moment';
 import axios from 'axios';
+import _ from 'lodash';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -9,7 +10,6 @@ import * as eventActions from '../actions/eventActions';
 import * as attendeeActions from '../actions/attendeeActions';
 
 import { Colors, Styles } from '../Themes/';
-
 
 class EventsScreen extends Component {
     static navigationOptions = ({ navigation }) => ({
@@ -20,10 +20,7 @@ class EventsScreen extends Component {
     
     constructor(props) {
         super(props);
-
-        this.state = {
-            attendees: {},
-        };
+        
         this.reloadData = this.reloadData.bind(this);
     }
 
@@ -32,14 +29,14 @@ class EventsScreen extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (JSON.parse(JSON.stringify(this.props.events)) !== JSON.parse(JSON.stringify(nextProps.events))) {
+        if (!_.isEqual(this.props.events, nextProps.events)) {
             nextProps.events.map(event => {
-                axios.get('http://localhost:7001/api/events/' + event._id + '/attendees',  { params: {token: this.props.token} })
+                // get attendees of each event
+                axios.get('http://localhost:7001/api/events/' + event._id + '/attendees', { params: {token: this.props.token} })
                 .then(response => {
-                    console.log('attendee of event', response.data);
-                    let attendees = this.state.attendees;
-                    attendees[event._id] = response.data;
-                    this.setState({ attendees });
+                    let payload = {};
+                    payload[event._id] = response.data;
+                    this.props.actions.loadAttendees(payload);
                 })
                 .catch(error => {
                     console.log(error);
@@ -53,13 +50,13 @@ class EventsScreen extends Component {
         this.props.actions.getAttendeesRequest({ token: this.props.token });
     }
 
-    _onItemClick(event) {
-        this.props.navigation.navigate('EventSummaryScreen', { event, attendees: this.state.attendees[event._id] });
+    _onItemClick(index, id) {
+        this.props.navigation.navigate('EventSummaryScreen', { index, id });
     }
 
     render() {
-        const { events, attendees } = this.props;
-        
+        const { events, attendees, eventAttendees } = this.props;
+
         return (
             <View style={Styles.container}>
                 <View style={styles.totalEventsContainer}>
@@ -73,23 +70,24 @@ class EventsScreen extends Component {
                 </View>
                 <FlatList
                     data={events}
+                    extraData={eventAttendees}
                     keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => {
+                    renderItem={({ item, index }) => {
                         return (
-                            <TouchableHighlight onPress={() => this._onItemClick(item)}>
+                            <TouchableHighlight onPress={() => this._onItemClick(index, item._id)}>
                                 <View style={styles.listItemContainer}>
                                     <Text style={styles.eventDate}>{moment(item.date).format('MMM DD, YYYY')}</Text>
                                     <View style={styles.seperator}/>
                                     <View style={styles.subDetails}>
                                         <Text style={styles.categoryTitle}>{item.name}</Text>
-                                        <Text style={{ color: item.isSubmitted ? '#34bd3e' : '#ff575c' }}>{this.state.attendees[item._id] ? this.state.attendees[item._id].length : 0}</Text>
+                                        <Text style={{ color: item.isSubmitted ? '#34bd3e' : '#ff575c' }}>{eventAttendees[item._id] ? eventAttendees[item._id].length.toLocaleString() : '0'}</Text>
                                     </View>
                                     <Icon name="chevron-right" size={16} color={'#797979'} style={styles.arrow} />
                                 </View>
                             </TouchableHighlight>
                         );
                     }}
-                    onEndReached={this.reloadData}
+                    // onEndReached={this.reloadData}
                 />
             </View>
         )
@@ -149,10 +147,11 @@ const mapStateToProps = state => ({
     token: state.auth.token,
     events: state.event.events,
     attendees: state.attendee.attendees,
+    eventAttendees: state.attendee.eventAttendees,
 });
 
 const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators({...eventActions, ...attendeeActions, }, dispatch),
+    actions: bindActionCreators({ ...eventActions, ...attendeeActions, }, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventsScreen);

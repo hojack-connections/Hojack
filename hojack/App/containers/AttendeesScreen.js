@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableHighlight, Platform, } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 import { Colors, Styles } from '../Themes/';
 
@@ -12,8 +13,16 @@ class AttendeesScreen extends Component {
         headerBackTitle: 'Back',
     });
     
-    _onItemClick(attendee) {
-        this.props.navigation.navigate('AttendeeSummaryScreen', { attendee });
+    constructor(props) {
+        super(props);
+
+        this._onItemClick = this._onItemClick.bind(this);
+    }
+
+    _onItemClick(attendee, attendeeIndex) {
+        const eventIndex = _.findIndex(this.props.events, event => event._id === attendee.event._id);
+        const localIndex = _.findIndex(this.props.eventAttendees[attendee.event._id], item => item._id === attendee._id);
+        this.props.navigation.navigate('AttendeeSummaryScreen', { event: eventIndex, id: attendee.event._id, attendee: localIndex, attendeeIndex, });
     }
 
     render() {
@@ -26,10 +35,10 @@ class AttendeesScreen extends Component {
                 </View>
                 <FlatList
                     data={attendees}
-                    keyExtractor={(item, index) => item.id}
-                    renderItem={({ item }) => {
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item, index }) => {
                         return (
-                            <TouchableHighlight onPress={() => this._onItemClick(item)}>
+                            <TouchableHighlight onPress={() => this._onItemClick(item, index)}>
                                 <View style={styles.listItemContainer}>
                                     <Icon name={item.isFilled ? "check-square" : "minus-square"} size={18} color={item.isFilled ? '#34bd3e' : '#ff575c'} />
                                     <Text style={styles.name}>{item.firstname} {item.lastname}</Text>
@@ -74,7 +83,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
+    events: state.event.events,
     attendees: state.attendee.attendees,
+    eventAttendees: state.attendee.eventAttendees,
 });
 
 export default connect(mapStateToProps, null)(AttendeesScreen);

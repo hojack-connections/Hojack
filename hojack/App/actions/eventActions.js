@@ -21,48 +21,6 @@ export function createEventFailure(err) {
     }
 }
 
-export function updateEventRequest(payload) {
-    return {
-        type: types.UPDATE_EVENT.REQUEST,
-        payload,
-    }
-}
-
-export function updateEventSuccess(response) {
-    return {
-        type: types.UPDATE_EVENT.SUCCESS,
-        response,
-    }
-}
-
-export function updateEventFailure(err) {
-    return {
-        type: types.UPDATE_EVENT.FAILURE,
-        err,
-    }
-}
-
-export function deleteEventRequest(payload) {
-    return {
-        type: types.DELETE_EVENT.REQUEST,
-        payload,
-    }
-}
-
-export function deleteEventSuccess(response) {
-    return {
-        type: types.DELETE_EVENT.SUCCESS,
-        response,
-    }
-}
-
-export function deleteEventFailure(err) {
-    return {
-        type: types.DELETE_EVENT.FAILURE,
-        err,
-    }
-}
-
 export function getEventRequest(payload) {
     return {
         type: types.GET_EVENT.REQUEST,
@@ -105,23 +63,9 @@ export function getEventsFailure(err) {
     }
 }
 
-export function getEventAttendeesRequest(payload) {
+export function removeEvent(payload) {
     return {
-        type: types.GET_EVENT_ATTENDEES.REQUEST,
+        type: types.REMOVE_EVENT,
         payload,
-    }
-}
-
-export function getEventAttendeesSuccess(response) {
-    return {
-        type: types.GET_EVENT_ATTENDEES.SUCCESS,
-        response,
-    }
-}
-
-export function getEventAttendeesFailure(err) {
-    return {
-        type: types.GET_EVENT_ATTENDEES.FAILURE,
-        err,
     }
 }
