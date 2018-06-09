@@ -37,6 +37,9 @@ class EventSummaryScreen extends Component {
             zipcode: '',
             courseNo: '',
             courseName: '',
+            numberOfCourseCredits: 0,
+            presenterName: '',
+            trainingProvider: '',
             attendees: [],
         };
 
@@ -55,6 +58,9 @@ class EventSummaryScreen extends Component {
             zipcode: this.props.event.zipcode,
             courseNo: this.props.event.courseNo,
             courseName: this.props.event.courseName,
+            numberOfCourseCredits: this.props.event.numberOfCourseCredits,
+            presenterName: this.props.event.presenterName,
+            trainingProvider: this.props.event.trainingProvider,
         });
     }
 
@@ -102,6 +108,9 @@ class EventSummaryScreen extends Component {
                     <UserInput label={'Zip Code:'} value={this.state.zipcode} onChangeText={(zipcode) => this.setState({ zipcode })} />
                     <UserInput label={'Course #:'} value={this.state.courseNo} onChangeText={(courseNo) => this.setState({ courseNo })} />
                     <UserInput label={'Course Name:'} value={this.state.courseName} onChangeText={(courseName) => this.setState({ courseName })} />
+                    <UserInput label={'Number of Course Credits:'} value={this.state.numberOfCourseCredits.toString()} onChangeText={(numberOfCourseCredits) => this.setState({ numberOfCourseCredits: parseInt(numberOfCourseCredits) })} />
+                    <UserInput label={'Presenter Name:'} value={this.state.presenterName} onChangeText={(presenterName) => this.setState({ presenterName })} />
+                    <UserInput label={'Training Provider:'} value={this.state.trainingProvider} onChangeText={(trainingProvider) => this.setState({ trainingProvider })} />
                     <UserInput label={'Attendees:'} readOnly arrow value={attendees.length.toString()} onClickEvent={() => this.onAttendees(this.props.navigation.state.params.index, event._id)} />
                 </View>
                 <TouchableOpacity style={styles.buttonContainer} onPress={() => this.onDelete()}>

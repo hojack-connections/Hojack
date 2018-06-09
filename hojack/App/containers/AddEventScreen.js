@@ -27,6 +27,9 @@ class AddEventScreen extends Component {
             zipcode: '',
             courseNo: '',
             courseName: '',
+            numberOfCourseCredits: 0,
+            presenterName: '',
+            trainingProvider: '',
         };
 
         this.onClickSave = this.onClickSave.bind(this);
@@ -58,6 +61,9 @@ class AddEventScreen extends Component {
                     <UserInput label={'Zip Code:'} onChangeText={(zipcode) => this.setState({ zipcode })} />
                     <UserInput label={'Course #:'} onChangeText={(courseNo) => this.setState({ courseNo })} />
                     <UserInput label={'Course Name:'} onChangeText={(courseName) => this.setState({ courseName })} />
+                    <UserInput label={'Number of Course Credits:'} onChangeText={(numberOfCourseCredits) => this.setState({ numberOfCourseCredits: parseInt(numberOfCourseCredits) })} />
+                    <UserInput label={'Presenter Name:'} onChangeText={(presenterName) => this.setState({ presenterName })} />
+                    <UserInput label={'Training Provider:'} onChangeText={(trainingProvider) => this.setState({ trainingProvider })} />
                 </View>
                 <View style={styles.errorField}>
                     <Text style={styles.errorLabel}>

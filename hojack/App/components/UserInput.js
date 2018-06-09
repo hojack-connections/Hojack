@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 16, 
         fontWeight: '700',
-        width: 120,
+        width: 210,
     },
     arrow: {
         position: 'absolute',
