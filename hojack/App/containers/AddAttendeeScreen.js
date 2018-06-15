@@ -57,10 +57,10 @@ class AddAttendeeScreen extends Component {
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.inputFields}>
-                    <UserInput label={'First Name:'} value={this.state.firstname} onChangeText={(firstname) => this.setState({ firstname })} />
-                    <UserInput label={'Last Name:'} value={this.state.lastname} onChangeText={(lastname) => this.setState({ lastname })} />
-                    <UserInput label={'Email:'} value={this.state.email} onChangeText={(email) => this.setState({ email })} />
-                    <UserInput label={'Phone:'} value={this.state.phone} onChangeText={(phone) => this.setState({ phone })} />
+                    <UserInput label={'First Name:'} placeholder={'First Name'} value={this.state.firstname} onChangeText={(firstname) => this.setState({ firstname })} />
+                    <UserInput label={'Last Name:'} placeholder={'Last Name'} value={this.state.lastname} onChangeText={(lastname) => this.setState({ lastname })} />
+                    <UserInput label={'Email:'} placeholder={'Email'} value={this.state.email} onChangeText={(email) => this.setState({ email })} />
+                    <UserInput label={'Phone:'} placeholder={'Phone'} value={this.state.phone} onChangeText={(phone) => this.setState({ phone })} />
                 </View>
                 <View style={styles.signatureField}>
                     <Text style={styles.signatureLabel}>Signature:</Text>

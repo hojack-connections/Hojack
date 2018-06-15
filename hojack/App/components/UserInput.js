@@ -43,6 +43,7 @@ class UserInput extends Component {
                                 autoCapitalize={'none'}
                                 autoCorrect={false} 
                                 underlineColorAndroid="transparent"
+                                placeholder={this.props.placeholder}
                             />
                     }
                     {

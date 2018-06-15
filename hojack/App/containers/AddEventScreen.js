@@ -53,17 +53,17 @@ class AddEventScreen extends Component {
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.inputFields}>
-                    <UserInput label={'Event Name:'} value={this.state.name} onChangeText={(name) => this.setState({ name })} />
+                    <UserInput label={'Event Name:'} placeholder={'Event Name'} value={this.state.name} onChangeText={(name) => this.setState({ name })} />
                     <UserInput label={'Date:'} value={this.state.date} datePicker onDateChanged={(date) => this.setState({ date })} />
-                    <UserInput label={'Address:'} onChangeText={(address) => this.setState({ address })} />
-                    <UserInput label={'City:'} onChangeText={(city) => this.setState({ city })} />
-                    <UserInput label={'State:'} onChangeText={(state) => this.setState({ state })} />
-                    <UserInput label={'Zip Code:'} onChangeText={(zipcode) => this.setState({ zipcode })} />
-                    <UserInput label={'Course #:'} onChangeText={(courseNo) => this.setState({ courseNo })} />
-                    <UserInput label={'Course Name:'} onChangeText={(courseName) => this.setState({ courseName })} />
-                    <UserInput label={'Number of Course Credits:'} onChangeText={(numberOfCourseCredits) => this.setState({ numberOfCourseCredits: parseInt(numberOfCourseCredits) })} />
-                    <UserInput label={'Presenter Name:'} onChangeText={(presenterName) => this.setState({ presenterName })} />
-                    <UserInput label={'Training Provider:'} onChangeText={(trainingProvider) => this.setState({ trainingProvider })} />
+                    <UserInput label={'Address:'} placeholder={'Address'} onChangeText={(address) => this.setState({ address })} />
+                    <UserInput label={'City:'} placeholder={'City'} onChangeText={(city) => this.setState({ city })} />
+                    <UserInput label={'State:'} placeholder={'State'} onChangeText={(state) => this.setState({ state })} />
+                    <UserInput label={'Zip Code:'} placeholder={'Zip Code'} onChangeText={(zipcode) => this.setState({ zipcode })} />
+                    <UserInput label={'Course #:'} placeholder={'Course #'} onChangeText={(courseNo) => this.setState({ courseNo })} />
+                    <UserInput label={'Course Name:'} placeholder={'Course Name'} onChangeText={(courseName) => this.setState({ courseName })} />
+                    <UserInput label={'Number of Course Credits:'} placeholder={'Course Credits'} onChangeText={(numberOfCourseCredits) => this.setState({ numberOfCourseCredits: parseInt(numberOfCourseCredits) })} />
+                    <UserInput label={'Presenter Name:'} placeholder={'Presenter Name'} onChangeText={(presenterName) => this.setState({ presenterName })} />
+                    <UserInput label={'Training Provider:'} placeholder={'Training Provider'} onChangeText={(trainingProvider) => this.setState({ trainingProvider })} />
                 </View>
                 <View style={styles.errorField}>
                     <Text style={styles.errorLabel}>
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     buttonContainer: { 
         justifyContent: 'center', 
         marginTop: 30, 
+        marginBottom: 30,
         flexDirection: 'row', 
     },
     saveButton: {

@@ -46,6 +46,7 @@ class SignupScreen extends Component {
                             onChangeText={(firstname) => this.setState({ firstname })}
                             autoCorrect={false}
                             underlineColorAndroid="transparent"
+                            placeholder="First Name"
                         />
                     </View>
                     <View style={styles.inputField}>
@@ -56,6 +57,7 @@ class SignupScreen extends Component {
                             onChangeText={(lastname) => this.setState({ lastname })}
                             autoCorrect={false}
                             underlineColorAndroid="transparent"
+                            placeholder="Last Name"
                         />
                     </View>
                     <View style={styles.inputField}>
@@ -67,6 +69,7 @@ class SignupScreen extends Component {
                             autoCapitalize={'none'}
                             autoCorrect={false}
                             underlineColorAndroid="transparent"
+                            placeholder="Email"
                         />
                     </View>
                     <View style={styles.inputField}>
@@ -79,6 +82,7 @@ class SignupScreen extends Component {
                             autoCapitalize={'none'}
                             autoCorrect={false}
                             underlineColorAndroid="transparent"
+                            placeholder="Password"
                         />
                     </View>
                     <View style={styles.errorField}>

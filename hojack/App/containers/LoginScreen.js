@@ -40,6 +40,7 @@ class LoginScreen extends Component {
                             autoCapitalize={'none'}
                             autoCorrect={false}
                             underlineColorAndroid="transparent"
+                            placeholder="email"
                         />
                     </View>
                     <View style={styles.inputField}>
@@ -52,6 +53,7 @@ class LoginScreen extends Component {
                             autoCapitalize={'none'}
                             autoCorrect={false}
                             underlineColorAndroid="transparent"
+                            placeholder="password"
                         />
                     </View>
                     <View style={styles.errorField}>

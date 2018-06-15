@@ -12,6 +12,8 @@ import _ from 'lodash';
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 
+var self;
+
 class EventSummaryScreen extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: 'Event',
@@ -19,7 +21,7 @@ class EventSummaryScreen extends Component {
         headerTitleStyle: Styles.nav.title,
         headerBackTitle: 'Back',
         headerRight:
-            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', }}>
+            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', }} onPress={() => self.onSubmit()}>
                 <Icon name={'paper-plane'} color={'#00eaea'} size={20} />
                 <Text style={{ color: '#00eaea', fontSize: normalize(15), marginLeft: 5, marginRight: 5, }}>Submit</Text>
             </TouchableOpacity>
@@ -27,6 +29,7 @@ class EventSummaryScreen extends Component {
     
     constructor(props) {
         super(props);
+        self = this;
 
         this.state = {
             name: '',
@@ -65,7 +68,32 @@ class EventSummaryScreen extends Component {
     }
 
     onSubmit() {
-        
+        const { certReceivers, sheetReceivers } = this.props;
+
+        Alert.alert(
+            'Confirm',
+            'Are you gonna submit this event?',
+            [
+              {text: 'No', onPress: () => {}, style: 'cancel'},
+              {text: 'Yes', onPress: () => {
+                axios.post('http://localhost:7001/api/events/submitEventById/' + this.props.navigation.state.params.id, 
+                    {
+                        token: this.props.token, 
+                        certReceivers,
+                        sheetReceivers,
+                    }
+                )
+                .then(response => {
+                    console.log('submit_event response = ', response);
+                    Alert.alert('Success', 'Submitted this event successfully!');
+                })
+                .catch(error => {
+                    console.log('submit_event response = ', error.response);
+                });
+              }},
+            ],
+            { cancelable: false }
+        );
     }
 
     onDelete() {
@@ -157,6 +185,8 @@ const mapStateToProps = (state, props) => ({
     token: state.auth.token,
     event: state.event.events[props.navigation.state.params.index] || {},
     attendees: state.attendee.eventAttendees[props.navigation.state.params.id] || [],
+    certReceivers: state.settings.certReceivers,
+    sheetReceivers: state.settings.sheetReceivers,
 });
 
 const mapDispatchToProps = dispatch => ({
