@@ -68,7 +68,14 @@ class EventSummaryScreen extends Component {
     }
 
     onSubmit() {
-        const { certReceivers, sheetReceivers } = this.props;
+        var { certReceivers, sheetReceivers } = this.props;
+        
+        certReceivers = certReceivers.map(receiver => {
+            return receiver.replace('<<All Attendees>>', 'all');
+        });
+        sheetReceivers = sheetReceivers.map(receiver => {
+            return receiver.replace('<<All Attendees>>', 'all');
+        });
 
         Alert.alert(
             'Confirm',
@@ -76,7 +83,7 @@ class EventSummaryScreen extends Component {
             [
               {text: 'No', onPress: () => {}, style: 'cancel'},
               {text: 'Yes', onPress: () => {
-                axios.post('http://localhost:7001/api/events/submitEventById/' + this.props.navigation.state.params.id, 
+                axios.post('http://localhost:7001/api/events/' + this.props.navigation.state.params.id + '/submit', 
                     {
                         token: this.props.token, 
                         certReceivers,
