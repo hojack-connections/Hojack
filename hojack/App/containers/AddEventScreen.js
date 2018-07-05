@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Platform, Alert, } from 'react-native';
+import { Button } from 'react-native-elements';
 import UserInput from '../components/UserInput';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { connect } from 'react-redux';
@@ -50,11 +51,14 @@ class AddEventScreen extends Component {
     }
 
     render() {
+        const { isCreating } = this.props;
+        const { name, date, address, city, state, zipcode, courseNo, courseName, numberOfCourseCredits, presenterName, trainingProvider } = this.state;
+
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.inputFields}>
-                    <UserInput label={'Event Name:'} placeholder={'Event Name'} value={this.state.name} onChangeText={(name) => this.setState({ name })} />
-                    <UserInput label={'Date:'} value={this.state.date} datePicker onDateChanged={(date) => this.setState({ date })} />
+                    <UserInput label={'Event Name:'} placeholder={'Event Name'} value={name} onChangeText={(name) => this.setState({ name })} />
+                    <UserInput label={'Date:'} value={date} datePicker onDateChanged={(date) => this.setState({ date })} />
                     <UserInput label={'Address:'} placeholder={'Address'} onChangeText={(address) => this.setState({ address })} />
                     <UserInput label={'City:'} placeholder={'City'} onChangeText={(city) => this.setState({ city })} />
                     <UserInput label={'State:'} placeholder={'State'} onChangeText={(state) => this.setState({ state })} />
@@ -72,12 +76,28 @@ class AddEventScreen extends Component {
                     }
                     </Text>
                 </View>
-                <TouchableOpacity style={styles.buttonContainer} onPress={() => this.onClickSave()}>
+                {/*<TouchableOpacity style={styles.buttonContainer} onPress={() => this.onClickSave()}>
                     <View style={styles.saveButton}>
                         <Icon name={'check-circle'} size={25} color={Colors.white} />
                         <Text style={styles.buttonTitle}>Save Event</Text>
                     </View>
-                </TouchableOpacity>
+                </TouchableOpacity>*/}
+                <Button
+                    title="Save Event"
+                    disabled={name === '' || address === '' || city === '' || state === '' || zipcode === '' || courseNo === '' || courseName === ''}
+                    loading={isCreating}
+                    icon={
+                        <Icon
+                          name='check-circle'
+                          size={25}
+                          color={Colors.white}
+                        />
+                    }
+                    onPress={() => this.onClickSave()}
+                    titleStyle={styles.buttonTitle}
+                    buttonStyle={styles.saveButton}
+                    containerStyle={styles.buttonContainer}
+                />
             </ScrollView>
         )
     }
@@ -92,19 +112,16 @@ const styles = StyleSheet.create({
         paddingTop: 10,
     },
     buttonContainer: { 
-        justifyContent: 'center', 
         marginTop: 30, 
         marginBottom: 30,
-        flexDirection: 'row', 
+        flexDirection: 'column', 
+        justifyContent: 'center',
+        paddingHorizontal: 20,
     },
     saveButton: {
-        backgroundColor: '#00eaea', 
         borderRadius: 10, 
-        width: '90%', 
-        height: 60, 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        flexDirection: 'row',
+        width: '100%', 
+        height: 60,
     },
     buttonTitle: { 
         marginLeft: 10, 
@@ -125,6 +142,7 @@ const mapStateToProps = state => ({
     token: state.auth.token,
     error: state.event.error,
     created: state.event.created,
+    isCreating: state.event.isCreating,
 });
 
 function mapDispatchToProps(dispatch) {

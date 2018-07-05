@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, TouchableHighlight, Image, Platform, } from 'react-native';
+import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -61,12 +62,26 @@ class EventAttendeesScreen extends Component {
                         );
                     }}
                 />
-                <TouchableOpacity style={styles.buttonContainer} onPress={() => this._onAddClick(event._id)}>
+                {/*<TouchableOpacity style={styles.buttonContainer} onPress={() => this._onAddClick(event._id)}>
                     <View style={styles.addButton}>
                         <Icon name={'plus-circle'} size={25} color={Colors.white} />
                         <Text style={styles.buttonTitle}>Add Attendee</Text>
                     </View>
-                </TouchableOpacity>
+                </TouchableOpacity>*/}
+                <Button
+                    title="Add Attendee"
+                    icon={
+                        <Icon
+                          name='plus-circle'
+                          size={25}
+                          color={Colors.white}
+                        />
+                    }
+                    onPress={() => this._onAddClick(event._id)}
+                    titleStyle={styles.buttonTitle}
+                    buttonStyle={styles.addButton}
+                    containerStyle={styles.buttonContainer}
+                />
             </View>
         )
     }
@@ -116,20 +131,17 @@ const styles = StyleSheet.create({
         right: 10,
         top: 13,
     },
-    buttonContainer: { 
-        justifyContent: 'center', 
+    buttonContainer: {
         marginTop: 30, 
         marginBottom: 30, 
-        flexDirection: 'row', 
+        flexDirection: 'column', 
+        justifyContent: 'center', 
+        paddingHorizontal: 20,
     },
     addButton: {
-        backgroundColor: '#00eaea', 
         borderRadius: 10, 
-        width: '90%', 
+        width: '100%', 
         height: 60, 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        flexDirection: 'row',
     },
     buttonTitle: { 
         marginLeft: 10, 

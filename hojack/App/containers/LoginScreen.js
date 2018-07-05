@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Platform, } from 'react-native';
+import { Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as authActions from '../actions/authActions';
@@ -7,6 +8,7 @@ import MainTabNavigator from '../navigation/MainTabNavigator';
 
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
+import * as EmailValidator from 'email-validator';
 
 class LoginScreen extends Component {
     constructor(props) {
@@ -15,11 +17,17 @@ class LoginScreen extends Component {
         this.state = {
             email: '',
             password: '',
+            warning: '',
         }
     }
 
     onLogin() {
-        this.props.actions.loginRequest(this.state);
+        if (!EmailValidator.validate(this.state.email)) {
+            this.setState({ warning: 'Email is not valid' });
+        } else {
+            this.setState({ warning: '' });
+            this.props.actions.loginRequest(this.state);
+        }
     }
 
     onBacktoSignup() {
@@ -27,7 +35,9 @@ class LoginScreen extends Component {
     }
 
     render() {
-        const { error } = this.props;
+        const { error, isFetching } = this.props;
+        const { warning, email, password } = this.state;
+
         return (
             <View style={Styles.container}>
                 <View style={styles.subContainer}>
@@ -35,12 +45,13 @@ class LoginScreen extends Component {
                         <Text style={styles.label}>Email: </Text>
                         <TextInput 
                             style={styles.input} 
-                            value={this.state.email}
+                            value={email}
                             onChangeText={(email) => this.setState({ email })}
-                            autoCapitalize={'none'}
+                            autoCapitalize="none"
                             autoCorrect={false}
                             underlineColorAndroid="transparent"
                             placeholder="email"
+                            keyboardType="email-address"
                         />
                     </View>
                     <View style={styles.inputField}>
@@ -48,9 +59,9 @@ class LoginScreen extends Component {
                         <TextInput 
                             secureTextEntry={true}
                             style={styles.input} 
-                            value={this.state.password}
+                            value={password}
                             onChangeText={(password) => this.setState({ password })}
-                            autoCapitalize={'none'}
+                            autoCapitalize="none"
                             autoCorrect={false}
                             underlineColorAndroid="transparent"
                             placeholder="password"
@@ -59,15 +70,19 @@ class LoginScreen extends Component {
                     <View style={styles.errorField}>
                         <Text style={styles.errorLabel}>
                         {
-                            error && error.data
+                            warning !== '' ? warning : error ? error.data : null
                         }
                         </Text>
                     </View>
-                    <TouchableOpacity style={styles.buttonContainer} onPress={() => this.onLogin()}>
-                        <View style={styles.loginButton}>
-                            <Text style={styles.buttonTitle}>Log In</Text>
-                        </View>
-                    </TouchableOpacity>
+                    <Button
+                        title="Log In"
+                        disabled={email === '' || password === ''}
+                        loading={isFetching}
+                        onPress={() => this.onLogin()}
+                        titleStyle={styles.buttonTitle}
+                        buttonStyle={styles.loginButton}
+                        containerStyle={styles.buttonContainer}
+                    />
                     <TouchableOpacity style={{ marginTop: 10, }} onPress={() => this.onBacktoSignup()}>
                         <Text style={{ fontSize: normalize(14), color: 'blue', textDecorationLine: 'underline', }}>Go to SignUp</Text>
                     </TouchableOpacity>
@@ -80,7 +95,6 @@ class LoginScreen extends Component {
 const styles = StyleSheet.create({
     subContainer: {
         justifyContent: 'center',
-        flexDirection: 'column',
         alignItems: 'center',
         flex: 1,
         paddingHorizontal: 30, 
@@ -104,24 +118,22 @@ const styles = StyleSheet.create({
     },
     errorField: {
         justifyContent: 'center',
+        height: 40,
     },
     errorLabel: {
         fontSize: normalize(14),
         color: 'red',
     },
     buttonContainer: { 
-        justifyContent: 'center', 
         marginTop: 30,
-        flexDirection: 'row', 
+        width: '100%',
+        flexDirection: 'column',
+        justifyContent: 'center',
     },
     loginButton: {
-        backgroundColor: '#00eaea', 
-        borderRadius: 10, 
-        width: '90%', 
-        height: 60, 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        flexDirection: 'row',
+        borderRadius: 10,
+        width: '100%',
+        height: 60,
     },
     buttonTitle: { 
         marginLeft: 10, 

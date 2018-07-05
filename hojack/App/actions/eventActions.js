@@ -69,3 +69,17 @@ export function removeEvent(payload) {
         payload,
     }
 }
+
+export function updateEvent(payload) {
+    return {
+        type: types.UPDATE_EVENT,
+        payload,
+    }
+}
+
+export function markEventAsSubmitted(payload) {
+    return {
+        type: types.MARK_EVENT_SUBMITTED,
+        payload,
+    }
+}

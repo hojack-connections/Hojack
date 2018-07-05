@@ -10,11 +10,10 @@ import {
     getEventsFailure,
 } from '../actions/eventActions';
 import axios from 'axios';
-
-const BASE_URL = 'http://localhost:7001/api/events';
+import API_BASE_URL from './config';
 
 function create_event(payload) {
-    return axios.post(BASE_URL, payload)
+    return axios.post(API_BASE_URL.event, payload)
         .then(response => {
             console.log('create_event response = ', response);
             return response;
@@ -26,7 +25,7 @@ function create_event(payload) {
 }
 
 function get_all_events(payload) {
-    return axios.get(BASE_URL, { params: {token: payload.token} })
+    return axios.get(API_BASE_URL.event, { params: {token: payload.token} })
     .then(response => {
         console.log('get_all_events response = ', response);
         return response;
@@ -38,7 +37,7 @@ function get_all_events(payload) {
 }
 
 function get_event(payload) {
-    return axios.get(BASE_URL + '/' + payload.id, { params: {token: payload.token} })
+    return axios.get(API_BASE_URL.event + '/' + payload.id, { params: {token: payload.token} })
     .then(response => {
         console.log('get_event response = ', response);
         return response;

@@ -20,8 +20,23 @@ export default function attendee(state = initialState, action) {
                   ...action.payload,
                 }
             }
+        case types.UPDATE_ATTENDEE:
+            let globalAttendees = state.attendees.slice(0);
+            globalAttendees[action.payload.attendeeIndex] = action.payload.response;
+            let tempLocalAttendee = {};
+            let eventLocalAttendees = state.eventAttendees[action.payload.event] ? state.eventAttendees[action.payload.event].slice(0) : [];
+            eventLocalAttendees[action.payload.attendee] = action.payload.response;
+            tempLocalAttendee[action.payload.event] = eventLocalAttendees;
+            return {
+                ...state,
+                attendees: globalAttendees,
+                eventAttendees: {
+                    ...state.eventAttendees,
+                    ...tempLocalAttendee,
+                }
+            }
         case types.REMOVE_ATTENDEE:
-            let tempAttendees = state.attendees.splice(0);
+            let tempAttendees = state.attendees.slice(0);
             tempAttendees.splice(action.payload.attendeeIndex, 1);
             let tempAttendee = {};
             let cloneEventAttendees = state.eventAttendees[action.payload.event] ? state.eventAttendees[action.payload.event].slice(0) : [];
@@ -36,7 +51,7 @@ export default function attendee(state = initialState, action) {
                 }
             }
         case types.REMOVE_EVENT:
-            let updated = state.attendees.splice(0);
+            let updated = state.attendees.slice(0);
             _.remove(updated, obj => obj.event._id === action.payload.id);
             return {
               ...state,

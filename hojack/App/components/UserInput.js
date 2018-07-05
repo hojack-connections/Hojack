@@ -35,12 +35,12 @@ class UserInput extends Component {
                             />
                         :
                             <TextInput 
-                                style={{ flex: 1, marginRight: readOnly ? 30 : 10, }} 
+                                style={{ flex: 1, marginRight: readOnly ? 30 : 10, color: label === 'Attendees:' ? Colors.blue : Colors.black, fontWeight: label === 'Attendees:' ? '700' : '100' }} 
                                 editable={!readOnly} 
                                 textAlign={'left'} 
                                 value={this.props.value}
                                 onChangeText={this.props.onChangeText}
-                                autoCapitalize={'none'}
+                                autoCapitalize={(label !== 'Email:' && label !== 'Password:') ? 'words' : 'none'}
                                 autoCorrect={false} 
                                 underlineColorAndroid="transparent"
                                 placeholder={this.props.placeholder}

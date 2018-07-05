@@ -27,7 +27,7 @@ class AttendeesScreen extends Component {
 
     render() {
         const { attendees } = this.props;
-
+        
         return (
             <View style={Styles.container}>
                 <View style={styles.totalEventsContainer}>

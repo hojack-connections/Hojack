@@ -10,6 +10,20 @@ const initialState = {
 
 export default function event(state = initialState, action) {
     switch (action.type) {
+        case types.MARK_EVENT_SUBMITTED:
+            let eventList = state.events.slice(0);
+            eventList[action.payload.index].isSubmitted = true;
+            return {
+                ...state,
+                events: eventList,
+            }
+        case types.UPDATE_EVENT:
+            let localEvents = state.events.slice(0);
+            localEvents[action.payload.index] = action.payload.response;
+            return {
+                ...state,
+                events: localEvents,
+            }
         case types.REMOVE_EVENT:
             let newEvent = state.events.slice(0);
             newEvent.splice(action.payload.index, 1);

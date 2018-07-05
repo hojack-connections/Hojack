@@ -10,11 +10,10 @@ import {
     getAttendeeFailure,
 } from '../actions/attendeeActions';
 import axios from 'axios';
-
-const BASE_URL = 'http://localhost:7001/api/attendees';
+import API_BASE_URL from './config';
 
 function create_attendee(payload) {
-    return axios.post(BASE_URL, payload)
+    return axios.post(API_BASE_URL.attendee, payload)
     .then(response => {
         console.log('create_attendee response = ', response);
         return response;
@@ -26,7 +25,7 @@ function create_attendee(payload) {
 }
 
 function get_all_attendees(payload) {
-  return axios.get(BASE_URL, { params: {token: payload.token} })
+  return axios.get(API_BASE_URL.attendee, { params: {token: payload.token} })
   .then(response => {
       console.log('get_all_attendees response = ', response);
       return response;
@@ -38,7 +37,7 @@ function get_all_attendees(payload) {
 }
 
 function get_attendee(payload) {
-  return axios.get(BASE_URL + '/' + payload.id, { params: {token: payload.token} })
+  return axios.get(API_BASE_URL.attendee + '/' + payload.id, { params: {token: payload.token} })
   .then(response => {
       console.log('get_attendee response = ', response);
       return response;

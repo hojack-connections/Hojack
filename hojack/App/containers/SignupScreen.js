@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Platform, } from 'react-native';
+import { Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as authActions from '../actions/authActions';
 
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
+import * as EmailValidator from 'email-validator';
 
 class SignupScreen extends Component {
     constructor(props) {
@@ -16,6 +18,7 @@ class SignupScreen extends Component {
             lastname: '',
             email: '',
             password: '',
+            warning: '',
         }
     }
 
@@ -25,8 +28,13 @@ class SignupScreen extends Component {
         }
     }
 
-    onSignup() {
-        this.props.actions.signupRequest(this.state);
+    onSignup() {        
+        if (!EmailValidator.validate(this.state.email)) {
+            this.setState({ warning: 'Email is not valid' });
+        } else {
+            this.setState({ warning: '' });
+            this.props.actions.signupRequest(this.state);
+        }
     }
 
     onGotoLogin() {
@@ -34,7 +42,9 @@ class SignupScreen extends Component {
     }
 
     render() {
-        const { error } = this.props;
+        const { error, isFetching } = this.props;
+        const { warning, firstname, lastname, email, password } = this.state;
+
         return (
             <View style={Styles.container}>
                 <View style={styles.subContainer}>
@@ -42,9 +52,10 @@ class SignupScreen extends Component {
                         <Text style={styles.label}>First Name: </Text>
                         <TextInput 
                             style={styles.input} 
-                            value={this.state.firstname}
+                            value={firstname}
                             onChangeText={(firstname) => this.setState({ firstname })}
                             autoCorrect={false}
+                            autoCapitalize="words"
                             underlineColorAndroid="transparent"
                             placeholder="First Name"
                         />
@@ -53,9 +64,10 @@ class SignupScreen extends Component {
                         <Text style={styles.label}>Last Name: </Text>
                         <TextInput 
                             style={styles.input} 
-                            value={this.state.lastname}
+                            value={lastname}
                             onChangeText={(lastname) => this.setState({ lastname })}
                             autoCorrect={false}
+                            autoCapitalize="words"
                             underlineColorAndroid="transparent"
                             placeholder="Last Name"
                         />
@@ -64,12 +76,13 @@ class SignupScreen extends Component {
                         <Text style={styles.label}>Email: </Text>
                         <TextInput 
                             style={styles.input} 
-                            value={this.state.email}
+                            value={email}
                             onChangeText={(email) => this.setState({ email })}
-                            autoCapitalize={'none'}
+                            autoCapitalize="none"
                             autoCorrect={false}
                             underlineColorAndroid="transparent"
                             placeholder="Email"
+                            keyboardType="email-address"
                         />
                     </View>
                     <View style={styles.inputField}>
@@ -77,9 +90,9 @@ class SignupScreen extends Component {
                         <TextInput 
                             secureTextEntry={true}
                             style={styles.input} 
-                            value={this.state.password}
+                            value={password}
                             onChangeText={(password) => this.setState({ password })}
-                            autoCapitalize={'none'}
+                            autoCapitalize="none"
                             autoCorrect={false}
                             underlineColorAndroid="transparent"
                             placeholder="Password"
@@ -88,15 +101,19 @@ class SignupScreen extends Component {
                     <View style={styles.errorField}>
                         <Text style={styles.errorLabel}>
                         {
-                            error && error.data
+                            warning !== '' ? warning : error ? error.data : null
                         }
                         </Text>
                     </View>
-                    <TouchableOpacity style={styles.buttonContainer} onPress={() => this.onSignup()}>
-                        <View style={styles.signupButton}>
-                            <Text style={styles.buttonTitle}>Register</Text>
-                        </View>
-                    </TouchableOpacity>
+                    <Button
+                        title="Register"
+                        loading={isFetching}
+                        disabled={firstname === '' || lastname === '' || email === '' || password === ''}
+                        onPress={() => this.onSignup()}
+                        titleStyle={styles.buttonTitle}
+                        buttonStyle={styles.signupButton}
+                        containerStyle={styles.buttonContainer}
+                    />
                     <TouchableOpacity style={{ marginTop: 10, }} onPress={() => this.onGotoLogin()}>
                         <Text style={{ fontSize: normalize(14), color: 'blue', textDecorationLine: 'underline', }}>Already registered? Go to LogIn</Text>
                     </TouchableOpacity>
@@ -133,24 +150,22 @@ const styles = StyleSheet.create({
     },
     errorField: {
         justifyContent: 'center',
+        height: 40,
     },
     errorLabel: {
         fontSize: normalize(14),
         color: 'red',
     },
     buttonContainer: { 
-        justifyContent: 'center', 
-        marginTop: 30, 
-        flexDirection: 'row', 
+        marginTop: 30,
+        width: '100%',
+        flexDirection: 'column',
+        justifyContent: 'center',
     },
     signupButton: {
-        backgroundColor: '#00eaea', 
-        borderRadius: 10, 
-        width: '90%', 
-        height: 60, 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        flexDirection: 'row',
+        borderRadius: 10,
+        width: '100%',
+        height: 60,
     },
     buttonTitle: { 
         marginLeft: 10, 

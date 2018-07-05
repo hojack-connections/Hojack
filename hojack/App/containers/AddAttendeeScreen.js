@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Platform, } from 'react-native';
+import { Button } from 'react-native-elements';
 import UserInput from '../components/UserInput';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import SignatureCapture from 'react-native-signature-capture';
@@ -7,6 +8,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { NavigationActions } from 'react-navigation';
 import * as attendeeActions from '../actions/attendeeActions';
+import * as EmailValidator from 'email-validator';
 
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
@@ -27,6 +29,7 @@ class AddAttendeeScreen extends Component {
             lastname: '',
             email: '',
             phone: '',
+            warning: '',
         };
 
         this.onSave = this.onSave.bind(this);
@@ -40,7 +43,12 @@ class AddAttendeeScreen extends Component {
     }
 
     onSave() {
-        this.refs["sign"].saveImage();
+        if (!EmailValidator.validate(this.state.email)) {
+            this.setState({ warning: 'Email is not valid' });
+        } else {
+            this.setState({ warning: '' });
+            this.refs["sign"].saveImage();
+        }
     }
 
     _onSaveEvent(result) {
@@ -54,19 +62,22 @@ class AddAttendeeScreen extends Component {
     }
 
     render() {
+        const { error, isCreating } = this.props;
+        const { warning, firstname, lastname, email, phone } = this.state;
+
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.inputFields}>
-                    <UserInput label={'First Name:'} placeholder={'First Name'} value={this.state.firstname} onChangeText={(firstname) => this.setState({ firstname })} />
-                    <UserInput label={'Last Name:'} placeholder={'Last Name'} value={this.state.lastname} onChangeText={(lastname) => this.setState({ lastname })} />
-                    <UserInput label={'Email:'} placeholder={'Email'} value={this.state.email} onChangeText={(email) => this.setState({ email })} />
-                    <UserInput label={'Phone:'} placeholder={'Phone'} value={this.state.phone} onChangeText={(phone) => this.setState({ phone })} />
+                    <UserInput label={'First Name:'} placeholder={'First Name'} value={firstname} onChangeText={(firstname) => this.setState({ firstname })} />
+                    <UserInput label={'Last Name:'} placeholder={'Last Name'} value={lastname} onChangeText={(lastname) => this.setState({ lastname })} />
+                    <UserInput label={'Email:'} placeholder={'Email'} value={email} onChangeText={(email) => this.setState({ email })} />
+                    <UserInput label={'Phone:'} placeholder={'Phone'} value={phone} onChangeText={(phone) => this.setState({ phone })} />
                 </View>
                 <View style={styles.signatureField}>
                     <Text style={styles.signatureLabel}>Signature:</Text>
                     <SignatureCapture
                         ref="sign"
-                        style={{ width: '100%', marginTop: 10, }}
+                        style={{ width: '100%', paddingTop: 10, backgroundColor: 'transparent', }}
                         showNativeButtons={true}
                         showBorder={false}
                         showTitleLabel={false}
@@ -77,16 +88,32 @@ class AddAttendeeScreen extends Component {
                 <View style={styles.errorField}>
                     <Text style={styles.errorLabel}>
                     {
-                        this.props.error && this.props.error.data
+                        warning !== '' ? warning : error ? error.data : null
                     }
                     </Text>
                 </View>
-                <TouchableOpacity style={styles.buttonContainer} onPress={() => this.onSave()}>
+                {/*<TouchableOpacity style={styles.buttonContainer} onPress={() => this.onSave()}>
                     <View style={styles.saveButton}>
                         <Icon name={'check-circle'} size={25} color={Colors.white} />
                         <Text style={styles.buttonTitle}>Save Attendee</Text>
                     </View>
-                </TouchableOpacity>
+                </TouchableOpacity>*/}
+                <Button
+                    title="Save Attendee"
+                    disabled={firstname === '' || lastname === '' || email === ''}
+                    loading={isCreating}
+                    icon={
+                        <Icon
+                          name='check-circle'
+                          size={25}
+                          color={Colors.white}
+                        />
+                    }
+                    onPress={() => this.onSave()}
+                    titleStyle={styles.buttonTitle}
+                    buttonStyle={styles.saveButton}
+                    containerStyle={styles.buttonContainer}
+                />
             </ScrollView>
         )
     }
@@ -102,10 +129,10 @@ const styles = StyleSheet.create({
     },
     signatureField: {
         height: 100,
-        width: '90%',
-        marginLeft: '5%',
         marginTop: 30,
         marginBottom: 30,
+        marginLeft: 20,
+        marginRight: 20,
         flexDirection: 'row',
         justifyContent: 'center',
         borderWidth: 1,
@@ -119,21 +146,19 @@ const styles = StyleSheet.create({
         position: 'absolute', 
         left: 10, 
         top: -16, 
+        zIndex: 1,
     },
     buttonContainer: { 
-        justifyContent: 'center', 
         marginTop: 30, 
         marginBottom: 30, 
-        flexDirection: 'row', 
+        flexDirection: 'column', 
+        justifyContent: 'center', 
+        paddingHorizontal: 20,
     },
     saveButton: {
-        backgroundColor: '#00eaea', 
         borderRadius: 10, 
-        width: '90%', 
+        width: '100%',
         height: 60, 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        flexDirection: 'row',
     },
     buttonTitle: { 
         marginLeft: 10, 
@@ -143,6 +168,7 @@ const styles = StyleSheet.create({
     errorField: {
         alignItems: 'center',
         justifyContent: 'center',
+        height: 40,
     },
     errorLabel: {
         fontSize: normalize(14),
@@ -154,6 +180,7 @@ const mapStateToProps = state => ({
     token: state.auth.token,
     error: state.attendee.error,
     created: state.attendee.created,
+    isCreating: state.attendee.isCreating,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -9,9 +9,10 @@ import {
     signupFailure,
 } from '../actions/authActions';
 import axios from 'axios';
+import API_BASE_URL from './config';
 
 function signup(payload) {
-    return axios.post('http://localhost:7001/api/users', payload)
+    return axios.post(API_BASE_URL.auth, payload)
     .then(response => {
         console.log('signup response = ', response);
         return response;
@@ -23,7 +24,7 @@ function signup(payload) {
 }
 
 function login(payload) {
-    return axios.post('http://localhost:7001/api/users/login', payload)
+    return axios.post(API_BASE_URL.auth + '/login', payload)
     .then(response => {
         console.log('login response = ', response);
         return response;

@@ -14,6 +14,13 @@ export function removeAttendee(payload) {
   }
 }
 
+export function updateAttendee(payload) {
+    return {
+      type: types.UPDATE_ATTENDEE,
+      payload,
+    }
+}
+
 export function createAttendeeRequest(payload) {
     return {
         type: types.CREATE_ATTENDEE.REQUEST,

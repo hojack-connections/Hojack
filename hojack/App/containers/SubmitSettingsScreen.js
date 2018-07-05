@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import * as settingsActions from '../actions/settingsActions';
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
+import * as EmailValidator from 'email-validator';
 
 class SubmitSettingsScreen extends Component {
     static navigationOptions = ({ navigation }) => ({

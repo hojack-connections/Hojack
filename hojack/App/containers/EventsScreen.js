@@ -9,6 +9,7 @@ import { bindActionCreators } from 'redux';
 import * as eventActions from '../actions/eventActions';
 import * as attendeeActions from '../actions/attendeeActions';
 
+import API_BASE_URL from '../sagas/config';
 import { Colors, Styles } from '../Themes/';
 
 class EventsScreen extends Component {
@@ -32,7 +33,7 @@ class EventsScreen extends Component {
         if (!_.isEqual(this.props.events, nextProps.events)) {
             nextProps.events.map(event => {
                 // get attendees of each event
-                axios.get('http://localhost:7001/api/events/' + event._id + '/attendees', { params: {token: this.props.token} })
+                axios.get(API_BASE_URL.event + '/' + event._id + '/attendees', { params: {token: this.props.token} })
                 .then(response => {
                     let payload = {};
                     payload[event._id] = response.data;
