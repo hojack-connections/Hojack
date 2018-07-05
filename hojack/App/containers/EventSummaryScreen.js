@@ -187,7 +187,7 @@ class EventSummaryScreen extends Component {
                     </View>
                 </TouchableOpacity>*/}
                 <Button
-                    title="Update Attendee"
+                    title="Update Event"
                     loading={this.state.isUpdating}
                     onPress={() => this.onUpdate()}
                     titleStyle={styles.buttonTitle}
@@ -195,7 +195,7 @@ class EventSummaryScreen extends Component {
                     containerStyle={styles.buttonContainer}
                 />
                 <Button
-                    title="Delete Attendee"
+                    title="Delete Event"
                     loading={this.state.isDeleting}
                     onPress={() => this.onDelete()}
                     titleStyle={styles.buttonTitle}
