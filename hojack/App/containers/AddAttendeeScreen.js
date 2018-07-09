@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Platform, } from 'react-native';
+import { View, ScrollView, Dimensions, Text, StyleSheet, TouchableOpacity, Platform, } from 'react-native';
 import { Button } from 'react-native-elements';
 import UserInput from '../components/UserInput';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -30,6 +30,7 @@ class AddAttendeeScreen extends Component {
             email: '',
             phone: '',
             warning: '',
+            signatureWidth: Dimensions.get('window').width - 50,
         };
 
         this.onSave = this.onSave.bind(this);
@@ -61,12 +62,17 @@ class AddAttendeeScreen extends Component {
         this.props.actions.createAttendeeRequest(payload);
     }
 
+    onLayout(e) {
+        const {width, height} = Dimensions.get('window');
+        this.setState({ signatureWidth: width - 50 });
+    }
+
     render() {
         const { error, isCreating } = this.props;
         const { warning, firstname, lastname, email, phone } = this.state;
 
         return (
-            <ScrollView style={styles.container}>
+            <ScrollView style={styles.container} onLayout={this.onLayout.bind(this)}>
                 <View style={styles.inputFields}>
                     <UserInput label={'First Name:'} placeholder={'First Name'} value={firstname} onChangeText={(firstname) => this.setState({ firstname })} />
                     <UserInput label={'Last Name:'} placeholder={'Last Name'} value={lastname} onChangeText={(lastname) => this.setState({ lastname })} />
@@ -75,13 +81,16 @@ class AddAttendeeScreen extends Component {
                 </View>
                 <View style={styles.signatureField}>
                     <Text style={styles.signatureLabel}>Signature:</Text>
+                    <TouchableOpacity style={{ zIndex: 1, position: 'absolute', right: 10, top: 5, }} onPress={() => this.refs["sign"].resetImage()}>
+                        <Text style={{ color: 'blue', fontSize: 14, }}>Reset</Text>
+                    </TouchableOpacity>
                     <SignatureCapture
                         ref="sign"
-                        style={{ width: '100%', paddingTop: 10, backgroundColor: 'transparent', }}
-                        showNativeButtons={true}
+                        style={{ width: this.state.signatureWidth, paddingTop: 10, backgroundColor: 'transparent', }}
+                        showNativeButtons={false}
                         showBorder={false}
                         showTitleLabel={false}
-                        viewMode={"landscape"}
+                        viewMode={"portrait"}
                         onSaveEvent={this._onSaveEvent}
                     />
                 </View>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, TextInput, StyleSheet, TouchableOpacity, Platform, } from 'react-native';
+import { View, ScrollView, Text, TextInput, StyleSheet, TouchableOpacity, Platform, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -22,17 +22,25 @@ class SubmitSettingsScreen extends Component {
             newCertReceiver: "",
             newSheetReceiver: "",
         };
+    }
 
-        this._onAddSheetReceiver = this._onAddSheetReceiver.bind(this);
-        this._onAddCertReceiver = this._onAddCertReceiver.bind(this);
-        this._onRemoveSheetReceiver = this._onRemoveSheetReceiver.bind(this);
-        this._onRemoveCertReceiver = this._onRemoveCertReceiver.bind(this);
+    _onBeforeAddSheetReceiver() {
+        this.sheetReceiverInput.focus();
     }
 
     _onAddSheetReceiver() {
         if (this.state.newSheetReceiver !== '') {
-            this.props.actions.addSheetReceiver(this.state.newSheetReceiver);
-            this.setState({ newSheetReceiver: '' });
+            if (this.state.newSheetReceiver === '<<All Attendees>>' || EmailValidator.validate(this.state.newSheetReceiver)) {
+                this.props.actions.addSheetReceiver(this.state.newSheetReceiver);
+                this.setState({ newSheetReceiver: '' });
+            }
+            else {
+                Alert.alert(
+                    "Warning",
+                    "Please input valid email address or '<<All Attendees>>'",
+                );
+                this.setState({ newSheetReceiver: '' });
+            }
         }
     }
 
@@ -40,10 +48,23 @@ class SubmitSettingsScreen extends Component {
         this.props.actions.removeSheetReceiver(index);
     }
 
+    _onBeforeAddCertReceiver() {
+        this.certReceiverInput.focus();
+    }
+
     _onAddCertReceiver() {
         if (this.state.newCertReceiver !== '') {
-            this.props.actions.addCertReceiver(this.state.newCertReceiver);
-            this.setState({ newCertReceiver: '' });
+            if (this.state.newCertReceiver === '<<All Attendees>>' || EmailValidator.validate(this.state.newCertReceiver)) {
+                this.props.actions.addCertReceiver(this.state.newCertReceiver);
+                this.setState({ newCertReceiver: '' });
+            }
+            else {
+                Alert.alert(
+                    "Warning",
+                    "Please input a valid email address or '<<All Attendees>>'",
+                );
+                this.setState({ newCertReceiver: '' });
+            }
         }
     }
 
@@ -70,10 +91,11 @@ class SubmitSettingsScreen extends Component {
                     ))
                 }
                 <View style={styles.plusContainer}>
-                    <TouchableOpacity onPress={() => this._onAddSheetReceiver()}>
+                    <TouchableOpacity onPress={() => this._onBeforeAddSheetReceiver()}>
                         <Icon name={"plus"} size={21} color={Colors.black} />
                     </TouchableOpacity>
                     <TextInput 
+                        ref={(input) => { this.sheetReceiverInput = input; }}
                         style={{ flex: 1, marginLeft: 50, marginRight: 10, }} 
                         textAlign={'left'} 
                         value={this.state.newSheetReceiver}
@@ -81,7 +103,9 @@ class SubmitSettingsScreen extends Component {
                         autoCapitalize={'none'}
                         autoCorrect={false} 
                         underlineColorAndroid="transparent"
-                        placeholder="Input new email address"
+                        placeholder="Input a new email address"
+                        onSubmitEditing={() => this._onAddSheetReceiver()}
+                        onBlur={() => this._onAddSheetReceiver()}
                     />
                 </View>
 
@@ -99,10 +123,11 @@ class SubmitSettingsScreen extends Component {
                     ))
                 }
                 <View style={styles.plusContainer}>
-                    <TouchableOpacity onPress={() => this._onAddCertReceiver()}>
+                    <TouchableOpacity onPress={() => this._onBeforeAddCertReceiver()}>
                         <Icon name={"plus"} size={21} color={Colors.black} />
                     </TouchableOpacity>
                     <TextInput 
+                        ref={(input) => { this.certReceiverInput = input; }}
                         style={{ flex: 1, marginLeft: 50, marginRight: 10, }} 
                         textAlign={'left'} 
                         value={this.state.newCertReceiver}
@@ -110,7 +135,9 @@ class SubmitSettingsScreen extends Component {
                         autoCapitalize={'none'}
                         autoCorrect={false} 
                         underlineColorAndroid="transparent"
-                        placeholder="Input new email address"
+                        placeholder="Input a new email address"
+                        onSubmitEditing={() => this._onAddCertReceiver()}
+                        onBlur={() => this._onAddCertReceiver()}
                     />
                 </View>
             </ScrollView>
