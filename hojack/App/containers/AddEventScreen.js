@@ -45,6 +45,7 @@ class AddEventScreen extends Component {
     onClickSave() {
         const payload = {
             ...this.state,
+            date: new Date(this.state.date),
             token: this.props.token,
         }
         this.props.actions.createEventRequest(payload);

@@ -110,7 +110,7 @@ class EventSummaryScreen extends Component {
         {
             token: this.props.token, 
             name: this.state.name,
-            date: this.state.date,
+            date: new Date(this.state.date),
             address: this.state.address,
             city: this.state.city,
             state: this.state.state,
