@@ -154,8 +154,8 @@ const styles = StyleSheet.create({
         fontWeight: '700', 
         position: 'absolute', 
         left: 10, 
-        top: -16, 
-        zIndex: 1,
+        top: Platform.OS === 'ios' ? -16 : -12, 
+        zIndex: 999,
     },
     buttonContainer: { 
         marginTop: 30, 

@@ -96,7 +96,7 @@ class SubmitSettingsScreen extends Component {
                     </TouchableOpacity>
                     <TextInput 
                         ref={(input) => { this.sheetReceiverInput = input; }}
-                        style={{ flex: 1, marginLeft: 50, marginRight: 10, }} 
+                        style={{ flex: 1, marginLeft: 50, marginRight: 10, height: 46 }} 
                         textAlign={'left'} 
                         value={this.state.newSheetReceiver}
                         onChangeText={(newSheetReceiver) => this.setState({ newSheetReceiver })}
@@ -128,7 +128,7 @@ class SubmitSettingsScreen extends Component {
                     </TouchableOpacity>
                     <TextInput 
                         ref={(input) => { this.certReceiverInput = input; }}
-                        style={{ flex: 1, marginLeft: 50, marginRight: 10, }} 
+                        style={{ flex: 1, marginLeft: 50, marginRight: 10, height: 46 }} 
                         textAlign={'left'} 
                         value={this.state.newCertReceiver}
                         onChangeText={(newCertReceiver) => this.setState({ newCertReceiver })}

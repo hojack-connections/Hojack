@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import DatePicker from 'react-native-datepicker';
 
 import { Colors, Styles } from '../Themes/';
+import normalize from '../helpers/normalizeText';
 
 class UserInput extends Component {
     render() {
@@ -61,13 +62,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         flex: 1,
-        paddingVertical: 10,
         borderBottomWidth: 1,
         borderBottomColor: 'gray',
-        height: 46, 
+        paddingVertical: Platform.OS === 'ios' ? 10 : 0,
+        height: 46
     },
     label: {
-        fontSize: 16, 
+        fontSize: normalize(16), 
         fontWeight: '700',
         width: 210,
     },

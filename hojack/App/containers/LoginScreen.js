@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     inputField: {
         alignItems: 'center',
         flexDirection: 'row',
-        paddingVertical: 10,
+        paddingVertical: Platform.OS === 'ios' ? 10 : 0,
         borderBottomWidth: 1,
         borderBottomColor: Colors.black,
         height: 46, 
