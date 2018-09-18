@@ -1,8 +1,8 @@
 import * as types from '../actions/types';
 
 const initialState = {
-  certReceivers: ["<<All Attendees>>", "ian.kuchman@gmail.com", ],
-  sheetReceivers: ["ian.kuchman@gmail.com", ]
+  certReceivers: ["<<All Attendees>>", ],
+  sheetReceivers: []
 }
 
 export default function settings(state = initialState, action) {
