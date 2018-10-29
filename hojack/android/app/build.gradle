@@ -100,7 +100,7 @@ android {
         applicationId "com.certifio"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 5
+        versionCode 6
         versionName "1.1"
         ndk {
             abiFilters "armeabi-v7a", "x86"
