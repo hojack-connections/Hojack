@@ -7,7 +7,6 @@ import {
   StyleSheet,
   TouchableOpacity,
   Platform,
-  Text,
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import UserInput from '../components/UserInput';

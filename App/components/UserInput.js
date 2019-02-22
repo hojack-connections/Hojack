@@ -37,17 +37,19 @@ class UserInput extends Component {
     ) : (
       <TextInput
         autoCapitalize={
-          label !== 'Email:' && label !== 'Password:' ? 'words' : 'none'
+          this.props.label !== 'Email:' && this.props.label !== 'Password:'
+            ? 'words'
+            : 'none'
         }
         autoCorrect={false}
-        editable={!readOnly}
+        editable={!this.props.readOnly}
         onChangeText={this.props.onChangeText}
         placeholder={this.props.placeholder}
         style={{
           flex: 1,
-          marginRight: readOnly ? 30 : 10,
-          color: label === 'Attendees:' ? Colors.blue : Colors.black,
-          fontWeight: label === 'Attendees:' ? '700' : '100',
+          marginRight: this.props.readOnly ? 30 : 10,
+          color: this.props.label === 'Attendees:' ? Colors.blue : Colors.black,
+          fontWeight: this.props.label === 'Attendees:' ? '700' : '100',
         }}
         textAlign={'left'}
         underlineColorAndroid="transparent"

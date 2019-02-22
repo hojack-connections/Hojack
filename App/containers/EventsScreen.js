@@ -38,7 +38,7 @@ class EventsScreen extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (!_.isEqual(this.props.events, nextProps.events)) {
-      nextProps.events.map((event) => {
+      nextProps.events.map((event) =>
         // get attendees of each event
         axios
           .get(API_BASE_URL.event + '/' + event._id + '/attendees', {
@@ -51,8 +51,8 @@ class EventsScreen extends Component {
           })
           .catch((error) => {
             console.log(error);
-          });
-      });
+          })
+      );
     }
   }
 
@@ -77,8 +77,8 @@ class EventsScreen extends Component {
         <View style={styles.subDetails}>
           <Text style={styles.categoryTitle}>{item.name}</Text>
           <Text style={{ color: item.isSubmitted ? '#34bd3e' : '#ff575c' }}>
-            {eventAttendees[item._id]
-              ? eventAttendees[item._id].length.toLocaleString()
+            {this.props.eventAttendees[item._id]
+              ? this.props.eventAttendees[item._id].length.toLocaleString()
               : '0'}
           </Text>
         </View>

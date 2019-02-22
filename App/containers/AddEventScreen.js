@@ -140,12 +140,6 @@ class AddEventScreen extends Component {
             {this.props.error && this.props.error.data}
           </Text>
         </View>
-        {/*<TouchableOpacity style={styles.buttonContainer} onPress={() => this.onClickSave()}>
-                    <View style={styles.saveButton}>
-                        <Icon name={'check-circle'} size={25} color={Colors.white} />
-                        <Text style={styles.buttonTitle}>Save Event</Text>
-                    </View>
-                </TouchableOpacity>*/}
         <Button
           title="Save Event"
           disabled={
