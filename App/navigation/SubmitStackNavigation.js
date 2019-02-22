@@ -5,17 +5,19 @@ import SubmitScreen from '../containers/SubmitScreen';
 import SubmitSettingsScreen from '../containers/SubmitSettingsScreen';
 import { Colors, Styles } from '../Themes/';
 
-
-const SubmitStackNavigation = createStackNavigator({
+const SubmitStackNavigation = createStackNavigator(
+  {
     SubmitSettingsScreen: { screen: SubmitSettingsScreen },
-}, {
+  },
+  {
     header: {
-        visible: true,
+      visible: true,
     },
     initialRouteName: 'SubmitSettingsScreen',
     navigationOptions: ({ navigation }) => ({
-        headerStyle: Styles.nav.header,
+      headerStyle: Styles.nav.header,
     }),
-});
+  }
+);
 
 export default SubmitStackNavigation;

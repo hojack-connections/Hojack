@@ -9,32 +9,37 @@ import AddAttendeeScreen from '../containers/AddAttendeeScreen';
 
 import { Colors, Styles } from '../Themes/';
 
-const EventsStackNavigation = createStackNavigator({
+const EventsStackNavigation = createStackNavigator(
+  {
     EventsScreen: { screen: EventsScreen },
     EventSummaryScreen: { screen: EventSummaryScreen },
     EventAttendeesScreen: { screen: EventAttendeesScreen },
     AttendeeSummaryScreen: { screen: AttendeeSummaryScreen },
     AddAttendeeScreen: { screen: AddAttendeeScreen },
-}, {
+  },
+  {
     header: {
-        visible: true,
+      visible: true,
     },
     initialRouteName: 'EventsScreen',
     navigationOptions: ({ navigation }) => ({
-        headerStyle: Styles.nav.header,
-        tabBarVisible: false,
+      headerStyle: Styles.nav.header,
+      tabBarVisible: false,
     }),
-});
+  }
+);
 
 // Prevents double taps navigating twice
 const navigateOnce = (getStateForAction) => (action, state) => {
-    const { type, routeName } = action;
-    return (
-        state &&
-        type === NavigationActions.NAVIGATE &&
-        routeName === state.routes[state.routes.length - 1].routeName
-    ) ? state : getStateForAction(action, state);
+  const { type, routeName } = action;
+  return state &&
+    type === NavigationActions.NAVIGATE &&
+    routeName === state.routes[state.routes.length - 1].routeName
+    ? state
+    : getStateForAction(action, state);
 };
-EventsStackNavigation.router.getStateForAction = navigateOnce(EventsStackNavigation.router.getStateForAction);
+EventsStackNavigation.router.getStateForAction = navigateOnce(
+  EventsStackNavigation.router.getStateForAction
+);
 
 export default EventsStackNavigation;

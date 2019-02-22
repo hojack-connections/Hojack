@@ -6,18 +6,20 @@ import AttendeeSummaryScreen from '../containers/AttendeeSummaryScreen';
 
 import { Colors, Styles } from '../Themes/';
 
-
-const AttendeesStackNavigation = createStackNavigator({
+const AttendeesStackNavigation = createStackNavigator(
+  {
     AttendeesScreen: { screen: AttendeesScreen },
     AttendeeSummaryScreen: { screen: AttendeeSummaryScreen },
-}, {
+  },
+  {
     header: {
-        visible: true,
+      visible: true,
     },
     initialRouteName: 'AttendeesScreen',
     navigationOptions: ({ navigation }) => ({
-        headerStyle: Styles.nav.header,
+      headerStyle: Styles.nav.header,
     }),
-});
+  }
+);
 
 export default AttendeesStackNavigation;

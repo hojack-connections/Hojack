@@ -6,32 +6,26 @@ import createSagaMiddleware from 'redux-saga';
 import sagas from '../sagas';
 
 const config = {
-    key: 'primary',
-    storage,
-    blacklist: ['attendee', 'event']
+  key: 'primary',
+  storage,
+  blacklist: ['attendee', 'event'],
 };
 
 export default function configureStore() {
-    let reducer = persistCombineReducers(config, reducers);
+  const reducer = persistCombineReducers(config, reducers);
 
-    const sagaMiddleware = createSagaMiddleware();
+  const sagaMiddleware = createSagaMiddleware();
 
-    const store = createStore(
-        reducer,
-        undefined,
-        compose(
-            applyMiddleware(sagaMiddleware),
-        )
-    );
+  const store = createStore(
+    reducer,
+    undefined,
+    compose(applyMiddleware(sagaMiddleware))
+  );
 
-    sagaMiddleware.run(sagas);
-    persistStore(
-        store,
-        null,
-        () => {
-            store.getState()
-        }
-    );
+  sagaMiddleware.run(sagas);
+  persistStore(store, null, () => {
+    store.getState();
+  });
 
-    return store;
+  return store;
 }

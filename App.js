@@ -9,13 +9,12 @@ import MyApp from './App/App';
 
 type Props = {};
 export default class App extends Component<Props> {
-
   constructor() {
     super();
 
     this.state = {
       store: configureStore(),
-    }
+    };
   }
 
   render() {

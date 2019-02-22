@@ -5,19 +5,22 @@ import SignupScreen from '../containers/SignupScreen';
 import LoginScreen from '../containers/LoginScreen';
 import { Colors, Styles } from '../Themes/';
 
-const AuthStackNavigation = createStackNavigator({
+const AuthStackNavigation = createStackNavigator(
+  {
     SignupScreen: { screen: SignupScreen },
     LoginScreen: { screen: LoginScreen },
-}, {
+  },
+  {
     header: {
-        visible: true,
+      visible: true,
     },
     initialRouteName: 'SignupScreen',
     navigationOptions: ({ navigation }) => ({
-        headerStyle: {
-            display: 'none',
-        },
+      headerStyle: {
+        display: 'none',
+      },
     }),
-});
+  }
+);
 
 export default AuthStackNavigation;

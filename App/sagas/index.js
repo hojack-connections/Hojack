@@ -4,11 +4,7 @@ import event from './event';
 import attendee from './attendee';
 
 const root = function* root() {
-    yield all([
-        ...auth,
-        ...event,
-        ...attendee,
-    ])
+  yield all([...auth, ...event, ...attendee]);
 };
 
 export default root;

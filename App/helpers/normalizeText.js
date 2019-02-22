@@ -6,15 +6,11 @@
 //
 
 const React = require('react-native');
-const {
-  PixelRatio,
-  Dimensions
-} = React;
+const { PixelRatio, Dimensions } = React;
 
 const pixelRatio = PixelRatio.get();
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
-
 
 const normalize = (size) => {
   if (pixelRatio === 2) {
@@ -25,7 +21,7 @@ const normalize = (size) => {
     // iphone 5
     if (deviceHeight < 667) {
       return size;
-    // iphone 6-6s
+      // iphone 6-6s
     } else if (deviceHeight >= 667 && deviceHeight <= 735) {
       return size * 1.1;
     }
@@ -36,13 +32,13 @@ const normalize = (size) => {
     // catch Android font scaling on small machines
     // where pixel ratio / font scale ratio => 3:3
     if (deviceWidth <= 360) {
-        return size;
+      return size;
     }
     // Catch other weird android width sizings
     if (deviceHeight < 667) {
       return size * 1.1;
-    // catch in-between size Androids and scale font up
-    // a tad but not too much
+      // catch in-between size Androids and scale font up
+      // a tad but not too much
     }
     if (deviceHeight >= 667 && deviceHeight <= 735) {
       return size * 1.15;
@@ -55,15 +51,15 @@ const normalize = (size) => {
     // catch Android font scaling on small machines
     // where pixel ratio / font scale ratio => 3:3
     if (deviceWidth <= 360) {
-        return size;
-    // Catch other smaller android height sizings
+      return size;
+      // Catch other smaller android height sizings
     }
     if (deviceHeight < 667) {
       return size * 1.15;
-    // catch in-between size Androids and scale font up
-    // a tad but not too much
+      // catch in-between size Androids and scale font up
+      // a tad but not too much
     }
-    if(deviceHeight >= 667 && deviceHeight <= 735) {
+    if (deviceHeight >= 667 && deviceHeight <= 735) {
       return size * 1.2;
     }
     // catch larger phablet devices
@@ -71,6 +67,6 @@ const normalize = (size) => {
   }
   // if older device ie pixelRatio !== 2 || 3 || 3.5
   return size;
-}
+};
 
 module.exports = normalize;
