@@ -51,8 +51,8 @@ export default createBottomTabNavigator(
       tabBarVisible: homeTabbarVisible(navigation),
       tabBarIcon: ({ focused }) => {
         const { routeName } = navigation.state;
-        let iconName, iconColor;
-        iconColor = focused ? '#538989' : Colors.black;
+        const iconColor = focused ? '#538989' : Colors.black;
+        let iconName;
         switch (routeName) {
           case 'Events':
             iconName = 'ticket';

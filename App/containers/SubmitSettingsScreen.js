@@ -33,11 +33,11 @@ class SubmitSettingsScreen extends Component {
     };
   }
 
-  _onBeforeAddSheetReceiver() {
+  _onBeforeAddSheetReceiver = () => {
     this.sheetReceiverInput.focus();
-  }
+  };
 
-  _onAddSheetReceiver() {
+  _onAddSheetReceiver = () => {
     if (this.state.newSheetReceiver !== '') {
       if (
         this.state.newSheetReceiver === '<<All Attendees>>' ||
@@ -53,17 +53,17 @@ class SubmitSettingsScreen extends Component {
         this.setState({ newSheetReceiver: '' });
       }
     }
-  }
+  };
 
-  _onRemoveSheetReceiver(index) {
+  _onRemoveSheetReceiver = (index) => {
     this.props.actions.removeSheetReceiver(index);
-  }
+  };
 
-  _onBeforeAddCertReceiver() {
+  _onBeforeAddCertReceiver = () => {
     this.certReceiverInput.focus();
-  }
+  };
 
-  _onAddCertReceiver() {
+  _onAddCertReceiver = () => {
     if (this.state.newCertReceiver !== '') {
       if (
         this.state.newCertReceiver === '<<All Attendees>>' ||
@@ -79,11 +79,11 @@ class SubmitSettingsScreen extends Component {
         this.setState({ newCertReceiver: '' });
       }
     }
-  }
+  };
 
-  _onRemoveCertReceiver(index) {
+  _onRemoveCertReceiver = (index) => {
     this.props.actions.removeCertReceiver(index);
-  }
+  };
 
   render() {
     const { certReceivers, sheetReceivers } = this.props;
@@ -91,23 +91,31 @@ class SubmitSettingsScreen extends Component {
     return (
       <ScrollView style={Styles.container}>
         <View style={styles.section}>
-                  <Text style={{ color: Colors.black, fontSize: normalize(17), fontWeight: '700', }}>Send Attendence Summary To:</Text>
+          <Text
+            style={{
+              color: Colors.black,
+              fontSize: normalize(17),
+              fontWeight: '700',
+            }}
+          >
+            Send Attendence Summary To:
           </Text>
         </View>
-              {
-                    sheetReceivers.map((item, index) => (
-                      <View key={index} style={styles.listItemContainer}>
-                          <TouchableOpacity onPress={() => this._onRemoveSheetReceiver(index)}>
-                              <Icon color={Colors.black} name={"minus-square"} size={20} />                                
+        {sheetReceivers.map((item, index) => (
+          <View key={index} style={styles.listItemContainer}>
+            <TouchableOpacity
+              onPress={() => this._onRemoveSheetReceiver(index)}
+            >
+              <Icon color={Colors.black} name={'minus-square'} size={20} />
             </TouchableOpacity>
-                          <Text style={styles.name}>{item}</Text>
+            <Text style={styles.name}>{item}</Text>
           </View>
         ))}
-              <View style={styles.plusContainer}>
-          <TouchableOpacity onPress={() => this._onBeforeAddSheetReceiver()}>
-                      <Icon color={Colors.black} name={"plus"} size={21} />
+        <View style={styles.plusContainer}>
+          <TouchableOpacity onPress={this._onBeforeAddSheetReceiver}>
+            <Icon color={Colors.black} name={'plus'} size={21} />
           </TouchableOpacity>
-                  <TextInput 
+          <TextInput
             ref={(input) => {
               this.sheetReceiverInput = input;
             }}
@@ -121,29 +129,35 @@ class SubmitSettingsScreen extends Component {
             autoCorrect={false}
             underlineColorAndroid="transparent"
             placeholder="Input a new email address"
-            onSubmitEditing={() => this._onAddSheetReceiver()}
-            onBlur={() => this._onAddSheetReceiver()}
+            onSubmitEditing={this._onAddSheetReceiver}
+            onBlur={this._onAddSheetReceiver}
           />
         </View>
 
-              <View style={[styles.section, { marginTop: 15, }]}>
-                  <Text style={{ color: Colors.black, fontSize: normalize(17), fontWeight: '700', }}>Send Certificates of Completion To:</Text>
+        <View style={[styles.section, { marginTop: 15 }]}>
+          <Text
+            style={{
+              color: Colors.black,
+              fontSize: normalize(17),
+              fontWeight: '700',
+            }}
+          >
+            Send Certificates of Completion To:
           </Text>
         </View>
-              {
-                    certReceivers.map((item, index) => (
-                      <View key={index} style={styles.listItemContainer}>
+        {certReceivers.map((item, index) => (
+          <View key={index} style={styles.listItemContainer}>
             <TouchableOpacity onPress={() => this._onRemoveCertReceiver(index)}>
-                              <Icon color={Colors.black} name={"minus-square"} size={20} />
+              <Icon color={Colors.black} name={'minus-square'} size={20} />
             </TouchableOpacity>
             <Text style={styles.name}>{item}</Text>
           </View>
         ))}
-              <View style={styles.plusContainer}>
-          <TouchableOpacity onPress={() => this._onBeforeAddCertReceiver()}>
-                      <Icon color={Colors.black} name={"plus"} size={21} />
+        <View style={styles.plusContainer}>
+          <TouchableOpacity onPress={this._onBeforeAddCertReceiver}>
+            <Icon color={Colors.black} name={'plus'} size={21} />
           </TouchableOpacity>
-                  <TextInput 
+          <TextInput
             ref={(input) => {
               this.certReceiverInput = input;
             }}
@@ -157,8 +171,8 @@ class SubmitSettingsScreen extends Component {
             autoCorrect={false}
             underlineColorAndroid="transparent"
             placeholder="Input a new email address"
-            onSubmitEditing={() => this._onAddCertReceiver()}
-            onBlur={() => this._onAddCertReceiver()}
+            onSubmitEditing={this._onAddCertReceive}
+            onBlur={this._onAddCertReceive}
           />
         </View>
       </ScrollView>

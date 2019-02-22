@@ -10,62 +10,70 @@ import {
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import DatePicker from 'react-native-datepicker';
 
-import { Colors, Styles } from '../Themes/';
+import { Colors } from '../Themes/';
 import normalize from '../helpers/normalizeText';
 
 class UserInput extends Component {
+  renderDatePicker = () =>
+    this.props.datePicker ? (
+      <DatePicker
+        cancelBtnText="Cancel"
+        confirmBtnText="Confirm"
+        customStyles={{
+          dateIcon: {
+            display: 'none',
+          },
+          dateInput: {
+            borderWidth: 0,
+            alignItems: 'flex-start',
+          },
+        }}
+        date={this.props.value}
+        format="MMM DD, YYYY"
+        mode="date"
+        onDateChange={this.props.onDateChanged}
+        style={{ flex: 1, marginRight: 10, height: 40 }}
+      />
+    ) : (
+      <TextInput
+        autoCapitalize={
+          label !== 'Email:' && label !== 'Password:' ? 'words' : 'none'
+        }
+        autoCorrect={false}
+        editable={!readOnly}
+        onChangeText={this.props.onChangeText}
+        placeholder={this.props.placeholder}
+        style={{
+          flex: 1,
+          marginRight: readOnly ? 30 : 10,
+          color: label === 'Attendees:' ? Colors.blue : Colors.black,
+          fontWeight: label === 'Attendees:' ? '700' : '100',
+        }}
+        textAlign={'left'}
+        underlineColorAndroid="transparent"
+        value={this.props.value}
+      />
+    );
+
+  renderArrow = () =>
+    this.props.arrow ? (
+      <Icon
+        color={'#797979'}
+        name="chevron-right"
+        size={16}
+        style={styles.arrow}
+      />
+    ) : null;
+
   render() {
-    const { label, datePicker, readOnly, arrow } = this.props;
+    const { label } = this.props;
 
     return (
       <TouchableOpacity onPress={this.props.onClickEvent}>
-              <View style={styles.container} >
+        <View style={styles.container}>
           <Text style={styles.label}>{label}</Text>
-                  {
-                        datePicker ? 
-                          <DatePicker
-              style={{ flex: 1, marginRight: 10, height: 40 }}
-              date={this.props.value}
-              mode="date"
-              format="MMM DD, YYYY"
-              confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
-              customStyles={{
-                dateIcon: {
-                  display: 'none',
-                },
-                dateInput: {
-                  borderWidth: 0,
-                  alignItems: 'flex-start',
-                },
-              }}
-              onDateChange={this.props.onDateChanged}
-            />
-          ) : (
-            <TextInput
-              style={{
-                flex: 1,
-                marginRight: readOnly ? 30 : 10,
-                color: label === 'Attendees:' ? Colors.blue : Colors.black,
-                fontWeight: label === 'Attendees:' ? '700' : '100',
-              }}
-              editable={!readOnly}
-              textAlign={'left'}
-              value={this.props.value}
-              onChangeText={this.props.onChangeText}
-              autoCapitalize={
-                label !== 'Email:' && label !== 'Password:' ? 'words' : 'none'
-              }
-              autoCorrect={false}
-              underlineColorAndroid="transparent"
-              placeholder={this.props.placeholder}
-            />
-          )}
-                  {
-                        arrow &&
-                        <Icon color={'#797979'} name="chevron-right" size={16} style={styles.arrow} />
-            />
-          )}
+          {this.renderDatePicker()}
+          {this.renderArrow()}
         </View>
       </TouchableOpacity>
     );

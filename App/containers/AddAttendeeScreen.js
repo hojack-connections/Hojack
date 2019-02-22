@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Platform,
+  Text,
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import UserInput from '../components/UserInput';
@@ -52,14 +53,14 @@ class AddAttendeeScreen extends Component {
     }
   }
 
-  onSave() {
+  onSave = () => {
     if (!EmailValidator.validate(this.state.email)) {
       this.setState({ warning: 'Email is not valid' });
     } else {
       this.setState({ warning: '' });
       this.refs.sign.saveImage();
     }
-  }
+  };
 
   _onSaveEvent(result) {
     const payload = {
@@ -71,85 +72,81 @@ class AddAttendeeScreen extends Component {
     this.props.actions.createAttendeeRequest(payload);
   }
 
-  onLayout(e) {
-    const { width, height } = Dimensions.get('window');
+  onLayout = (e) => {
+    const { width } = Dimensions.get('window');
     this.setState({ signatureWidth: width - 50 });
-  }
+  };
 
   render() {
     const { error, isCreating } = this.props;
     const { warning, firstname, lastname, email, phone } = this.state;
 
     return (
-      <ScrollView onLayout={this.onLayout.bind(this)} style={styles.container}>
+      <ScrollView style={styles.container} onLayout={this.onLayout}>
         <View style={styles.inputFields}>
           <UserInput
             label={'First Name:'}
-            onChangeText={(firstname) => this.setState({ firstname })}
             placeholder={'First Name'}
             value={firstname}
+            onChangeText={(firstname) => this.setState({ firstname })}
           />
           <UserInput
             label={'Last Name:'}
-            onChangeText={(lastname) => this.setState({ lastname })}
             placeholder={'Last Name'}
             value={lastname}
+            onChangeText={(lastname) => this.setState({ lastname })}
           />
           <UserInput
             label={'Email:'}
-            onChangeText={(email) => this.setState({ email })}
             placeholder={'Email'}
             value={email}
+            onChangeText={(email) => this.setState({ email })}
           />
           <UserInput
             label={'Phone:'}
-            onChangeText={(phone) => this.setState({ phone })}
             placeholder={'Phone'}
             value={phone}
-          />
+            onChangeText={(phone) => this.setState({ phone })}
           />
         </View>
         <View style={styles.signatureField}>
           <Text style={styles.signatureLabel}>Signature:</Text>
           <TouchableOpacity
-            onPress={() => this.refs.sign.resetImage()}
             style={{ zIndex: 1, position: 'absolute', right: 10, top: 5 }}
-            <Text style={{ color: 'blue', fontSize: 14, }}>Reset</Text>
+            onPress={() => {
+              this.refs.sign.resetImage();
+            }}
+          >
+            <Text style={{ color: 'blue', fontSize: 14 }}>Reset</Text>
           </TouchableOpacity>
           <SignatureCapture
-            onSaveEvent={this._onSaveEvent}
             ref="sign"
-            showBorder={false}
-            showNativeButtons={false}
-            showTitleLabel={false}
             style={{
               width: this.state.signatureWidth,
               paddingTop: 10,
               backgroundColor: 'transparent',
             }}
+            showNativeButtons={false}
+            showBorder={false}
+            showTitleLabel={false}
             viewMode={'portrait'}
+            onSaveEvent={this._onSaveEvent}
           />
         </View>
         <View style={styles.errorField}>
           <Text style={styles.errorLabel}>
-            {warning !== '' ? warning : error ? error.data : null}
+            {warning || (error && error.data)}
           </Text>
         </View>
-        {/*<TouchableOpacity style={styles.buttonContainer} onPress={() => this.onSave()}>
-                    <View style={styles.saveButton}>
-                        <Icon name={'check-circle'} size={25} color={Colors.white} />
-                        <Text style={styles.buttonTitle}>Save Attendee</Text>
-                    </View>
-                </TouchableOpacity>*/}
         <Button
+          title="Save Attendee"
+          disabled={firstname === '' || lastname === '' || email === ''}
+          loading={isCreating}
+          icon={<Icon name="check-circle" size={25} color={Colors.white} />}
+          onPress={this.onSave}
+          titleStyle={styles.buttonTitle}
           buttonStyle={styles.saveButton}
           containerStyle={styles.buttonContainer}
-          disabled={firstname === '' || lastname === '' || email === ''}
-          icon={<Icon color={Colors.white} name="check-circle" size={25} />}
-          loading={isCreating}
-          onPress={() => this.onSave()}
-          title="Save Attendee"
-          titleStyle={styles.buttonTitle}
         />
       </ScrollView>
     );

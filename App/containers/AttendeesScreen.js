@@ -5,7 +5,6 @@ import {
   StyleSheet,
   FlatList,
   TouchableHighlight,
-  Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { connect } from 'react-redux';
@@ -26,7 +25,7 @@ class AttendeesScreen extends Component {
     this._onItemClick = this._onItemClick.bind(this);
   }
 
-  _onItemClick(attendee, attendeeIndex) {
+  _onItemClick = (attendee, attendeeIndex) => {
     const eventIndex = _.findIndex(
       this.props.events,
       (event) => event._id === attendee.event._id
@@ -41,7 +40,30 @@ class AttendeesScreen extends Component {
       attendee: localIndex,
       attendeeIndex,
     });
-  }
+  };
+
+  keyExtractor = (item, index) => index.toString();
+
+  renderCell = ({ item, index }) => (
+    <TouchableHighlight onPress={this._onItemClick}>
+      <View style={styles.listItemContainer}>
+        <Icon
+          name={item.isFilled ? 'check-square' : 'minus-square'}
+          size={18}
+          color={item.isFilled ? '#34bd3e' : '#ff575c'}
+        />
+        <Text style={styles.name}>
+          {item.firstname} {item.lastname}
+        </Text>
+        <Icon
+          name="chevron-right"
+          size={16}
+          color={'#797979'}
+          style={styles.arrow}
+        />
+      </View>
+    </TouchableHighlight>
+  );
 
   render() {
     const { attendees } = this.props;
@@ -49,21 +71,14 @@ class AttendeesScreen extends Component {
     return (
       <View style={Styles.container}>
         <View style={styles.totalEventsContainer}>
-                  <Text style={{ color: '#895353' }}>Total Attendees: {attendees.length}</Text>
+          <Text style={{ color: '#895353' }}>
+            Total Attendees: {attendees.length}
           </Text>
         </View>
         <FlatList
           data={attendees}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => (
-                            <TouchableHighlight onPress={() => this._onItemClick(item, index)}>
-                                <View style={styles.listItemContainer}>
-                                    <Icon name={item.isFilled ? "check-square" : "minus-square"} size={18} color={item.isFilled ? '#34bd3e' : '#ff575c'} />
-                                    <Text style={styles.name}>{item.firstname} {item.lastname}</Text>
-                                    <Icon name="chevron-right" size={16} color={'#797979'} style={styles.arrow} />
-                                </View>
-                            </TouchableHighlight>
-                        )}
+          keyExtractor={this.keyExtractor}
+          renderItem={this.renderCell}
         />
       </View>
     );

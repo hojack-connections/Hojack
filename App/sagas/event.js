@@ -12,7 +12,7 @@ import {
 import axios from 'axios';
 import API_BASE_URL from './config';
 
-function create_event(payload) {
+function createEvent(payload) {
   return axios
     .post(API_BASE_URL.event, payload)
     .then((response) => {
@@ -25,7 +25,7 @@ function create_event(payload) {
     });
 }
 
-function get_all_events(payload) {
+function getAllEvents(payload) {
   return axios
     .get(API_BASE_URL.event, { params: { token: payload.token } })
     .then((response) => {
@@ -38,7 +38,7 @@ function get_all_events(payload) {
     });
 }
 
-function get_event(payload) {
+function getEvent(payload) {
   return axios
     .get(API_BASE_URL.event + '/' + payload.id, {
       params: { token: payload.token },
@@ -55,7 +55,7 @@ function get_event(payload) {
 
 function* createEventRequestWorker(action) {
   try {
-    const response = yield call(create_event, action.payload);
+    const response = yield call(createEvent, action.payload);
     console.log('SAGA CREATE_EVENT SUCCESS: ', response.data);
     yield put(createEventSuccess(response.data));
   } catch (err) {
@@ -66,7 +66,7 @@ function* createEventRequestWorker(action) {
 
 function* getEventsRequestWorker(action) {
   try {
-    const response = yield call(get_all_events, action.payload);
+    const response = yield call(getAllEvents, action.payload);
     console.log('SAGA GET_EVENTS SUCCESS: ', response.data);
     yield put(getEventsSuccess(response.data));
   } catch (err) {
@@ -77,7 +77,7 @@ function* getEventsRequestWorker(action) {
 
 function* getEventRequestWorker(action) {
   try {
-    const response = yield call(get_event, action.payload);
+    const response = yield call(getEvent, action.payload);
     console.log('SAGA GET_EVENT SUCCESS: ', response.data);
     yield put(getEventSuccess(response.data));
   } catch (err) {

@@ -11,7 +11,6 @@ import { Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as authActions from '../actions/authActions';
-import MainTabNavigator from '../navigation/MainTabNavigator';
 
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
@@ -28,18 +27,18 @@ class LoginScreen extends Component {
     };
   }
 
-  onLogin() {
+  onLogin = () => {
     if (!EmailValidator.validate(this.state.email)) {
       this.setState({ warning: 'Email is not valid' });
     } else {
       this.setState({ warning: '' });
       this.props.actions.loginRequest(this.state);
     }
-  }
+  };
 
-  onBacktoSignup() {
+  onBacktoSignup = () => {
     this.props.navigation.goBack();
-  }
+  };
 
   render() {
     const { error, isFetching } = this.props;
@@ -50,7 +49,7 @@ class LoginScreen extends Component {
         <View style={styles.subContainer}>
           <View style={styles.inputField}>
             <Text style={styles.label}>Email: </Text>
-                      <TextInput 
+            <TextInput
               style={styles.input}
               value={email}
               onChangeText={(email) => this.setState({ email })}
@@ -63,7 +62,7 @@ class LoginScreen extends Component {
           </View>
           <View style={styles.inputField}>
             <Text style={styles.label}>Password: </Text>
-                      <TextInput 
+            <TextInput
               secureTextEntry
               style={styles.input}
               value={password}
@@ -75,23 +74,31 @@ class LoginScreen extends Component {
             />
           </View>
           <View style={styles.errorField}>
-                      <Text style={styles.errorLabel}>
-                          {
-                            warning !== '' ? warning : error ? error.data : null
-                        }
+            <Text style={styles.errorLabel}>
+              {warning !== '' ? warning : error ? error.data : null}
             </Text>
           </View>
           <Button
             title="Log In"
             disabled={email === '' || password === ''}
             loading={isFetching}
-            onPress={() => this.onLogin()}
+            onPress={this.onLogin}
             titleStyle={styles.buttonTitle}
             buttonStyle={styles.loginButton}
             containerStyle={styles.buttonContainer}
           />
-                  <TouchableOpacity onPress={() => this.onBacktoSignup()} style={{ marginTop: 10, }}>
-                      <Text style={{ fontSize: normalize(14), color: 'blue', textDecorationLine: 'underline', }}>Go to SignUp</Text>
+          <TouchableOpacity
+            onPress={this.onBacktoSignup}
+            style={{ marginTop: 10 }}
+          >
+            <Text
+              style={{
+                fontSize: normalize(14),
+                color: 'blue',
+                textDecorationLine: 'underline',
+              }}
+            >
+              Go to SignUp
             </Text>
           </TouchableOpacity>
         </View>

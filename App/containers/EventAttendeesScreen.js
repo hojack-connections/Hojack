@@ -4,10 +4,7 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  TouchableOpacity,
   TouchableHighlight,
-  Image,
-  Platform,
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -33,22 +30,46 @@ class EventAttendeesScreen extends Component {
     this._onAddClick = this._onAddClick.bind(this);
   }
 
-  _onItemClick(attendee, index) {
-    const attendeeIndex = _.findIndex(
-      this.props.globalAttendees,
-      (item) => item._id === attendee._id
-    );
-    this.props.navigation.navigate('AttendeeSummaryScreen', {
-      event: this.props.navigation.state.params.index,
-      id: this.props.event._id,
-      attendee: index,
-      attendeeIndex,
-    });
-  }
-
-  _onAddClick(id) {
+  _onAddClick = (id) => {
     this.props.navigation.navigate('AddAttendeeScreen', { id });
-  }
+  };
+
+  keyExtractor = (item, index) => index.toString();
+
+  renderItem = ({ attendee, index }) => {
+    const _onItemClick = () => {
+      const attendeeIndex = _.findIndex(
+        this.props.globalAttendees,
+        (item) => item._id === attendee._id
+      );
+      this.props.navigation.navigate('AttendeeSummaryScreen', {
+        event: this.props.navigation.state.params.index,
+        id: this.props.event._id,
+        attendee: index,
+        attendeeIndex,
+      });
+    };
+    return (
+      <TouchableHighlight onPress={_onItemClick}>
+        <View style={styles.listItemContainer}>
+          <Icon
+            name={item.isFilled ? 'check-square' : 'minus-square'}
+            size={18}
+            color={item.isFilled ? '#34bd3e' : '#ff575c'}
+          />
+          <Text style={styles.name}>
+            {item.firstname} {item.lastname}
+          </Text>
+          <Icon
+            name="chevron-right"
+            size={16}
+            color={'#797979'}
+            style={styles.arrow}
+          />
+        </View>
+      </TouchableHighlight>
+    );
+  };
 
   render() {
     const { event, attendees } = this.props;
@@ -56,40 +77,33 @@ class EventAttendeesScreen extends Component {
     return (
       <View style={Styles.container}>
         <View style={styles.totalEventsContainer}>
-                  <Text style={{ color: '#895353' }}>Total Attendees: {attendees.length}</Text>
+          <Text style={{ color: '#895353' }}>
+            Total Attendees: {attendees.length}
           </Text>
         </View>
-              <View style={styles.eventNameContainer}>
-                  <Text style={{ color: Colors.black, fontSize: 16, fontWeight: '700', }}>{event.name}</Text>
+        <View style={styles.eventNameContainer}>
+          <Text
+            style={{ color: Colors.black, fontSize: 16, fontWeight: '700' }}
+          >
+            {event.name}
           </Text>
         </View>
         <View style={styles.eventDateContainer}>
-                  <Text style={{ color: Colors.black, fontSize: 14, fontWeight: '700', }}>{moment(event.date).format('MMM DD, YYYY')}</Text>
+          <Text
+            style={{ color: Colors.black, fontSize: 14, fontWeight: '700' }}
+          >
+            {moment(event.date).format('MMM DD, YYYY')}
           </Text>
         </View>
-              <FlatList
+        <FlatList
           data={attendees}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => (
-                            <TouchableHighlight onPress={() => this._onItemClick(item, index)}>
-                                <View style={styles.listItemContainer}>
-                                    <Icon name={item.isFilled ? "check-square" : "minus-square"} size={18} color={item.isFilled ? '#34bd3e' : '#ff575c'} />
-                                    <Text style={styles.name}>{item.firstname} {item.lastname}</Text>
-                                    <Icon name="chevron-right" size={16} color={'#797979'} style={styles.arrow} />
-                                </View>
-                            </TouchableHighlight>
-                        )}
+          keyExtractor={this.keyExtractor}
+          renderItem={this.renderItem}
         />
-        {/*<TouchableOpacity style={styles.buttonContainer} onPress={() => this._onAddClick(event._id)}>
-                    <View style={styles.addButton}>
-                        <Icon name={'plus-circle'} size={25} color={Colors.white} />
-                        <Text style={styles.buttonTitle}>Add Attendee</Text>
-                    </View>
-                </TouchableOpacity>*/}
-              <Button
+        <Button
           title="Add Attendee"
           icon={<Icon name="plus-circle" size={25} color={Colors.white} />}
-          onPress={() => this._onAddClick(event._id)}
+          onPress={this._onAddClick}
           titleStyle={styles.buttonTitle}
           buttonStyle={styles.addButton}
           containerStyle={styles.buttonContainer}

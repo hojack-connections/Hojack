@@ -65,39 +65,63 @@ class EventsScreen extends Component {
     this.props.navigation.navigate('EventSummaryScreen', { index, id });
   }
 
+  keyExtractor = (item, index) => index.toString();
+
+  renderItem = ({ item, index }) => (
+    <TouchableHighlight onPress={() => this._onItemClick(index, item._id)}>
+      <View style={styles.listItemContainer}>
+        <Text style={styles.eventDate}>
+          {moment(item.date).format('MMM DD, YYYY')}
+        </Text>
+        <View style={styles.seperator} />
+        <View style={styles.subDetails}>
+          <Text style={styles.categoryTitle}>{item.name}</Text>
+          <Text style={{ color: item.isSubmitted ? '#34bd3e' : '#ff575c' }}>
+            {eventAttendees[item._id]
+              ? eventAttendees[item._id].length.toLocaleString()
+              : '0'}
+          </Text>
+        </View>
+        <Icon
+          name="chevron-right"
+          size={16}
+          color={'#797979'}
+          style={styles.arrow}
+        />
+      </View>
+    </TouchableHighlight>
+  );
+
   render() {
     const { events, attendees, eventAttendees } = this.props;
 
     return (
-          <View style={Styles.container}>
-              <View style={styles.totalEventsContainer}>
-                  <Text style={{ color: '#895353' }}>Total Attendees: {attendees.length}</Text>
-                  <Text style={{ color: '#538989' }}>Total Events: {events.length}</Text>
+      <View style={Styles.container}>
+        <View style={styles.totalEventsContainer}>
+          <Text style={{ color: '#895353' }}>
+            Total Attendees: {attendees.length}
+          </Text>
+          <Text style={{ color: '#538989' }}>
+            Total Events: {events.length}
           </Text>
         </View>
         <View style={styles.allEventsContainer}>
           <Text>All Attendees</Text>
-                  <Text style={{ color: '#34bd3e' }}>{attendees.length.toLocaleString()}</Text>
-                  <Icon color={'#797979'} name="chevron-right" size={16} style={Styles.arrow} />
+          <Text style={{ color: '#34bd3e' }}>
+            {attendees.length.toLocaleString()}
+          </Text>
+          <Icon
+            color={'#797979'}
+            name="chevron-right"
+            size={16}
+            style={Styles.arrow}
           />
         </View>
         <FlatList
           data={events}
           extraData={eventAttendees}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => (
-                            <TouchableHighlight onPress={() => this._onItemClick(index, item._id)}>
-                                <View style={styles.listItemContainer}>
-                                    <Text style={styles.eventDate}>{moment(item.date).format('MMM DD, YYYY')}</Text>
-                                    <View style={styles.seperator}/>
-                                    <View style={styles.subDetails}>
-                                        <Text style={styles.categoryTitle}>{item.name}</Text>
-                                        <Text style={{ color: item.isSubmitted ? '#34bd3e' : '#ff575c' }}>{eventAttendees[item._id] ? eventAttendees[item._id].length.toLocaleString() : '0'}</Text>
-                                    </View>
-                                    <Icon name="chevron-right" size={16} color={'#797979'} style={styles.arrow} />
-                                </View>
-                            </TouchableHighlight>
-                        )}
+          keyExtractor={this.keyExtractor}
+          renderItem={this.renderItem}
           // onEndReached={this.reloadData}
         />
       </View>

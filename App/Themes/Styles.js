@@ -1,5 +1,4 @@
 import Colors from './Colors';
-import { Platform } from 'react-native';
 import normalize from '../helpers/normalizeText';
 
 const Styles = {

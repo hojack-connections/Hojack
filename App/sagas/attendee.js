@@ -12,7 +12,7 @@ import {
 import axios from 'axios';
 import API_BASE_URL from './config';
 
-function create_attendee(payload) {
+function createAttendee(payload) {
   return axios
     .post(API_BASE_URL.attendee, payload)
     .then((response) => {
@@ -25,7 +25,7 @@ function create_attendee(payload) {
     });
 }
 
-function get_all_attendees(payload) {
+function getAllAttendees(payload) {
   return axios
     .get(API_BASE_URL.attendee, { params: { token: payload.token } })
     .then((response) => {
@@ -38,7 +38,7 @@ function get_all_attendees(payload) {
     });
 }
 
-function get_attendee(payload) {
+function getAttendee(payload) {
   return axios
     .get(API_BASE_URL.attendee + '/' + payload.id, {
       params: { token: payload.token },
@@ -55,7 +55,7 @@ function get_attendee(payload) {
 
 function* createAttendeeRequestWorker(action) {
   try {
-    const response = yield call(create_attendee, action.payload);
+    const response = yield call(createAttendee, action.payload);
     console.log('SAGA CREATE_ATTENDEE SUCCESS: ', response.data);
     yield put(createAttendeeSuccess(action.payload.event, response.data));
   } catch (err) {
@@ -66,7 +66,7 @@ function* createAttendeeRequestWorker(action) {
 
 function* getAttendeesRequestWorker(action) {
   try {
-    const response = yield call(get_all_attendees, action.payload);
+    const response = yield call(getAllAttendees, action.payload);
     console.log('SAGA GET_ATTENDEES SUCCESS: ', response.data);
     yield put(getAttendeesSuccess(response.data));
   } catch (err) {
@@ -77,7 +77,7 @@ function* getAttendeesRequestWorker(action) {
 
 function* getAttendeeRequestWorker(action) {
   try {
-    const response = yield call(get_attendee, action.payload);
+    const response = yield call(getAttendee, action.payload);
     console.log('SAGA GET_ATTENDEE SUCCESS: ', response.data);
     yield put(getAttendeeSuccess(response.data));
   } catch (err) {

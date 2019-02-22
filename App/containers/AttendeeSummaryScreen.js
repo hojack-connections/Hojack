@@ -4,7 +4,6 @@ import {
   ScrollView,
   Text,
   StyleSheet,
-  TouchableOpacity,
   Platform,
   Image,
   Alert,
@@ -12,8 +11,6 @@ import {
 import { Button } from 'react-native-elements';
 import axios from 'axios';
 import UserInput from '../components/UserInput';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import SignatureCapture from 'react-native-signature-capture';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as attendeeActions from '../actions/attendeeActions';
@@ -45,6 +42,7 @@ class AttendeeSummaryScreen extends Component {
   }
 
   componentDidMount() {
+    // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({
       firstname: this.props.attendee.firstname,
       lastname: this.props.attendee.lastname,
@@ -53,7 +51,7 @@ class AttendeeSummaryScreen extends Component {
     });
   }
 
-  onUpdate() {
+  onUpdate = () => {
     this.setState({ isUpdating: true });
     axios
       .put(API_BASE_URL.attendee + '/' + this.props.attendee._id, {
@@ -78,9 +76,9 @@ class AttendeeSummaryScreen extends Component {
         console.log('update_attendee error = ', error.response);
         this.setState({ isUpdating: false });
       });
-  }
+  };
 
-  onDelete() {
+  onDelete = () => {
     Alert.alert(
       'Confirm',
       'Do you really want to remove this attendee?',
@@ -114,7 +112,7 @@ class AttendeeSummaryScreen extends Component {
       ],
       { cancelable: false }
     );
-  }
+  };
 
   render() {
     const { event, attendee } = this.props;
@@ -122,63 +120,52 @@ class AttendeeSummaryScreen extends Component {
     return (
       <ScrollView style={styles.container}>
         <View style={styles.inputFields}>
-                  <UserInput label={'First Name:'} onChangeText={(firstname) => this.setState({ firstname })} value={this.state.firstname} />
-                  <UserInput label={'Last Name:'} onChangeText={(lastname) => this.setState({ lastname })} value={this.state.lastname} />
-                  <UserInput label={'Email:'} onChangeText={(email) => this.setState({ email })} value={this.state.email} />
-                  <UserInput label={'Phone:'} onChangeText={(phone) => this.setState({ phone })} value={this.state.phone} />
-                  <UserInput label={'Event:'} readOnly value={event.name} />
+          <UserInput
+            label={'First Name:'}
+            value={this.state.firstname}
+            onChangeText={(firstname) => this.setState({ firstname })}
+          />
+          <UserInput
+            label={'Last Name:'}
+            value={this.state.lastname}
+            onChangeText={(lastname) => this.setState({ lastname })}
+          />
+          <UserInput
+            label={'Email:'}
+            value={this.state.email}
+            onChangeText={(email) => this.setState({ email })}
+          />
+          <UserInput
+            label={'Phone:'}
+            value={this.state.phone}
+            onChangeText={(phone) => this.setState({ phone })}
+          />
+          <UserInput label={'Event:'} readOnly value={event.name} />
         </View>
         <View style={styles.signatureField}>
           <Text style={styles.signatureLabel}>Signature:</Text>
-          {/* <SignatureCapture
-                        style={{ width: '100%', marginTop: 10, }}
-                        showNativeButtons={true}
-                        showBorder={false}
-                        showTitleLabel={false}
-                        viewMode={"landscape"}
-                    /> */}
-                  {
-                        attendee.signature !== '' && 
+          {attendee.signature !== '' && (
             <Image
               source={{ uri: attendee.signature }}
               style={{ width: '100%', height: '100%' }}
             />
           )}
         </View>
-        {/*<TouchableOpacity style={styles.buttonContainer} onPress={() => this.onDelete()}>
-                    <View style={styles.deleteButton}>
-                        <Text style={styles.buttonTitle}>Delete Attendee</Text>
-                    </View>
-                </TouchableOpacity>*/}
-              <Button
+        <Button
           title="Update Attendee"
           loading={this.state.isUpdating}
-          // icon={
-          //     <Icon
-          //       name='pencil'
-          //       size={25}
-          //       color={Colors.white}
-          //     />
-          // }
           onPress={() => this.onUpdate()}
           titleStyle={styles.buttonTitle}
           buttonStyle={styles.updateButton}
           containerStyle={styles.buttonContainer}
         />
         <Button
+          title="Delete Attendee"
+          loading={this.state.isDeleting}
+          onPress={() => this.onDelete()}
+          titleStyle={styles.buttonTitle}
           buttonStyle={styles.deleteButton}
-                    containerStyle={styles.buttonContainer}
-                    // icon={
-                    //     <Icon
-                    //       name='check-circle'
-                    //       size={25}
-                    //       color={Colors.white}
-                    //     />
-                    // }
-                    loading={this.state.isDeleting}
-                    onPress={() => this.onDelete()}
-                    title="Delete Attendee"
-                    titleStyle={styles.buttonTitle}
+          containerStyle={styles.buttonContainer}
         />
       </ScrollView>
     );

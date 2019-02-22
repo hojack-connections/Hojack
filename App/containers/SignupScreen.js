@@ -35,29 +35,29 @@ class SignupScreen extends Component {
     }
   }
 
-  onSignup() {
+  onSignup = () => {
     if (!EmailValidator.validate(this.state.email)) {
       this.setState({ warning: 'Email is not valid' });
     } else {
       this.setState({ warning: '' });
       this.props.actions.signupRequest(this.state);
     }
-  }
+  };
 
-  onGotoLogin() {
+  onGotoLogin = () => {
     this.props.navigation.navigate('LoginScreen');
-  }
+  };
 
   render() {
     const { error, isFetching } = this.props;
     const { warning, firstname, lastname, email, password } = this.state;
 
     return (
-          <View style={Styles.container}>
+      <View style={Styles.container}>
         <View style={styles.subContainer}>
           <View style={styles.inputField}>
             <Text style={styles.label}>First Name: </Text>
-                      <TextInput 
+            <TextInput
               style={styles.input}
               value={firstname}
               onChangeText={(firstname) => this.setState({ firstname })}
@@ -67,9 +67,9 @@ class SignupScreen extends Component {
               placeholder="First Name"
             />
           </View>
-                  <View style={styles.inputField}>
+          <View style={styles.inputField}>
             <Text style={styles.label}>Last Name: </Text>
-                      <TextInput 
+            <TextInput
               style={styles.input}
               value={lastname}
               onChangeText={(lastname) => this.setState({ lastname })}
@@ -81,7 +81,7 @@ class SignupScreen extends Component {
           </View>
           <View style={styles.inputField}>
             <Text style={styles.label}>Email: </Text>
-                      <TextInput 
+            <TextInput
               style={styles.input}
               value={email}
               onChangeText={(email) => this.setState({ email })}
@@ -93,23 +93,21 @@ class SignupScreen extends Component {
             />
           </View>
           <View style={styles.inputField}>
-                      <Text style={styles.label}>Password: </Text>
-                      <TextInput 
+            <Text style={styles.label}>Password: </Text>
+            <TextInput
               autoCapitalize="none"
-                            autoCorrect={false} 
-                            onChangeText={(password) => this.setState({ password })}
-                            placeholder="Password"
-                            secureTextEntry={true}
-                            style={styles.input}
-                            underlineColorAndroid="transparent"
-                            value={password}
+              autoCorrect={false}
+              onChangeText={(password) => this.setState({ password })}
+              placeholder="Password"
+              secureTextEntry
+              style={styles.input}
+              underlineColorAndroid="transparent"
+              value={password}
             />
           </View>
           <View style={styles.errorField}>
             <Text style={styles.errorLabel}>
-                          {
-                            warning !== '' ? warning : error ? error.data : null
-                        }
+              {warning || (error && error.data)}
             </Text>
           </View>
           <Button
@@ -121,13 +119,23 @@ class SignupScreen extends Component {
               email === '' ||
               password === ''
             }
-            onPress={() => this.onSignup()}
+            onPress={this.onSignup}
             titleStyle={styles.buttonTitle}
             buttonStyle={styles.signupButton}
             containerStyle={styles.buttonContainer}
           />
-                  <TouchableOpacity onPress={() => this.onGotoLogin()} style={{ marginTop: 10, }}>
-                      <Text style={{ fontSize: normalize(14), color: 'blue', textDecorationLine: 'underline', }}>Already registered? Go to LogIn</Text>
+          <TouchableOpacity
+            onPress={this.onGotoLogin}
+            style={{ marginTop: 10 }}
+          >
+            <Text
+              style={{
+                fontSize: normalize(14),
+                color: 'blue',
+                textDecorationLine: 'underline',
+              }}
+            >
+              Already registered? Go to LogIn
             </Text>
           </TouchableOpacity>
         </View>
