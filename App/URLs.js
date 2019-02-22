@@ -7,6 +7,7 @@ export default {
   },
   events: {
     _: `${BASE_URL}/events`,
+    attendees: (id) => `${BASE_URL}/${id}/attendees`,
   },
   event: (id) => `${BASE_URL}/events/${id}`,
   attendees: {

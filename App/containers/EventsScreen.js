@@ -8,17 +8,14 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import moment from 'moment';
-import axios from 'axios';
 import _ from 'lodash';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as eventActions from '../actions/eventActions';
-import * as attendeeActions from '../actions/attendeeActions';
-
-import API_BASE_URL from '../sagas/config';
 import { Colors, Styles } from '../Themes/';
+import { inject, observer } from 'mobx-react';
 
+export default
+@inject('user', 'event')
+@observer
 class EventsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Events',
@@ -26,44 +23,13 @@ class EventsScreen extends Component {
     headerBackTitle: 'Back',
   });
 
-  constructor(props) {
-    super(props);
-
-    this.reloadData = this.reloadData.bind(this);
-  }
-
   componentDidMount() {
-    this.reloadData();
+    this.props.event.loadEvents();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!_.isEqual(this.props.events, nextProps.events)) {
-      nextProps.events.map((event) =>
-        // get attendees of each event
-        axios
-          .get(API_BASE_URL.event + '/' + event._id + '/attendees', {
-            params: { token: this.props.token },
-          })
-          .then((response) => {
-            const payload = {};
-            payload[event._id] = response.data;
-            this.props.actions.loadAttendees(payload);
-          })
-          .catch((error) => {
-            console.log(error);
-          })
-      );
-    }
-  }
-
-  reloadData() {
-    this.props.actions.getEventsRequest({ token: this.props.token });
-    this.props.actions.getAttendeesRequest({ token: this.props.token });
-  }
-
-  _onItemClick(index, id) {
+  _onItemClick = (index, id) => {
     this.props.navigation.navigate('EventSummaryScreen', { index, id });
-  }
+  };
 
   keyExtractor = (item, index) => index.toString();
 
@@ -77,8 +43,8 @@ class EventsScreen extends Component {
         <View style={styles.subDetails}>
           <Text style={styles.categoryTitle}>{item.name}</Text>
           <Text style={{ color: item.isSubmitted ? '#34bd3e' : '#ff575c' }}>
-            {this.props.eventAttendees[item._id]
-              ? this.props.eventAttendees[item._id].length.toLocaleString()
+            {this.props.event.attendeesById[item._id]
+              ? this.props.event.attendeesById[item._id].length.toLocaleString()
               : '0'}
           </Text>
         </View>
@@ -93,22 +59,22 @@ class EventsScreen extends Component {
   );
 
   render() {
-    const { events, attendees, eventAttendees } = this.props;
-
     return (
       <View style={Styles.container}>
         <View style={styles.totalEventsContainer}>
           <Text style={{ color: '#895353' }}>
-            Total Attendees: {attendees.length}
+            {/* TODO: Make this a rest call, shouldn't be calculating on client side */}
+            Total Attendees: {0}
           </Text>
           <Text style={{ color: '#538989' }}>
-            Total Events: {events.length}
+            Total Events: {this.props.event.events.length}
           </Text>
         </View>
         <View style={styles.allEventsContainer}>
           <Text>All Attendees</Text>
           <Text style={{ color: '#34bd3e' }}>
-            {attendees.length.toLocaleString()}
+            {/* TODO: Make this a rest call, shouldn't be calculating on client side */}
+            {0}
           </Text>
           <Icon
             color={'#797979'}
@@ -118,11 +84,10 @@ class EventsScreen extends Component {
           />
         </View>
         <FlatList
-          data={events}
-          extraData={eventAttendees}
+          data={this.props.event.events}
+          extraData={{}}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
-          // onEndReached={this.reloadData}
         />
       </View>
     );
@@ -177,22 +142,3 @@ const styles = StyleSheet.create({
     top: 44,
   },
 });
-
-const mapStateToProps = (state) => ({
-  token: state.auth.token,
-  events: state.event.events,
-  attendees: state.attendee.attendees,
-  eventAttendees: state.attendee.eventAttendees,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(
-    { ...eventActions, ...attendeeActions },
-    dispatch
-  ),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EventsScreen);

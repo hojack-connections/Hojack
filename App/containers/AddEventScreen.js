@@ -3,38 +3,32 @@ import { View, ScrollView, Text, StyleSheet, Alert } from 'react-native';
 import { Button } from 'react-native-elements';
 import UserInput from '../components/UserInput';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as eventActions from '../actions/eventActions';
-
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
+import { inject, observer } from 'mobx-react';
 
+export default
+@inject()
+@observer
 class AddEventScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Add Event',
     headerTitleStyle: Styles.nav.title,
   });
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      name: '',
-      date: new Date(),
-      address: '',
-      city: '',
-      state: '',
-      zipcode: '',
-      courseNo: '',
-      courseName: '',
-      numberOfCourseCredits: 0,
-      presenterName: '',
-      trainingProvider: '',
-    };
-
-    this.onClickSave = this.onClickSave.bind(this);
-  }
+  state = {
+    name: '',
+    date: new Date(),
+    address: '',
+    city: '',
+    state: '',
+    zipcode: '',
+    courseNo: '',
+    courseName: '',
+    numberOfCourseCredits: 0,
+    presenterName: '',
+    trainingProvider: '',
+  };
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.created && nextProps.created) {
@@ -43,17 +37,18 @@ class AddEventScreen extends Component {
     }
   }
 
-  onClickSave() {
+  onClickSave = () => {
     const payload = {
       ...this.state,
       date: new Date(this.state.date),
       token: this.props.token,
     };
     this.props.actions.createEventRequest(payload);
-  }
+  };
 
   render() {
-    const { isCreating } = this.props;
+    // TODO: make this dynamic
+    const { isCreating } = false;
     const {
       name,
       date,
@@ -197,21 +192,3 @@ const styles = StyleSheet.create({
     color: 'red',
   },
 });
-
-const mapStateToProps = (state) => ({
-  token: state.auth.token,
-  error: state.event.error,
-  created: state.event.created,
-  isCreating: state.event.isCreating,
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators({ ...eventActions }, dispatch),
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AddEventScreen);

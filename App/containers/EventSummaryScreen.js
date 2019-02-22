@@ -11,19 +11,19 @@ import {
 import { Button } from 'react-native-elements';
 import UserInput from '../components/UserInput';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as eventActions from '../actions/eventActions';
 import { NavigationActions } from 'react-navigation';
 import axios from 'axios';
-import _ from 'lodash';
 import API_BASE_URL from '../sagas/config';
 
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
+import { inject, observer } from 'mobx-react';
 
 let self;
 
+export default
+@inject('event')
+@observer
 class EventSummaryScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Event',
@@ -53,42 +53,25 @@ class EventSummaryScreen extends Component {
   constructor(props) {
     super(props);
     self = this;
-
-    this.state = {
-      name: '',
-      date: '',
-      address: '',
-      city: '',
-      state: '',
-      zipcode: '',
-      courseNo: '',
-      courseName: '',
-      numberOfCourseCredits: 0,
-      presenterName: '',
-      trainingProvider: '',
-      attendees: [],
-      isUpdating: false,
-      isDeleting: false,
-    };
   }
 
-  componentDidMount() {
-    this.setState({
-      name: this.props.event.name,
-      date: new Date(this.props.event.date),
-      address: this.props.event.address,
-      city: this.props.event.city,
-      state: this.props.event.state,
-      zipcode: this.props.event.zipcode,
-      courseNo: this.props.event.courseNo,
-      courseName: this.props.event.courseName,
-      numberOfCourseCredits: this.props.event.numberOfCourseCredits,
-      presenterName: this.props.event.presenterName,
-      trainingProvider: this.props.event.trainingProvider,
-    });
-  }
+  state = {
+    name: '',
+    date: '',
+    address: '',
+    city: '',
+    state: '',
+    zipcode: '',
+    courseNo: '',
+    courseName: '',
+    numberOfCourseCredits: 0,
+    presenterName: '',
+    trainingProvider: '',
+    isUpdating: false,
+    isDeleting: false,
+  };
 
-  onSubmit() {
+  onSubmit = () => {
     let { certReceivers, sheetReceivers } = this.props;
 
     certReceivers = certReceivers.map((receiver) =>
@@ -100,7 +83,7 @@ class EventSummaryScreen extends Component {
 
     Alert.alert(
       'Confirm',
-      'Are you gonna submit this event?',
+      'Would you like to submit this event?',
       [
         { text: 'No', onPress: () => {}, style: 'cancel' },
         {
@@ -133,9 +116,9 @@ class EventSummaryScreen extends Component {
       ],
       { cancelable: false }
     );
-  }
+  };
 
-  onUpdate() {
+  onUpdate = () => {
     this.setState({ isUpdating: true });
     axios
       .put(API_BASE_URL.event + '/' + this.props.navigation.state.params.id, {
@@ -165,9 +148,9 @@ class EventSummaryScreen extends Component {
         console.log('update_event error = ', error.response);
         this.setState({ isUpdating: false });
       });
-  }
+  };
 
-  onDelete() {
+  onDelete = () => {
     Alert.alert(
       'Confirm',
       'Do you really want to remove this event?',
@@ -201,14 +184,15 @@ class EventSummaryScreen extends Component {
       ],
       { cancelable: false }
     );
-  }
+  };
 
-  onAttendees(index, id) {
+  onAttendees = (index, id) => {
     this.props.navigation.navigate('EventAttendeesScreen', { index, id });
   }
 
   render() {
-    const { event, attendees } = this.props;
+    const eventId = this.props.navigation.getParam('id');
+    const attendees = this.props.event.attendeesById[eventId] || [];
 
     return (
       <ScrollView style={styles.container}>
@@ -281,23 +265,18 @@ class EventSummaryScreen extends Component {
             onClickEvent={() =>
               this.onAttendees(
                 this.props.navigation.state.params.index,
-                event._id
+                eventId
               )
             }
             readOnly
             value={attendees.length.toString()}
           />
         </View>
-        {/*<TouchableOpacity style={styles.buttonContainer} onPress={() => this.onDelete()}>
-                    <View style={styles.deleteButton}>
-                        <Text style={styles.buttonTitle}>Delete Event</Text>
-                    </View>
-                </TouchableOpacity>*/}
         <Button
           buttonStyle={styles.updateButton}
           containerStyle={styles.buttonContainer}
           loading={this.state.isUpdating}
-          onPress={() => this.onUpdate()}
+          onPress={this.onUpdate}
           title="Update Event"
           titleStyle={styles.buttonTitle}
         />
@@ -305,7 +284,7 @@ class EventSummaryScreen extends Component {
           buttonStyle={styles.deleteButton}
           containerStyle={styles.buttonContainer}
           loading={this.state.isDeleting}
-          onPress={() => this.onDelete()}
+          onPress={this.onDelete}
           title="Delete Event"
           titleStyle={styles.buttonTitle}
         />
@@ -346,21 +325,3 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
 });
-
-const mapStateToProps = (state, props) => ({
-  token: state.auth.token,
-  event: state.event.events[props.navigation.state.params.index] || {},
-  attendees:
-    state.attendee.eventAttendees[props.navigation.state.params.id] || [],
-  certReceivers: state.settings.certReceivers,
-  sheetReceivers: state.settings.sheetReceivers,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators({ ...eventActions }, dispatch),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EventSummaryScreen);

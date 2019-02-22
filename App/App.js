@@ -6,10 +6,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, StatusBar, YellowBox } from 'react-native';
 import RootNavigation from './navigation/MainTabNavigator';
 import AuthStackNavigation from './navigation/AuthStackNavigation';
-import { Provider } from 'mobx-react';
-import AttendeeStore from './store/attendee';
-import AuthStore from './store/auth';
-import EventStore from './store/event';
+import { inject, observer } from 'mobx-react';
 
 YellowBox.ignoreWarnings([
   'Warning: isMounted(...) is deprecated',
@@ -17,24 +14,19 @@ YellowBox.ignoreWarnings([
 ]);
 StatusBar.setBarStyle('light-content', true);
 
-const stores = {
-  attendee: new AttendeeStore(),
-  auth: new AuthStore(),
-  event: new EventStore(),
-};
-
-export default class App extends Component {
+export default
+@inject('auth')
+@observer
+class App extends Component {
   render() {
     return (
-      <Provider {...stores}>
-        <View style={styles.container}>
-          {stores.auth.authenticated ? (
-            <RootNavigation />
-          ) : (
-            <AuthStackNavigation />
-          )}
-        </View>
-      </Provider>
+      <View style={styles.container}>
+        {this.props.auth.authenticated ? (
+          <RootNavigation />
+        ) : (
+          <AuthStackNavigation />
+        )}
+      </View>
     );
   }
 }

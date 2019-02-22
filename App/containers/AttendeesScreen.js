@@ -11,19 +11,17 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import { Colors, Styles } from '../Themes/';
+import { inject, observer } from 'mobx-react';
 
+export default
+@inject('event')
+@observer
 class AttendeesScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'All Attendees',
     headerTitleStyle: Styles.nav.title,
     headerBackTitle: 'Back',
   });
-
-  constructor(props) {
-    super(props);
-
-    this._onItemClick = this._onItemClick.bind(this);
-  }
 
   _onItemClick = (attendee, attendeeIndex) => {
     const eventIndex = _.findIndex(
@@ -45,7 +43,7 @@ class AttendeesScreen extends Component {
   keyExtractor = (item, index) => index.toString();
 
   renderCell = ({ item, index }) => (
-    <TouchableHighlight onPress={this._onItemClick}>
+    <TouchableHighlight onPress={() => this._onItemClick(item, index)}>
       <View style={styles.listItemContainer}>
         <Icon
           name={item.isFilled ? 'check-square' : 'minus-square'}
@@ -66,7 +64,8 @@ class AttendeesScreen extends Component {
   );
 
   render() {
-    const { attendees } = this.props;
+    const eventId = this.props.navigation.getParam('id');
+    const attendees = this.props.event.attendeesById[eventId] || [];
 
     return (
       <View style={Styles.container}>
@@ -113,14 +112,3 @@ const styles = StyleSheet.create({
     top: 13,
   },
 });
-
-const mapStateToProps = (state) => ({
-  events: state.event.events,
-  attendees: state.attendee.attendees,
-  eventAttendees: state.attendee.eventAttendees,
-});
-
-export default connect(
-  mapStateToProps,
-  null
-)(AttendeesScreen);

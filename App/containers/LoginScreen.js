@@ -8,31 +8,28 @@ import {
   Platform,
 } from 'react-native';
 import { Button } from 'react-native-elements';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as authActions from '../actions/authActions';
 
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 import * as EmailValidator from 'email-validator';
+import { inject, observer } from 'mobx-react';
 
+export default
+@inject('user')
+@observer
 class LoginScreen extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      email: '',
-      password: '',
-      warning: '',
-    };
-  }
+  state = {
+    email: '',
+    password: '',
+    warning: '',
+  };
 
   onLogin = () => {
     if (!EmailValidator.validate(this.state.email)) {
       this.setState({ warning: 'Email is not valid' });
     } else {
       this.setState({ warning: '' });
-      this.props.actions.loginRequest(this.state);
+      this.props.user.login(this.state);
     }
   };
 
@@ -156,19 +153,3 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
 });
-
-const mapStateToProps = (state) => ({
-  error: state.auth.error,
-  isFetching: state.auth.isFetching,
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators({ ...authActions }, dispatch),
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LoginScreen);

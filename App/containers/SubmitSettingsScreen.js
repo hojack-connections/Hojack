@@ -6,17 +6,17 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Platform,
   Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as settingsActions from '../actions/settingsActions';
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 import * as EmailValidator from 'email-validator';
+import { inject, observer } from 'mobx-react';
 
+export default
+@inject('receiver')
+@observer
 class SubmitSettingsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Submit Settings',
@@ -24,14 +24,10 @@ class SubmitSettingsScreen extends Component {
     headerBackTitle: 'Back',
   });
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      newCertReceiver: '',
-      newSheetReceiver: '',
-    };
-  }
+  state = {
+    newCertReceiver: '',
+    newSheetReceiver: '',
+  };
 
   _onBeforeAddSheetReceiver = () => {
     this.sheetReceiverInput.focus();
@@ -57,6 +53,7 @@ class SubmitSettingsScreen extends Component {
 
   _onRemoveSheetReceiver = (index) => {
     this.props.actions.removeSheetReceiver(index);
+
   };
 
   _onBeforeAddCertReceiver = () => {
@@ -69,7 +66,8 @@ class SubmitSettingsScreen extends Component {
         this.state.newCertReceiver === '<<All Attendees>>' ||
         EmailValidator.validate(this.state.newCertReceiver)
       ) {
-        this.props.actions.addCertReceiver(this.state.newCertReceiver);
+        const eventId = this.props.navigation.getParam('id');
+        this.props.receiver.addCertReceiver(eventId, this.state.newCertReceiver);
         this.setState({ newCertReceiver: '' });
       } else {
         Alert.alert(
@@ -86,7 +84,9 @@ class SubmitSettingsScreen extends Component {
   };
 
   render() {
-    const { certReceivers, sheetReceivers } = this.props;
+    const eventId = this.props.navigation.getParam(eventId);
+    const certReceivers = this.props.receiver.certReceiversById[id];
+    const sheetReceivers = this.props.receiver.sheetReceiversById[id];
 
     return (
       <ScrollView style={Styles.container}>
@@ -210,19 +210,3 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
 });
-
-const mapStateToProps = (state) => ({
-  certReceivers: state.settings.certReceivers,
-  sheetReceivers: state.settings.sheetReceivers,
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators({ ...settingsActions }, dispatch),
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SubmitSettingsScreen);
