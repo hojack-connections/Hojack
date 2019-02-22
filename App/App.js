@@ -6,20 +6,34 @@ import React, { Component } from 'react';
 import { StyleSheet, View, StatusBar, YellowBox } from 'react-native';
 import RootNavigation from './navigation/MainTabNavigator';
 import AuthStackNavigation from './navigation/AuthStackNavigation';
-import { connect } from 'react-redux';
+import { inject, Provider } from 'mobx-react';
+import AttendeeStore from './store/attendee';
+import AuthStore from './store/auth';
+import EventStore from './store/event';
+
 YellowBox.ignoreWarnings([
   'Warning: isMounted(...) is deprecated',
   'Module RCTImageLoader',
 ]);
 StatusBar.setBarStyle('light-content', true);
 
+const stores = {
+  attendee: new AttendeeStore(),
+  auth: new AuthStore(),
+  event: new EventStore(),
+};
+
+export default
+@inject('auth')
 class App extends Component {
   render() {
-    const { isLogged } = this.props;
+    console.log(this.props.auth);
     return (
-      <View style={styles.container}>
-        {isLogged ? <RootNavigation /> : <AuthStackNavigation />}
-      </View>
+      <Provider {...stores}>
+        <View style={styles.container}>
+          {false ? <RootNavigation /> : <AuthStackNavigation />}
+        </View>
+      </Provider>
     );
   }
 }
@@ -30,12 +44,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
 });
-
-const mapStateToProps = (state) => ({
-  isLogged: state.auth.isLogged,
-});
-
-export default connect(
-  mapStateToProps,
-  null
-)(App);
