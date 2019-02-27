@@ -53,7 +53,6 @@ class SubmitSettingsScreen extends Component {
 
   _onRemoveSheetReceiver = (index) => {
     this.props.actions.removeSheetReceiver(index);
-
   };
 
   _onBeforeAddCertReceiver = () => {
@@ -61,21 +60,20 @@ class SubmitSettingsScreen extends Component {
   };
 
   _onAddCertReceiver = () => {
-    if (this.state.newCertReceiver !== '') {
-      if (
-        this.state.newCertReceiver === '<<All Attendees>>' ||
-        EmailValidator.validate(this.state.newCertReceiver)
-      ) {
-        const eventId = this.props.navigation.getParam('id');
-        this.props.receiver.addCertReceiver(eventId, this.state.newCertReceiver);
-        this.setState({ newCertReceiver: '' });
-      } else {
-        Alert.alert(
-          'Warning',
-          "Please input a valid email address or '<<All Attendees>>'"
-        );
-        this.setState({ newCertReceiver: '' });
-      }
+    if (this.state.newCertReceiver === '') return;
+    if (
+      this.state.newCertReceiver === '<<All Attendees>>' ||
+      EmailValidator.validate(this.state.newCertReceiver)
+    ) {
+      const eventId = this.props.navigation.getParam('id');
+      this.props.receiver.addCertReceiver(eventId, this.state.newCertReceiver);
+      this.setState({ newCertReceiver: '' });
+    } else {
+      Alert.alert(
+        'Warning',
+        `Please input a valid email address or '<<All Attendees>>'`
+      );
+      this.setState({ newCertReceiver: '' });
     }
   };
 
