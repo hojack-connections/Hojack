@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { VFlex, HFlex } from '../components/Shared';
 import styled from 'styled-components';
 import Colors from '../Themes/Colors';
 
@@ -22,42 +23,28 @@ const HoveringBox = styled.View`
   align-items: center;
 `;
 
-const Container = styled.View`
-  align-items: center;
-`;
-
-const ImageTextContainer = styled.View`
-  flex: 1;
-  flex-direction: row;
-  padding: 10px;
-`;
-
 const ImageIcon = styled(Image)`
   width: 35px;
   height: 35px;
   margin-horizontal: 8px;
 `;
 
-const ImageTextView = styled.View`
-  margin-left: 8px;
-  flex: 1;
-  flex-direction: column;
-  flex-wrap: wrap;
-`;
-
 const ImageTextHeader = styled.Text`
+  display: flex;
+  flex: 1;
   font-size: 18;
+  text-align: left;
 `;
 
 const ImageTextDescription = styled.Text`
-  flex: 1;
+  display: flex;
   font-size: 16;
   color: gray;
-  flex-wrap: wrap;
+  text-align: left;
 `;
 
-const TermsText = styled.Text`
-  margin-vertical: 8px;
+const DetailsText = styled.Text`
+  margin: 8px;
 `;
 
 const FooterView = styled.View`
@@ -86,8 +73,10 @@ export default class StartTrial extends React.Component {
               Join Engineers and Architects across the country
             </Text>
           </HoveringBox>
-          <Container>
-            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
+          <VFlex>
+            <Text
+              style={{ textAlign: 'center', fontSize: 20, fontWeight: 'bold' }}
+            >
               How It Works
             </Text>
             <Text
@@ -100,67 +89,71 @@ export default class StartTrial extends React.Component {
             >
               The App you need to simplify your Lunch & Learn routine
             </Text>
-          </Container>
-          <ImageTextContainer>
-            <ImageIcon
-              source={require('../../assets/attendance.png')}
-              resizeMode="contain"
-            />
-            <ImageTextView>
+          </VFlex>
+          <HFlex>
+            <VFlex>
+              <ImageIcon
+                source={require('../../assets/attendance.png')}
+                resizeMode="contain"
+              />
+            </VFlex>
+            <VFlex>
               <ImageTextHeader>Digitize attendance sign-in</ImageTextHeader>
               <ImageTextDescription>
                 Use your smart phone or tablet to capture attendance and
                 signatures
               </ImageTextDescription>
-            </ImageTextView>
-          </ImageTextContainer>
-          <ImageTextContainer>
-            <ImageIcon
-              source={require('../../assets/certification.png')}
-              resizeMode="contain"
-            />
-            <ImageTextView>
+            </VFlex>
+          </HFlex>
+          <HFlex>
+            <VFlex>
+              <ImageIcon
+                source={require('../../assets/certification.png')}
+                resizeMode="contain"
+              />
+            </VFlex>
+            <VFlex>
               <ImageTextHeader>Course Certificate Creation</ImageTextHeader>
               <ImageTextDescription>
                 Automatically create a Course Certificate and email to each
                 attendee
               </ImageTextDescription>
-            </ImageTextView>
-          </ImageTextContainer>
-          <ImageTextContainer>
-            <ImageIcon
-              source={require('../../assets/sheet.png')}
-              resizeMode="contain"
-            />
-            <ImageTextView>
+            </VFlex>
+          </HFlex>
+          <HFlex>
+            <VFlex>
+              <ImageIcon
+                source={require('../../assets/sheet.png')}
+                resizeMode="contain"
+              />
+            </VFlex>
+            <VFlex>
               <ImageTextHeader>Attendance Summary Sheet</ImageTextHeader>
               <ImageTextDescription>
                 Automatically tabulate attendance and distribute to program
                 administrators
               </ImageTextDescription>
-            </ImageTextView>
-          </ImageTextContainer>
-          <View style={{ marginHorizontal: 16 }}>
-            <Text style={{ marginVertical: 16, fontSize: 18 }}>
-              Subscription Details
-            </Text>
-            <TermsText>
+            </VFlex>
+          </HFlex>
+          <VFlex>
+            <DetailsText>Subscription Details</DetailsText>
+            <DetailsText>
               Subscriptions purchased through the app are charged to your iTunes
               account.
-            </TermsText>
-            <TermsText>
+            </DetailsText>
+            <DetailsText>
               Cancel or manage your subscription in iTunes settings. Upon
               completion of your free trial, you will be notified to choose and
               confirm your subscription plan. Per iTunes policy, your
               subscription plan will need to be manually renewed after plan
               expiration. You will be notified to extend your subscription at
               your renewal date.
-            </TermsText>
-            <TermsText>
+            </DetailsText>
+            <DetailsText>
               By purchasing goCert.io services, you acknowledge and agree to the
               goCert.io Membership Terms and Conditions. See our Privacy Policy.
-            </TermsText>
-          </View>
+            </DetailsText>
+          </VFlex>
         </ScrollView>
         <FooterView>
           <TouchableOpacity
