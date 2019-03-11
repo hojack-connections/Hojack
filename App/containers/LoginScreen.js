@@ -24,6 +24,8 @@ class LoginScreen extends Component {
     warning: '',
   };
 
+  passwordTextInputRef;
+
   onLogin = () => {
     if (!EmailValidator.validate(this.state.email)) {
       this.setState({ warning: 'Email is not valid' });
@@ -50,6 +52,7 @@ class LoginScreen extends Component {
               style={styles.input}
               value={email}
               onChangeText={(email) => this.setState({ email })}
+              onSubmitEditing={() => this.passwordTextInputRef.focus()}
               autoCapitalize="none"
               autoCorrect={false}
               underlineColorAndroid="transparent"
@@ -60,10 +63,14 @@ class LoginScreen extends Component {
           <View style={styles.inputField}>
             <Text style={styles.label}>Password: </Text>
             <TextInput
+              ref={(input) => {
+                this.passwordTextInputRef = input;
+              }}
               secureTextEntry
               style={styles.input}
               value={password}
               onChangeText={(password) => this.setState({ password })}
+              onSubmitEditing={this.onLogin}
               autoCapitalize="none"
               autoCorrect={false}
               underlineColorAndroid="transparent"
