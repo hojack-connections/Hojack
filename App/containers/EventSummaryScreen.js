@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   View,
   ScrollView,
-  Text,
   StyleSheet,
   TouchableOpacity,
   Alert,
@@ -10,91 +9,24 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import { NavigationActions } from 'react-navigation';
-import axios from 'axios';
-import API_BASE_URL from '../sagas/config';
-
 import normalize from '../helpers/normalizeText';
 import { Colors } from '../Themes/';
 import { inject, observer } from 'mobx-react';
 import DatePicker from 'react-native-datepicker';
 import Cell from '../components/Cell';
 
-let self;
-
 export default
 @inject('event')
 @observer
 class EventSummaryScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Event',
-    headerRight: (
-      <TouchableOpacity
-        onPress={() => self.onSubmit()}
-        style={{ flexDirection: 'row', alignItems: 'center' }}
-      >
-        <Icon color={'#00eaea'} name={'paper-plane'} size={20} />
-        <Text
-          style={{
-            color: '#00eaea',
-            fontSize: normalize(15),
-            marginLeft: 5,
-            marginRight: 5,
-          }}
-        >
-          Submit
-        </Text>
-      </TouchableOpacity>
-    ),
+    title: 'Edit Event',
   });
-
-  constructor(props) {
-    super(props);
-    self = this;
-  }
 
   state = {
     ...this.props.event.eventsById[this.props.navigation.getParam('id')],
     isUpdating: false,
     isDeleting: false,
-  };
-
-  onSubmit = () => {
-    let { certReceivers, sheetReceivers } = this.props;
-
-    certReceivers = certReceivers.map((receiver) =>
-      receiver.replace('<<All Attendees>>', 'all')
-    );
-    sheetReceivers = sheetReceivers.map((receiver) =>
-      receiver.replace('<<All Attendees>>', 'all')
-    );
-
-    Alert.alert(
-      'Confirm',
-      'Would you like to submit this event?',
-      [
-        { text: 'No', onPress: () => {}, style: 'cancel' },
-        {
-          text: 'Yes',
-          onPress: () => {
-            const eventId = this.props.navigation.getParam('id');
-            this.props.event
-              .submit(eventId, certReceivers, sheetReceivers)
-              .then(() => {
-                Alert.alert('Success', 'Submitted this event successfully!');
-              })
-              .catch(() => {
-                Alert.alert(
-                  'Error',
-                  'There was a problem submitting your event.'
-                );
-              });
-          },
-        },
-      ],
-      { cancelable: false }
-    );
   };
 
   onUpdate = () => {

@@ -40,7 +40,7 @@ class EventsScreen extends Component {
   }
 
   _onItemClick = (index, id) => {
-    this.props.navigation.navigate('EventSummaryScreen', { index, id });
+    this.props.navigation.navigate('SubmitSettingsScreen', { index, id });
   };
 
   keyExtractor = (item, index) => index.toString();

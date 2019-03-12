@@ -13,20 +13,71 @@ import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 import * as EmailValidator from 'email-validator';
 import { inject, observer } from 'mobx-react';
+import { Button } from 'react-native-elements';
 
 export default
-@inject('receiver')
+@inject('receiver', 'event')
 @observer
 class SubmitSettingsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Submit Settings',
-    headerTitleStyle: Styles.nav.title,
-    headerBackTitle: 'Back',
+    title: 'Event Settings',
+    headerRight: (
+      <Button
+        onPress={() =>
+          navigation.navigate('EventSummaryScreen', {
+            id: navigation.getParam('id'),
+          })
+        }
+        title="Edit"
+        color="#fff"
+      />
+    ),
   });
 
   state = {
     newCertReceiver: '',
     newSheetReceiver: '',
+    isSubmitting: false,
+  };
+
+  onSubmit = () => {
+    // let { certReceivers, sheetReceivers } = this.props;
+    //
+    // certReceivers = certReceivers.map((receiver) =>
+    //   receiver.replace('<<All Attendees>>', 'all')
+    // );
+    // sheetReceivers = sheetReceivers.map((receiver) =>
+    //   receiver.replace('<<All Attendees>>', 'all')
+    // );
+    Alert.alert(
+      'Confirm',
+      'Would you like to submit this event?',
+      [
+        { text: 'No', onPress: () => {}, style: 'cancel' },
+        {
+          text: 'Yes',
+          onPress: () => {
+            const eventId = this.props.navigation.getParam('id');
+            this.props.event
+              .submit(
+                eventId,
+                this.props.receiver.certReceiversById[eventId],
+                this.props.receiver.sheetReceiversById[eventId]
+              )
+              .then(() => {
+                Alert.alert('Success', 'Submitted this event successfully!');
+              })
+              .catch(() => {
+                Alert.alert(
+                  'Error',
+                  'There was a problem submitting your event.'
+                );
+              });
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   _onBeforeAddSheetReceiver = () => {
@@ -34,25 +85,29 @@ class SubmitSettingsScreen extends Component {
   };
 
   _onAddSheetReceiver = () => {
-    if (this.state.newSheetReceiver !== '') {
-      if (
-        this.state.newSheetReceiver === '<<All Attendees>>' ||
-        EmailValidator.validate(this.state.newSheetReceiver)
-      ) {
-        this.props.actions.addSheetReceiver(this.state.newSheetReceiver);
-        this.setState({ newSheetReceiver: '' });
-      } else {
-        Alert.alert(
-          'Warning',
-          "Please input valid email address or '<<All Attendees>>'"
-        );
-        this.setState({ newSheetReceiver: '' });
-      }
+    if (this.state.newSheetReceiver === '') return;
+    if (
+      this.state.newSheetReceiver === '<<All Attendees>>' ||
+      EmailValidator.validate(this.state.newSheetReceiver)
+    ) {
+      const eventId = this.props.navigation.getParam('id');
+      this.props.receiver.addSheetReceiver(
+        eventId,
+        this.state.newSheetReceiver
+      );
+      this.setState({ newSheetReceiver: '' });
+    } else {
+      Alert.alert(
+        'Warning',
+        "Please input valid email address or '<<All Attendees>>'"
+      );
+      this.setState({ newSheetReceiver: '' });
     }
   };
 
-  _onRemoveSheetReceiver = (index) => {
-    this.props.actions.removeSheetReceiver(index);
+  _onRemoveSheetReceiver = (item) => {
+    const eventId = this.props.navigation.getParam('id');
+    this.props.receiver.removeSheetReceiver(eventId, item);
   };
 
   _onBeforeAddCertReceiver = () => {
@@ -77,14 +132,16 @@ class SubmitSettingsScreen extends Component {
     }
   };
 
-  _onRemoveCertReceiver = (index) => {
-    this.props.actions.removeCertReceiver(index);
+  _onRemoveCertReceiver = (item) => {
+    const eventId = this.props.navigation.getParam('id');
+    this.props.receiver.removeCertReceiver(eventId, item);
   };
 
   render() {
-    const eventId = this.props.navigation.getParam(eventId);
-    const certReceivers = this.props.receiver.certReceiversById[id];
-    const sheetReceivers = this.props.receiver.sheetReceiversById[id];
+    const eventId = this.props.navigation.getParam('id');
+    const certReceivers = this.props.receiver.certReceiversById[eventId] || [];
+    const sheetReceivers =
+      this.props.receiver.sheetReceiversById[eventId] || [];
 
     return (
       <ScrollView style={Styles.container}>
@@ -101,9 +158,7 @@ class SubmitSettingsScreen extends Component {
         </View>
         {sheetReceivers.map((item, index) => (
           <View key={index} style={styles.listItemContainer}>
-            <TouchableOpacity
-              onPress={() => this._onRemoveSheetReceiver(index)}
-            >
+            <TouchableOpacity onPress={() => this._onRemoveSheetReceiver(item)}>
               <Icon color={Colors.black} name={'minus-square'} size={20} />
             </TouchableOpacity>
             <Text style={styles.name}>{item}</Text>
@@ -145,7 +200,7 @@ class SubmitSettingsScreen extends Component {
         </View>
         {certReceivers.map((item, index) => (
           <View key={index} style={styles.listItemContainer}>
-            <TouchableOpacity onPress={() => this._onRemoveCertReceiver(index)}>
+            <TouchableOpacity onPress={() => this._onRemoveCertReceiver(item)}>
               <Icon color={Colors.black} name={'minus-square'} size={20} />
             </TouchableOpacity>
             <Text style={styles.name}>{item}</Text>
@@ -169,16 +224,41 @@ class SubmitSettingsScreen extends Component {
             autoCorrect={false}
             underlineColorAndroid="transparent"
             placeholder="Input a new email address"
-            onSubmitEditing={this._onAddCertReceive}
-            onBlur={this._onAddCertReceive}
+            onSubmitEditing={this._onAddCertReceiver}
+            onBlur={this._onAddCertReceiver}
           />
         </View>
+        <Button
+          buttonStyle={styles.updateButton}
+          containerStyle={styles.buttonContainer}
+          loading={this.state.isSubmitting}
+          onPress={this.onSubmit}
+          title="Send"
+          titleStyle={styles.buttonTitle}
+        />
       </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    marginTop: 15,
+    marginBottom: 15,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  updateButton: {
+    borderRadius: 10,
+    width: '100%',
+    height: 60,
+  },
+  buttonTitle: {
+    marginLeft: 10,
+    fontSize: normalize(20),
+    color: Colors.white,
+  },
   section: {
     height: 43,
     backgroundColor: Colors.white,

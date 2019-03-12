@@ -10,16 +10,36 @@ export default class ReceiverStore {
   }
 
   addSheetReceiver(id, email) {
-    if (!sheetReceiversById[id]) {
-      sheetReceiversById[id] = [];
+    if (!this.sheetReceiversById[id]) {
+      this.sheetReceiversById[id] = [];
     }
-    sheetReceiversById[id].push(email);
+    if (this.sheetReceiversById[id].indexOf(email) !== -1) return;
+    this.sheetReceiversById[id].push(email);
   }
 
   addCertReceiver(id, email) {
-    if (!certReceiversById[id]) {
-      certReceiversById[id] = [];
+    if (!this.certReceiversById[id]) {
+      this.certReceiversById[id] = [];
     }
-    certReceiversById[id].push(email);
+    if (this.certReceiversById[id].indexOf(email) !== -1) return;
+    this.certReceiversById[id].push(email);
+  }
+
+  removeSheetReceiver(id, email) {
+    if (!this.sheetReceiversById[id]) {
+      this.sheetReceiversById[id] = [];
+    }
+    const emailIndex = this.sheetReceiversById[id].indexOf(email);
+    if (emailIndex === -1) return;
+    this.sheetReceiversById[id].splice(emailIndex, 1);
+  }
+
+  removeCertReceiver(id, email) {
+    if (!this.certReceiversById[id]) {
+      this.certReceiversById[id] = [];
+    }
+    const emailIndex = this.certReceiversById[id].indexOf(email);
+    if (emailIndex === -1) return;
+    this.certReceiversById[id].splice(emailIndex, 1);
   }
 }
