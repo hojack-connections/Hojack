@@ -11,24 +11,18 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import _ from 'lodash';
+import { inject, observer } from 'mobx-react';
 
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 
+export default
+@inject('event', 'auth')
+@observer
 class EventAttendeesScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Attendees',
-    headerTitleStyle: Styles.nav.title,
-    headerTintColor: '#00eaea',
-    headerBackTitle: 'Back',
   });
-
-  constructor(props) {
-    super(props);
-
-    this._onItemClick = this._onItemClick.bind(this);
-    this._onAddClick = this._onAddClick.bind(this);
-  }
 
   _onAddClick = (id) => {
     this.props.navigation.navigate('AddAttendeeScreen', { id });
@@ -72,7 +66,10 @@ class EventAttendeesScreen extends Component {
   };
 
   render() {
-    const { event, attendees } = this.props;
+    const event = this.props.event.eventsById[
+      this.props.navigation.getParam('id')
+    ];
+    const attendees = event.attendees || [];
 
     return (
       <View style={Styles.container}>
@@ -175,15 +172,3 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
 });
-
-const mapStateToProps = (state, props) => ({
-  event: state.event.events[props.navigation.state.params.index] || {},
-  attendees:
-    state.attendee.eventAttendees[props.navigation.state.params.id] || [],
-  globalAttendees: state.attendee.attendees,
-});
-
-export default connect(
-  mapStateToProps,
-  null
-)(EventAttendeesScreen);

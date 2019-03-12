@@ -110,7 +110,7 @@ class AddEventScreen extends Component {
             onChangeText={(courseName) => this.setState({ courseName })}
           />
           <UserInput
-            label={'Number of Course Credits:'}
+            label={'Course Credits:'}
             placeholder={'Course Credits'}
             onChangeText={(numberOfCourseCredits) =>
               this.setState({

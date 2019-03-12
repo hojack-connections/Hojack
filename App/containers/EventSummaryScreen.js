@@ -16,10 +16,8 @@ import axios from 'axios';
 import API_BASE_URL from '../sagas/config';
 
 import normalize from '../helpers/normalizeText';
-import { Colors, Styles } from '../Themes/';
+import { Colors } from '../Themes/';
 import { inject, observer } from 'mobx-react';
-
-let self;
 
 export default
 @inject('event')
@@ -27,9 +25,6 @@ export default
 class EventSummaryScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Event',
-    headerTintColor: '#00eaea',
-    headerTitleStyle: Styles.nav.title,
-    headerBackTitle: 'Back',
     headerRight: (
       <TouchableOpacity
         onPress={() => self.onSubmit()}
@@ -50,23 +45,8 @@ class EventSummaryScreen extends Component {
     ),
   });
 
-  constructor(props) {
-    super(props);
-    self = this;
-  }
-
   state = {
-    name: '',
-    date: '',
-    address: '',
-    city: '',
-    state: '',
-    zipcode: '',
-    courseNo: '',
-    courseName: '',
-    numberOfCourseCredits: 0,
-    presenterName: '',
-    trainingProvider: '',
+    ...this.props.event.eventsById[this.props.navigation.getParam('id')],
     isUpdating: false,
     isDeleting: false,
   };
@@ -188,7 +168,7 @@ class EventSummaryScreen extends Component {
 
   onAttendees = (index, id) => {
     this.props.navigation.navigate('EventAttendeesScreen', { index, id });
-  }
+  };
 
   render() {
     const eventId = this.props.navigation.getParam('id');
@@ -239,13 +219,13 @@ class EventSummaryScreen extends Component {
             value={this.state.courseName}
           />
           <UserInput
-            label={'Number of Course Credits:'}
+            label={'Course Credits:'}
             onChangeText={(numberOfCourseCredits) =>
               this.setState({
                 numberOfCourseCredits: parseInt(numberOfCourseCredits),
               })
             }
-            value={this.state.numberOfCourseCredits.toString()}
+            value={this.state.numberOfCourseCredits}
           />
           <UserInput
             label={'Presenter Name:'}

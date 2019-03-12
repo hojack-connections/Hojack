@@ -27,7 +27,11 @@ class EventsScreen extends Component {
       />
     ),
     headerRight: (
-      <Button onPress={() => alert('Settings')} title="Settings" color="#fff" />
+      <Button
+        onPress={() => navigation.navigate('SettingsScreen')}
+        title="Settings"
+        color="#fff"
+      />
     ),
   });
 

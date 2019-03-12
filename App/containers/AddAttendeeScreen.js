@@ -12,38 +12,29 @@ import { Button } from 'react-native-elements';
 import UserInput from '../components/UserInput';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import SignatureCapture from 'react-native-signature-capture';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { NavigationActions } from 'react-navigation';
-import * as attendeeActions from '../actions/attendeeActions';
 import * as EmailValidator from 'email-validator';
+import { inject, observer } from 'mobx-react';
 
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 
+export default
+@inject('event', 'auth')
+@observer
 class AddAttendeeScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Add Attendee',
-    headerTintColor: '#00eaea',
-    headerTitleStyle: Styles.nav.title,
-    headerBackTitle: 'Back',
   });
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      firstname: '',
-      lastname: '',
-      email: '',
-      phone: '',
-      warning: '',
-      signatureWidth: Dimensions.get('window').width - 50,
-    };
-
-    this.onSave = this.onSave.bind(this);
-    this._onSaveEvent = this._onSaveEvent.bind(this);
-  }
+  state = {
+    firstname: '',
+    lastname: '',
+    email: '',
+    phone: '',
+    warning: '',
+    signatureWidth: Dimensions.get('window').width - 50,
+  };
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.created && nextProps.created) {
@@ -61,17 +52,23 @@ class AddAttendeeScreen extends Component {
     }
   };
 
-  _onSaveEvent(result) {
-    const payload = {
-      ...this.state,
-      signature: result.encoded,
-      event: this.props.navigation.state.params.id,
-      token: this.props.token,
-    };
-    this.props.actions.createAttendeeRequest(payload);
-  }
+  _onSaveEvent = (result) => {
+    const eventId = this.props.navigation.getParam('id');
+    this.props.event
+      .createAttendee(eventId, {
+        ...this.state,
+        signature: result.encoded,
+        event: eventId,
+      })
+      .then(() => {
+        this.props.navigation.goBack();
+      })
+      .catch(() => {
+        alert('There was a problem creating the attendee.');
+      });
+  };
 
-  onLayout = (e) => {
+  onLayout = () => {
     const { width } = Dimensions.get('window');
     this.setState({ signatureWidth: width - 50 });
   };
@@ -208,19 +205,3 @@ const styles = StyleSheet.create({
     color: 'red',
   },
 });
-
-const mapStateToProps = (state) => ({
-  token: state.auth.token,
-  error: state.attendee.error,
-  created: state.attendee.created,
-  isCreating: state.attendee.isCreating,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators({ ...attendeeActions }, dispatch),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AddAttendeeScreen);

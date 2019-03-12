@@ -61,4 +61,14 @@ export default class EventStore {
       console.log('Error loading attendees for event', id);
     }
   }
+
+  async createAttendee(eventId, data) {
+    try {
+      await axios.post(URLs.events.attendees, data);
+      await this.getEventAttendees(eventId);
+    } catch (err) {
+      console.log('Error creating attendee', err);
+      throw err;
+    }
+  }
 }
