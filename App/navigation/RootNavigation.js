@@ -3,17 +3,20 @@ import Colors from '../Themes/Colors';
 
 import EventsScreen from '../containers/EventsScreen';
 import AddEventScreen from '../containers/AddEventScreen';
+import SettingsScreen from '../containers/SettingsScreen';
+import EventSummaryScreen from '../containers/EventSummaryScreen';
+import EventAttendeesScreen from '../containers/EventAttendeesScreen';
+import AddAttendeeScreen from '../containers/AddAttendeeScreen';
 
 export default createStackNavigator(
   {
-    Home: {
-      screen: EventsScreen,
-    },
-    // EventSummaryScreen: { screen: EventSummaryScreen },
-    // EventAttendeesScreen: { screen: EventAttendeesScreen },
+    Home: { screen: EventsScreen },
+    EventSummaryScreen: { screen: EventSummaryScreen },
+    EventAttendeesScreen: { screen: EventAttendeesScreen },
     // AttendeeSummaryScreen: { screen: AttendeeSummaryScreen },
-    // AddAttendeeScreen: { screen: AddAttendeeScreen },
+    AddAttendeeScreen: { screen: AddAttendeeScreen },
     AddEventScreen: { screen: AddEventScreen },
+    SettingsScreen: { screen: SettingsScreen },
   },
   {
     initialRouteName: 'Home',
