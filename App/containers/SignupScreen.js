@@ -16,7 +16,7 @@ import * as EmailValidator from 'email-validator';
 import { inject, observer } from 'mobx-react';
 
 export default
-@inject('user')
+@inject('user', 'auth')
 @observer
 class SignupScreen extends Component {
   state = {
@@ -38,7 +38,15 @@ class SignupScreen extends Component {
       this.setState({ warning: 'Email is not valid' });
     } else {
       this.setState({ warning: '' });
-      this.props.user.signup(this.state);
+      this.props.user.signup(this.state)
+        .then(() => {
+          if (this.props.auth.authenticated) {
+            this.props.navigation.navigate('App');
+          }
+        })
+        .catch(() => {
+          alert('There was a problem logging in. Please try again.');
+        });
     }
   };
 

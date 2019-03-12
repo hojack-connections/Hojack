@@ -1,24 +1,32 @@
-import React from 'react';
 import { createStackNavigator } from 'react-navigation';
-import { Platform } from 'react-native';
+import Colors from '../Themes/Colors';
 
-import MainTabNavigator from './MainTabNavigator';
+import EventsScreen from '../containers/EventsScreen';
+import AddEventScreen from '../containers/AddEventScreen';
 
-const RootStackNavigator = createStackNavigator(
+export default createStackNavigator(
   {
-    Main: {
-      screen: MainTabNavigator,
+    Home: {
+      screen: EventsScreen,
     },
+    // EventSummaryScreen: { screen: EventSummaryScreen },
+    // EventAttendeesScreen: { screen: EventAttendeesScreen },
+    // AttendeeSummaryScreen: { screen: AttendeeSummaryScreen },
+    // AddAttendeeScreen: { screen: AddAttendeeScreen },
+    AddEventScreen: { screen: AddEventScreen },
   },
   {
-    navigationOptions: () => ({
-      headerTitleStyle: {},
-    }),
+    initialRouteName: 'Home',
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: Colors.navigation,
+        borderBottomWidth: 0,
+      },
+      headerTitleStyle: {
+        color: Colors.white,
+        fontSize: 17,
+      },
+      headerTintColor: 'white',
+    },
   }
 );
-
-export default class RootNavigator extends React.Component {
-  render() {
-    return <RootStackNavigator />;
-  }
-}

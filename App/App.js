@@ -1,12 +1,9 @@
-/**
- * @flow
- */
-
 import React, { Component } from 'react';
 import { StyleSheet, View, StatusBar, YellowBox } from 'react-native';
-import RootNavigation from './navigation/MainTabNavigator';
+import RootNavigation from './navigation/RootNavigation';
 import AuthStackNavigation from './navigation/AuthStackNavigation';
-import { inject, observer } from 'mobx-react';
+import AuthLoading from './containers/AuthLoading';
+import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 
 YellowBox.ignoreWarnings([
   'Warning: isMounted(...) is deprecated',
@@ -14,18 +11,19 @@ YellowBox.ignoreWarnings([
 ]);
 StatusBar.setBarStyle('light-content', true);
 
-export default
-@inject('auth')
-@observer
-class App extends Component {
+const AppContainer = createAppContainer(
+  createSwitchNavigator({
+    AuthLoading,
+    Auth: AuthStackNavigation,
+    App: RootNavigation,
+  })
+);
+
+export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.props.auth.authenticated ? (
-          <RootNavigation />
-        ) : (
-          <AuthStackNavigation />
-        )}
+        <AppContainer />
       </View>
     );
   }

@@ -11,15 +11,16 @@ export default class UserStore {
 
   async signup(data) {
     try {
-      const res = await axios.post(URLs.users._, {
+      await axios.post(URLs.users._, {
         firstname: data.firstname,
         lastname: data.lastname,
         email: data.email,
         password: data.password,
       });
-      this._authStore.auth = res;
+      await this.login(data);
     } catch (err) {
       console.log('Error signing up', err);
+      throw err;
     }
   }
 
@@ -29,9 +30,10 @@ export default class UserStore {
         email: data.email,
         password: data.password,
       });
-      this.authStore.auth = res.data;
+      await this.authStore.authChanged(res.data.token);
     } catch (err) {
       console.log('Error logging in', err);
+      throw err;
     }
   }
 }

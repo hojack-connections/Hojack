@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Button,
   Platform,
   View,
   Text,
@@ -8,19 +9,26 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import moment from 'moment';
-import _ from 'lodash';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { Colors, Styles } from '../Themes/';
 import { inject, observer } from 'mobx-react';
 
 export default
-@inject('user', 'event')
+@inject('user', 'auth', 'event')
 @observer
 class EventsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Events',
-    headerTitleStyle: Styles.nav.title,
-    headerBackTitle: 'Back',
+    headerLeft: (
+      <Button
+        onPress={() => navigation.navigate('AddEventScreen')}
+        title="Create"
+        color="#fff"
+      />
+    ),
+    headerRight: (
+      <Button onPress={() => alert('Settings')} title="Settings" color="#fff" />
+    ),
   });
 
   componentDidMount() {

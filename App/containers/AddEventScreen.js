@@ -8,12 +8,11 @@ import { Colors, Styles } from '../Themes/';
 import { inject, observer } from 'mobx-react';
 
 export default
-@inject()
+@inject('event')
 @observer
 class AddEventScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Add Event',
-    headerTitleStyle: Styles.nav.title,
   });
 
   state = {
@@ -43,7 +42,9 @@ class AddEventScreen extends Component {
       date: new Date(this.state.date),
       token: this.props.token,
     };
-    this.props.actions.createEventRequest(payload);
+    this.props.event.create(payload)
+      .then(() => alert('created'))
+      .catch(err => alert(err.toString()));
   };
 
   render() {

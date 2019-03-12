@@ -15,7 +15,7 @@ export default class EventStore {
 
   async create(data) {
     try {
-      await axios.post(URLs.events._, data);
+      return await axios.post(URLs.events._, data);
     } catch (err) {
       console.log('Error creating event');
     }
@@ -35,7 +35,7 @@ export default class EventStore {
 
   async loadEvents() {
     try {
-      const res = await axios.get(URLs.events._, {
+      const res = await axios.get(URLs.users.events, {
         params: {
           token: this.authStore.token,
         },
