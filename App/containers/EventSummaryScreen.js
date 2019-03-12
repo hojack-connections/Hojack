@@ -5,11 +5,11 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Platform,
   Alert,
+  TextInput,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { Button } from 'react-native-elements';
-import UserInput from '../components/UserInput';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { NavigationActions } from 'react-navigation';
 import axios from 'axios';
@@ -18,6 +18,8 @@ import API_BASE_URL from '../sagas/config';
 import normalize from '../helpers/normalizeText';
 import { Colors } from '../Themes/';
 import { inject, observer } from 'mobx-react';
+import DatePicker from 'react-native-datepicker';
+import Cell from '../components/Cell';
 
 export default
 @inject('event')
@@ -166,8 +168,8 @@ class EventSummaryScreen extends Component {
     );
   };
 
-  onAttendees = (index, id) => {
-    this.props.navigation.navigate('EventAttendeesScreen', { index, id });
+  onAttendees = (id) => {
+    this.props.navigation.navigate('EventAttendeesScreen', { id });
   };
 
   render() {
@@ -175,100 +177,178 @@ class EventSummaryScreen extends Component {
     const attendees = this.props.event.attendeesById[eventId] || [];
 
     return (
-      <ScrollView style={styles.container}>
-        <View style={styles.inputFields}>
-          <UserInput
-            label={'Event Name:'}
-            onChangeText={(name) => this.setState({ name })}
-            value={this.state.name}
+      <KeyboardAvoidingView behavior="padding">
+        <ScrollView style={styles.container}>
+          <View style={styles.inputFields}>
+            <Cell label="Event Name:">
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                editable
+                onChangeText={(name) => this.setState({ name })}
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.name}
+              />
+            </Cell>
+            <Cell label="Date:">
+              <DatePicker
+                cancelBtnText="Cancel"
+                confirmBtnText="Confirm"
+                customStyles={{
+                  dateIcon: { display: 'none' },
+                  dateInput: { borderWidth: 0, alignItems: 'flex-start' },
+                }}
+                date={this.state.date}
+                format="YYYY-MM-DD"
+                mode="date"
+                onDateChange={(date) => this.setState({ date })}
+                style={{ flex: 1, marginRight: 10, height: 40 }}
+              />
+            </Cell>
+            <Cell label="Address:">
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                editable
+                onChangeText={(address) => this.setState({ address })}
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.address}
+              />
+            </Cell>
+            <Cell label="City:">
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                editable
+                onChangeText={(city) => this.setState({ city })}
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.city}
+              />
+            </Cell>
+            <Cell label="State:">
+              <TextInput
+                autoCapitalize="none"
+                autoCorrect={false}
+                editable
+                onChangeText={(state) => this.setState({ state })}
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.state}
+              />
+            </Cell>
+            <Cell label="Zip Code:">
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                editable
+                keyboardType="number-pad"
+                onChangeText={(zipcode) => this.setState({ zipcode })}
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.zipcode}
+              />
+            </Cell>
+            <Cell label="Course #:">
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                editable
+                onChangeText={(courseNo) => this.setState({ courseNo })}
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.courseNo}
+              />
+            </Cell>
+            <Cell label="Course Name:">
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                editable
+                onChangeText={(courseName) => this.setState({ courseName })}
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.courseName}
+              />
+            </Cell>
+            <Cell label="Course Credits:">
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                editable
+                keyboardType="number-pad"
+                onChangeText={(numberOfCourseCredits) =>
+                  this.setState({ numberOfCourseCredits })
+                }
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.numberOfCourseCredits}
+              />
+            </Cell>
+            <Cell label="Presenter Name:">
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                editable
+                onChangeText={(presenterName) =>
+                  this.setState({ presenterName })
+                }
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.presenterName}
+              />
+            </Cell>
+            <Cell label="Training Provider:">
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                editable
+                onChangeText={(trainingProvider) =>
+                  this.setState({ trainingProvider })
+                }
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.trainingProvider}
+              />
+            </Cell>
+            <TouchableOpacity onPress={() => this.onAttendees(eventId)}>
+              <Cell arrow label="Attendees:">
+                <TextInput
+                  autoCapitalize="words"
+                  autoCorrect={false}
+                  editable={false}
+                  pointerEvents="none"
+                  style={{
+                    ...styles.textInputStyle,
+                    color: Colors.blue,
+                    fontWeight: '700',
+                  }}
+                  underlineColorAndroid="transparent"
+                  value={attendees.length.toString()}
+                />
+              </Cell>
+            </TouchableOpacity>
+          </View>
+          <Button
+            buttonStyle={styles.updateButton}
+            containerStyle={styles.buttonContainer}
+            loading={this.state.isUpdating}
+            onPress={this.onUpdate}
+            title="Update Event"
+            titleStyle={styles.buttonTitle}
           />
-          <UserInput
-            datePicker
-            label={'Date:'}
-            onDateChanged={(date) => this.setState({ date })}
-            value={this.state.date}
+          <Button
+            buttonStyle={styles.deleteButton}
+            containerStyle={styles.buttonContainer}
+            loading={this.state.isDeleting}
+            onPress={this.onDelete}
+            title="Delete Event"
+            titleStyle={styles.buttonTitle}
           />
-          <UserInput
-            label={'Address:'}
-            onChangeText={(address) => this.setState({ address })}
-            value={this.state.address}
-          />
-          <UserInput
-            label={'City:'}
-            onChangeText={(city) => this.setState({ city })}
-            value={this.state.city}
-          />
-          <UserInput
-            label={'State:'}
-            onChangeText={(state) => this.setState({ state })}
-            value={this.state.state}
-          />
-          <UserInput
-            label={'Zip Code:'}
-            onChangeText={(zipcode) => this.setState({ zipcode })}
-            value={this.state.zipcode}
-          />
-          <UserInput
-            label={'Course #:'}
-            onChangeText={(courseNo) => this.setState({ courseNo })}
-            value={this.state.courseNo}
-          />
-          <UserInput
-            label={'Course Name:'}
-            onChangeText={(courseName) => this.setState({ courseName })}
-            value={this.state.courseName}
-          />
-          <UserInput
-            label={'Course Credits:'}
-            onChangeText={(numberOfCourseCredits) =>
-              this.setState({
-                numberOfCourseCredits: parseInt(numberOfCourseCredits),
-              })
-            }
-            value={this.state.numberOfCourseCredits}
-          />
-          <UserInput
-            label={'Presenter Name:'}
-            onChangeText={(presenterName) => this.setState({ presenterName })}
-            value={this.state.presenterName}
-          />
-          <UserInput
-            label={'Training Provider:'}
-            onChangeText={(trainingProvider) =>
-              this.setState({ trainingProvider })
-            }
-            value={this.state.trainingProvider}
-          />
-          <UserInput
-            arrow
-            label={'Attendees:'}
-            onClickEvent={() =>
-              this.onAttendees(
-                this.props.navigation.state.params.index,
-                eventId
-              )
-            }
-            readOnly
-            value={attendees.length.toString()}
-          />
-        </View>
-        <Button
-          buttonStyle={styles.updateButton}
-          containerStyle={styles.buttonContainer}
-          loading={this.state.isUpdating}
-          onPress={this.onUpdate}
-          title="Update Event"
-          titleStyle={styles.buttonTitle}
-        />
-        <Button
-          buttonStyle={styles.deleteButton}
-          containerStyle={styles.buttonContainer}
-          loading={this.state.isDeleting}
-          onPress={this.onDelete}
-          title="Delete Event"
-          titleStyle={styles.buttonTitle}
-        />
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -276,6 +356,12 @@ class EventSummaryScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
+  },
+  textInputStyle: {
+    flex: 1,
+    marginRight: 10,
+    color: Colors.black,
+    fontWeight: '100',
   },
   inputFields: {
     paddingLeft: 20,
