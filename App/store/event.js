@@ -15,9 +15,13 @@ export default class EventStore {
 
   async create(data) {
     try {
-      return await axios.post(URLs.events._, data);
+      await axios.post(URLs.events._, {
+        ...data,
+        token: this.authStore.token,
+      });
     } catch (err) {
       console.log('Error creating event');
+      throw err;
     }
   }
 
@@ -30,6 +34,7 @@ export default class EventStore {
       });
     } catch (err) {
       console.log('Error loading event');
+      throw err;
     }
   }
 
@@ -46,6 +51,7 @@ export default class EventStore {
       });
     } catch (err) {
       console.log('Error loading events', err);
+      throw err;
     }
   }
 
@@ -59,6 +65,47 @@ export default class EventStore {
       attendeesById[id] = res.data;
     } catch (err) {
       console.log('Error loading attendees for event', id);
+      throw err;
+    }
+  }
+
+  async update(id, data) {
+    try {
+      await axios.put(URLs.events._, {
+        ...data,
+        token: this.authStore.token,
+      });
+    } catch (err) {
+      console.log('Error updating event', err);
+      throw err;
+    }
+  }
+
+  async delete(id) {
+    try {
+      await axios.delete(URLs.events._, {
+        data: {
+          _id: id,
+          token: this.authStore.token,
+        },
+      });
+    } catch (err) {
+      console.log('Error deleting event', err);
+      throw err;
+    }
+  }
+
+  async submit(id, certReceivers, sheetReceivers) {
+    try {
+      await axios.post(URLs.events.submit, {
+        _id: id,
+        certReceivers,
+        sheetReceivers,
+        token: this.authStore.token,
+      });
+    } catch (err) {
+      console.log('Error submitting event', err);
+      throw err;
     }
   }
 

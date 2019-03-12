@@ -1,5 +1,5 @@
 const BASE_URL = 'https://shielded-sea-32169.herokuapp.com/api';
-const NEW_BASE_URL = 'https://backend-z5172g9pr.now.sh';
+const NEW_BASE_URL = 'https://backend-9r4ts70y7.now.sh';
 
 export default {
   users: {

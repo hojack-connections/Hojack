@@ -21,6 +21,8 @@ import { inject, observer } from 'mobx-react';
 import DatePicker from 'react-native-datepicker';
 import Cell from '../components/Cell';
 
+let self;
+
 export default
 @inject('event')
 @observer
@@ -47,6 +49,11 @@ class EventSummaryScreen extends Component {
     ),
   });
 
+  constructor(props) {
+    super(props);
+    self = this;
+  }
+
   state = {
     ...this.props.event.eventsById[this.props.navigation.getParam('id')],
     isUpdating: false,
@@ -71,27 +78,17 @@ class EventSummaryScreen extends Component {
         {
           text: 'Yes',
           onPress: () => {
-            axios
-              .post(
-                API_BASE_URL.event +
-                  '/' +
-                  this.props.navigation.state.params.id +
-                  '/submit',
-                {
-                  token: this.props.token,
-                  certReceivers,
-                  sheetReceivers,
-                }
-              )
-              .then((response) => {
-                console.log('submit_event response = ', response);
-                this.props.actions.markEventAsSubmitted({
-                  index: this.props.navigation.state.params.index,
-                });
+            const eventId = this.props.navigation.getParam('id');
+            this.props.event
+              .submit(eventId, certReceivers, sheetReceivers)
+              .then(() => {
                 Alert.alert('Success', 'Submitted this event successfully!');
               })
-              .catch((error) => {
-                console.log('submit_event response = ', error.response);
+              .catch(() => {
+                Alert.alert(
+                  'Error',
+                  'There was a problem submitting your event.'
+                );
               });
           },
         },
@@ -102,33 +99,17 @@ class EventSummaryScreen extends Component {
 
   onUpdate = () => {
     this.setState({ isUpdating: true });
-    axios
-      .put(API_BASE_URL.event + '/' + this.props.navigation.state.params.id, {
-        token: this.props.token,
-        name: this.state.name,
-        date: new Date(this.state.date),
-        address: this.state.address,
-        city: this.state.city,
-        state: this.state.state,
-        zipcode: this.state.zipcode,
-        courseNo: this.state.courseNo,
-        courseName: this.state.courseName,
-        numberOfCourseCredits: this.state.numberOfCourseCredits,
-        presenterName: this.state.presenterName,
-        trainingProvider: this.state.trainingProvider,
-      })
-      .then((response) => {
-        console.log('update_event response = ', response);
+    const eventId = this.props.navigation.getParam('id');
+    this.props.event
+      .update(eventId, this.state)
+      .then(() => {
         this.setState({ isUpdating: false });
-        this.props.actions.updateEvent({
-          index: this.props.navigation.state.params.index,
-          response: response.data,
-        });
-        this.props.navigation.dispatch(NavigationActions.back());
+        this.props.event.loadEvents();
+        this.props.navigation.goBack();
       })
-      .catch((error) => {
-        console.log('update_event error = ', error.response);
+      .catch(() => {
         this.setState({ isUpdating: false });
+        alert('There was a problem updating the event.');
       });
   };
 
@@ -142,24 +123,17 @@ class EventSummaryScreen extends Component {
           text: 'Yes',
           onPress: () => {
             this.setState({ isDeleting: true });
-            axios
-              .delete(
-                API_BASE_URL.event +
-                  '/' +
-                  this.props.navigation.state.params.id,
-                { params: { token: this.props.token } }
-              )
-              .then((response) => {
-                console.log('delete_event response = ', response);
+            const eventId = this.props.navigation.getParam('id');
+            this.props.event
+              .delete(eventId)
+              .then(() => {
                 this.setState({ isDeleting: false });
-                this.props.actions.removeEvent({
-                  index: this.props.navigation.state.params.index,
-                });
-                this.props.navigation.dispatch(NavigationActions.back());
+                this.props.event.loadEvents();
+                this.props.navigation.goBack();
               })
-              .catch((error) => {
-                console.log('delete_event response = ', error.response);
+              .catch(() => {
                 this.setState({ isDeleting: false });
+                alert('There was a problem deleting the event.');
               });
           },
         },
@@ -284,7 +258,7 @@ class EventSummaryScreen extends Component {
                 }
                 style={styles.textInputStyle}
                 underlineColorAndroid="transparent"
-                value={this.state.numberOfCourseCredits}
+                value={`${this.state.numberOfCourseCredits}`}
               />
             </Cell>
             <Cell label="Presenter Name:">

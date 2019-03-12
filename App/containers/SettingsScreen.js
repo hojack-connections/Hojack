@@ -6,6 +6,10 @@ export default
 @inject('auth')
 @observer
 class SettingsScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Settings',
+  });
+
   render() {
     return (
       <Button
