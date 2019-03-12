@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import {
-  Button,
-  Platform,
   View,
   Text,
   StyleSheet,
   FlatList,
   TouchableHighlight,
+  TouchableOpacity,
 } from 'react-native';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import Ionicon from 'react-native-ionicons';
 import { Colors, Styles } from '../Themes/';
 import { inject, observer } from 'mobx-react';
 
@@ -20,18 +20,20 @@ class EventsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Events',
     headerLeft: (
-      <Button
+      <TouchableOpacity
+        style={{ padding: 8, marginLeft: 8 }}
         onPress={() => navigation.navigate('AddEventScreen')}
-        title="Create"
-        color="#fff"
-      />
+      >
+        <Ionicon name="add-circle-outline" color="white" />
+      </TouchableOpacity>
     ),
     headerRight: (
-      <Button
+      <TouchableOpacity
+        style={{ padding: 8, marginRight: 8 }}
         onPress={() => navigation.navigate('SettingsScreen')}
-        title="Settings"
-        color="#fff"
-      />
+      >
+        <Ionicon name="cog" color="white" />
+      </TouchableOpacity>
     ),
   });
 

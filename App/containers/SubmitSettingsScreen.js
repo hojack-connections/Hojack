@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
+import Ionicon from 'react-native-ionicons';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
@@ -22,15 +23,16 @@ class SubmitSettingsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Event Settings',
     headerRight: (
-      <Button
+      <TouchableOpacity
+        style={{ padding: 8, marginRight: 8 }}
         onPress={() =>
           navigation.navigate('EventSummaryScreen', {
             id: navigation.getParam('id'),
           })
         }
-        title="Edit"
-        color="#fff"
-      />
+      >
+        <Ionicon name="create" color="white" />
+      </TouchableOpacity>
     ),
   });
 
