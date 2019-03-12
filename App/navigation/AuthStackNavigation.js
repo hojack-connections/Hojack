@@ -10,15 +10,12 @@ const AuthStackNavigation = createStackNavigator(
     LoginScreen: { screen: LoginScreen },
   },
   {
-    header: {
-      visible: true,
-    },
     initialRouteName: 'SignupScreen',
-    navigationOptions: ({ navigation }) => ({
+    defaultNavigationOptions: {
       headerStyle: {
         display: 'none',
       },
-    }),
+    },
   }
 );
 
