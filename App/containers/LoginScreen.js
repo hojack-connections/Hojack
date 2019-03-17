@@ -8,10 +8,8 @@ import {
   Platform,
 } from 'react-native';
 import { Button } from 'react-native-elements';
-
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
-import * as EmailValidator from 'email-validator';
 import { inject, observer } from 'mobx-react';
 
 export default
@@ -22,26 +20,32 @@ class LoginScreen extends Component {
     email: '',
     password: '',
     warning: '',
+    isLoggingIn: false,
   };
 
   passwordTextInputRef;
 
   onLogin = () => {
-    if (!EmailValidator.validate(this.state.email)) {
-      this.setState({ warning: 'Email is not valid' });
-    } else {
-      this.setState({ warning: '' });
-      this.props.user
-        .login(this.state)
-        .then(() => {
-          if (this.props.auth.authenticated) {
-            this.props.navigation.navigate('App');
-          }
-        })
-        .catch(() => {
-          alert('There was a problem logging in. Please try again.');
+    this.setState({
+      isLoggingIn: true,
+      warning: '',
+    });
+    this.props.user
+      .login(this.state)
+      .then(() => {
+        if (this.props.auth.authenticated) {
+          this.props.navigation.navigate('App');
+        }
+        this.setState({
+          isLoggingIn: false,
         });
-    }
+      })
+      .catch(() => {
+        alert('There was a problem logging in. Please try again.');
+        this.setState({
+          isLoggingIn: false,
+        });
+      });
   };
 
   onBacktoSignup = () => {
@@ -49,9 +53,6 @@ class LoginScreen extends Component {
   };
 
   render() {
-    const { error, isFetching } = this.props;
-    const { warning, email, password } = this.state;
-
     return (
       <View style={Styles.container}>
         <View style={styles.subContainer}>
@@ -59,7 +60,7 @@ class LoginScreen extends Component {
             <Text style={styles.label}>Email: </Text>
             <TextInput
               style={styles.input}
-              value={email}
+              value={this.props.email}
               onChangeText={(email) => this.setState({ email })}
               onSubmitEditing={() => this.passwordTextInputRef.focus()}
               autoCapitalize="none"
@@ -67,6 +68,7 @@ class LoginScreen extends Component {
               underlineColorAndroid="transparent"
               placeholder="email"
               keyboardType="email-address"
+              returnKeyType="next"
             />
           </View>
           <View style={styles.inputField}>
@@ -77,13 +79,14 @@ class LoginScreen extends Component {
               }}
               secureTextEntry
               style={styles.input}
-              value={password}
+              value={this.props.password}
               onChangeText={(password) => this.setState({ password })}
               onSubmitEditing={this.onLogin}
               autoCapitalize="none"
               autoCorrect={false}
               underlineColorAndroid="transparent"
               placeholder="password"
+              returnKeyType="go"
             />
           </View>
           <View style={styles.errorField}>
@@ -93,8 +96,8 @@ class LoginScreen extends Component {
           </View>
           <Button
             title="Log In"
-            disabled={email === '' || password === ''}
-            loading={isFetching}
+            disabled={this.props.email === '' || this.props.password === ''}
+            loading={this.state.isLoggingIn}
             onPress={this.onLogin}
             titleStyle={styles.buttonTitle}
             buttonStyle={styles.loginButton}
@@ -111,7 +114,7 @@ class LoginScreen extends Component {
                 textDecorationLine: 'underline',
               }}
             >
-              Go to SignUp
+              Go to Sign Up
             </Text>
           </TouchableOpacity>
         </View>
