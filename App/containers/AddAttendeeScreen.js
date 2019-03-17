@@ -19,7 +19,7 @@ import normalize from '../helpers/normalizeText';
 import { Colors } from '../Themes/';
 
 export default
-@inject('event', 'auth')
+@inject('event', 'auth', 'attendee')
 @observer
 class AddAttendeeScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -50,13 +50,14 @@ class AddAttendeeScreen extends Component {
 
   onSignatureSave = (result) => {
     const eventId = this.props.navigation.getParam('id');
-    this.props.event
-      .createAttendee(eventId, {
+    this.props.attendee
+      .create(eventId, {
         ...this.state,
         signature: result.encoded,
         event: eventId,
       })
       .then(() => {
+        this.props.event.loadEventAttendees(eventId);
         this.props.navigation.goBack();
       })
       .catch(() => {
