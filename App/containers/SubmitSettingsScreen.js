@@ -31,7 +31,7 @@ class SubmitSettingsScreen extends Component {
           })
         }
       >
-        <Ionicon name="create" color="white" />
+        <Ionicon name="ios-create" color="white" size={30} />
       </TouchableOpacity>
     ),
   });

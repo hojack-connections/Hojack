@@ -24,7 +24,7 @@ class EventsScreen extends Component {
         style={{ padding: 8, marginLeft: 8 }}
         onPress={() => navigation.navigate('AddEventScreen')}
       >
-        <Ionicon name="add-circle-outline" color="white" />
+        <Ionicon name="ios-add-circle-outline" color="white" size={30} />
       </TouchableOpacity>
     ),
     headerRight: (
@@ -32,7 +32,7 @@ class EventsScreen extends Component {
         style={{ padding: 8, marginRight: 8 }}
         onPress={() => navigation.navigate('SettingsScreen')}
       >
-        <Ionicon name="cog" color="white" />
+        <Ionicon name="ios-cog" color="white" size={30} />
       </TouchableOpacity>
     ),
   });
