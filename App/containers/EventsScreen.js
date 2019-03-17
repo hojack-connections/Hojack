@@ -58,9 +58,7 @@ class EventsScreen extends Component {
         <View style={styles.subDetails}>
           <Text style={styles.categoryTitle}>{item.name}</Text>
           <Text style={{ color: item.isSubmitted ? '#34bd3e' : '#ff575c' }}>
-            {this.props.event.attendeesById[item._id]
-              ? this.props.event.attendeesById[item._id].length.toLocaleString()
-              : '0'}
+            {(this.props.event.attendeesById[item._id] || []).length}
           </Text>
         </View>
         <Icon
@@ -86,7 +84,6 @@ class EventsScreen extends Component {
         </HeaderSubtitle>
         <FlatList
           data={this.props.event.events}
-          extraData={{}}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
         />
