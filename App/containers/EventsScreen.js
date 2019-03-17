@@ -86,8 +86,7 @@ class EventsScreen extends Component {
         <View style={styles.allEventsContainer}>
           <Text>All Attendees</Text>
           <Text style={{ color: '#34bd3e' }}>
-            {/* TODO: Make this a rest call, shouldn't be calculating on client side */}
-            {0}
+            {this.props.event.totalAttendeeCount}
           </Text>
           <Icon
             color={'#797979'}

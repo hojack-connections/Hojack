@@ -73,14 +73,15 @@ export default class EventStore {
     }
   }
 
-  async getEventAttendees(id) {
+  async loadEventAttendees(id) {
     try {
-      const res = await axios.get(URLs.events.attendees(id), {
+      const res = await axios.get(URLs.events.attendees, {
         params: {
+          eventId: id,
           token: this.authStore.token,
         },
       });
-      attendeesById[id] = res.data;
+      this.attendeesById[id] = res.data;
     } catch (err) {
       console.log('Error loading attendees for event', id);
       throw err;
@@ -123,16 +124,6 @@ export default class EventStore {
       });
     } catch (err) {
       console.log('Error submitting event', err);
-      throw err;
-    }
-  }
-
-  async createAttendee(eventId, data) {
-    try {
-      await axios.post(URLs.events.attendees, data);
-      await this.getEventAttendees(eventId);
-    } catch (err) {
-      console.log('Error creating attendee', err);
       throw err;
     }
   }

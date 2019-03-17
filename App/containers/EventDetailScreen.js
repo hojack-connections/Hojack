@@ -43,6 +43,11 @@ class SubmitSettingsScreen extends Component {
     isSubmitting: false,
   };
 
+  componentDidMount() {
+    const eventId = this.props.navigation.getParam('id');
+    this.props.event.loadEventAttendees(eventId);
+  }
+
   onSubmit = () => {
     // let { certReceivers, sheetReceivers } = this.props;
     //
@@ -150,23 +155,10 @@ class SubmitSettingsScreen extends Component {
       <ScrollView style={Styles.container}>
         <HeaderSubtitle>
           <Text style={{ color: '#538989' }}>
-            {/* TODO: Make this a rest call, shouldn't be calculating on client side */}
-            Total Attendees: {0}
+            Total Attendees:{' '}
+            {(this.props.event.attendeesById[eventId] || []).length}
           </Text>
         </HeaderSubtitle>
-        <View style={styles.allEventsContainer}>
-          <Text>All Attendees</Text>
-          <Text style={{ color: '#34bd3e' }}>
-            {/* TODO: Make this a rest call, shouldn't be calculating on client side */}
-            {0}
-          </Text>
-          <Icon
-            color={'#797979'}
-            name="chevron-right"
-            size={16}
-            style={Styles.arrow}
-          />
-        </View>
         <Button
           buttonStyle={styles.updateButton}
           containerStyle={styles.buttonContainer}

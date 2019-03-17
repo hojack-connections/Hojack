@@ -11,11 +11,11 @@ export default {
   },
   events: {
     _: `${NEW_BASE_URL}/events`,
-    attendees: (id) => `${BASE_URL}/${id}/attendees`,
+    attendees: `${NEW_BASE_URL}/events/attendees`,
     submit: `${NEW_BASE_URL}/events/submit`,
   },
   event: (id) => `${BASE_URL}/events/${id}`,
   attendees: {
-    _: `${BASE_URL}/attendees`,
+    _: `${NEW_BASE_URL}/attendees`,
   },
 };
