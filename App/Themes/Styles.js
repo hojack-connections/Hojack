@@ -5,7 +5,6 @@ const Styles = {
   nav: {
     header: {
       backgroundColor: Colors.navigation,
-      height: 70,
       borderBottomWidth: 0,
     },
     title: {

@@ -3,6 +3,7 @@ const BASE_PATH = 'https://shielded-sea-32169.herokuapp.com/api/';
 
 export default (API_PATH = {
   auth: BASE_PATH + 'users',
+  login: BASE_PATH + 'users/login',
   attendee: BASE_PATH + 'attendees',
   event: BASE_PATH + 'events',
 });

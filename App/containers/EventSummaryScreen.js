@@ -2,172 +2,50 @@ import React, { Component } from 'react';
 import {
   View,
   ScrollView,
-  Text,
   StyleSheet,
   TouchableOpacity,
-  Platform,
   Alert,
+  TextInput,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { Button } from 'react-native-elements';
-import UserInput from '../components/UserInput';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as eventActions from '../actions/eventActions';
-import { NavigationActions } from 'react-navigation';
-import axios from 'axios';
-import _ from 'lodash';
-import API_BASE_URL from '../sagas/config';
-
 import normalize from '../helpers/normalizeText';
-import { Colors, Styles } from '../Themes/';
+import { Colors } from '../Themes/';
+import { inject, observer } from 'mobx-react';
+import DatePicker from 'react-native-datepicker';
+import Cell from '../components/Cell';
 
-let self;
-
+export default
+@inject('event')
+@observer
 class EventSummaryScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Event',
-    headerTintColor: '#00eaea',
-    headerTitleStyle: Styles.nav.title,
-    headerBackTitle: 'Back',
-    headerRight: (
-      <TouchableOpacity
-        onPress={() => self.onSubmit()}
-        style={{ flexDirection: 'row', alignItems: 'center' }}
-      >
-        <Icon color={'#00eaea'} name={'paper-plane'} size={20} />
-        <Text
-          style={{
-            color: '#00eaea',
-            fontSize: normalize(15),
-            marginLeft: 5,
-            marginRight: 5,
-          }}
-        >
-          Submit
-        </Text>
-      </TouchableOpacity>
-    ),
+    title: 'Edit Event',
   });
 
-  constructor(props) {
-    super(props);
-    self = this;
+  state = {
+    ...this.props.event.eventsById[this.props.navigation.getParam('id')],
+    isUpdating: false,
+    isDeleting: false,
+  };
 
-    this.state = {
-      name: '',
-      date: '',
-      address: '',
-      city: '',
-      state: '',
-      zipcode: '',
-      courseNo: '',
-      courseName: '',
-      numberOfCourseCredits: 0,
-      presenterName: '',
-      trainingProvider: '',
-      attendees: [],
-      isUpdating: false,
-      isDeleting: false,
-    };
-  }
-
-  componentDidMount() {
-    this.setState({
-      name: this.props.event.name,
-      date: new Date(this.props.event.date),
-      address: this.props.event.address,
-      city: this.props.event.city,
-      state: this.props.event.state,
-      zipcode: this.props.event.zipcode,
-      courseNo: this.props.event.courseNo,
-      courseName: this.props.event.courseName,
-      numberOfCourseCredits: this.props.event.numberOfCourseCredits,
-      presenterName: this.props.event.presenterName,
-      trainingProvider: this.props.event.trainingProvider,
-    });
-  }
-
-  onSubmit() {
-    let { certReceivers, sheetReceivers } = this.props;
-
-    certReceivers = certReceivers.map((receiver) =>
-      receiver.replace('<<All Attendees>>', 'all')
-    );
-    sheetReceivers = sheetReceivers.map((receiver) =>
-      receiver.replace('<<All Attendees>>', 'all')
-    );
-
-    Alert.alert(
-      'Confirm',
-      'Are you gonna submit this event?',
-      [
-        { text: 'No', onPress: () => {}, style: 'cancel' },
-        {
-          text: 'Yes',
-          onPress: () => {
-            axios
-              .post(
-                API_BASE_URL.event +
-                  '/' +
-                  this.props.navigation.state.params.id +
-                  '/submit',
-                {
-                  token: this.props.token,
-                  certReceivers,
-                  sheetReceivers,
-                }
-              )
-              .then((response) => {
-                console.log('submit_event response = ', response);
-                this.props.actions.markEventAsSubmitted({
-                  index: this.props.navigation.state.params.index,
-                });
-                Alert.alert('Success', 'Submitted this event successfully!');
-              })
-              .catch((error) => {
-                console.log('submit_event response = ', error.response);
-              });
-          },
-        },
-      ],
-      { cancelable: false }
-    );
-  }
-
-  onUpdate() {
+  onUpdate = () => {
     this.setState({ isUpdating: true });
-    axios
-      .put(API_BASE_URL.event + '/' + this.props.navigation.state.params.id, {
-        token: this.props.token,
-        name: this.state.name,
-        date: new Date(this.state.date),
-        address: this.state.address,
-        city: this.state.city,
-        state: this.state.state,
-        zipcode: this.state.zipcode,
-        courseNo: this.state.courseNo,
-        courseName: this.state.courseName,
-        numberOfCourseCredits: this.state.numberOfCourseCredits,
-        presenterName: this.state.presenterName,
-        trainingProvider: this.state.trainingProvider,
-      })
-      .then((response) => {
-        console.log('update_event response = ', response);
+    const eventId = this.props.navigation.getParam('id');
+    this.props.event
+      .update(eventId, this.state)
+      .then(() => {
         this.setState({ isUpdating: false });
-        this.props.actions.updateEvent({
-          index: this.props.navigation.state.params.index,
-          response: response.data,
-        });
-        this.props.navigation.dispatch(NavigationActions.back());
+        this.props.event.loadEvents();
+        this.props.navigation.goBack();
       })
-      .catch((error) => {
-        console.log('update_event error = ', error.response);
+      .catch(() => {
         this.setState({ isUpdating: false });
+        alert('There was a problem updating the event.');
       });
-  }
+  };
 
-  onDelete() {
+  onDelete = () => {
     Alert.alert(
       'Confirm',
       'Do you really want to remove this event?',
@@ -177,139 +55,206 @@ class EventSummaryScreen extends Component {
           text: 'Yes',
           onPress: () => {
             this.setState({ isDeleting: true });
-            axios
-              .delete(
-                API_BASE_URL.event +
-                  '/' +
-                  this.props.navigation.state.params.id,
-                { params: { token: this.props.token } }
-              )
-              .then((response) => {
-                console.log('delete_event response = ', response);
+            const eventId = this.props.navigation.getParam('id');
+            this.props.event
+              .delete(eventId)
+              .then(() => {
                 this.setState({ isDeleting: false });
-                this.props.actions.removeEvent({
-                  index: this.props.navigation.state.params.index,
-                });
-                this.props.navigation.dispatch(NavigationActions.back());
+                this.props.event.loadEvents();
+                this.props.navigation.goBack();
               })
-              .catch((error) => {
-                console.log('delete_event response = ', error.response);
+              .catch(() => {
                 this.setState({ isDeleting: false });
+                alert('There was a problem deleting the event.');
               });
           },
         },
       ],
       { cancelable: false }
     );
-  }
+  };
 
-  onAttendees(index, id) {
-    this.props.navigation.navigate('EventAttendeesScreen', { index, id });
-  }
+  onAttendees = (id) => {
+    this.props.navigation.navigate('EventAttendeesScreen', { id });
+  };
 
   render() {
-    const { event, attendees } = this.props;
+    const eventId = this.props.navigation.getParam('id');
+    const attendees = this.props.event.attendeesById[eventId] || [];
 
     return (
-      <ScrollView style={styles.container}>
-        <View style={styles.inputFields}>
-          <UserInput
-            label={'Event Name:'}
-            onChangeText={(name) => this.setState({ name })}
-            value={this.state.name}
+      <KeyboardAvoidingView behavior="padding">
+        <ScrollView style={styles.container}>
+          <View style={styles.inputFields}>
+            <Cell label="Event Name:">
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                editable
+                onChangeText={(name) => this.setState({ name })}
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.name}
+              />
+            </Cell>
+            <Cell label="Date:">
+              <DatePicker
+                cancelBtnText="Cancel"
+                confirmBtnText="Confirm"
+                customStyles={{
+                  dateIcon: { display: 'none' },
+                  dateInput: { borderWidth: 0, alignItems: 'flex-start' },
+                }}
+                date={this.state.date}
+                format="YYYY-MM-DD"
+                mode="date"
+                onDateChange={(date) => this.setState({ date })}
+                style={{ flex: 1, marginRight: 10, height: 40 }}
+              />
+            </Cell>
+            <Cell label="Address:">
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                editable
+                onChangeText={(address) => this.setState({ address })}
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.address}
+              />
+            </Cell>
+            <Cell label="City:">
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                editable
+                onChangeText={(city) => this.setState({ city })}
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.city}
+              />
+            </Cell>
+            <Cell label="State:">
+              <TextInput
+                autoCapitalize="none"
+                autoCorrect={false}
+                editable
+                onChangeText={(state) => this.setState({ state })}
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.state}
+              />
+            </Cell>
+            <Cell label="Zip Code:">
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                editable
+                keyboardType="number-pad"
+                onChangeText={(zipcode) => this.setState({ zipcode })}
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.zipcode}
+              />
+            </Cell>
+            <Cell label="Course #:">
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                editable
+                onChangeText={(courseNo) => this.setState({ courseNo })}
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.courseNo}
+              />
+            </Cell>
+            <Cell label="Course Name:">
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                editable
+                onChangeText={(courseName) => this.setState({ courseName })}
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.courseName}
+              />
+            </Cell>
+            <Cell label="Course Credits:">
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                editable
+                keyboardType="number-pad"
+                onChangeText={(numberOfCourseCredits) =>
+                  this.setState({ numberOfCourseCredits })
+                }
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={`${this.state.numberOfCourseCredits}`}
+              />
+            </Cell>
+            <Cell label="Presenter Name:">
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                editable
+                onChangeText={(presenterName) =>
+                  this.setState({ presenterName })
+                }
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.presenterName}
+              />
+            </Cell>
+            <Cell label="Training Provider:">
+              <TextInput
+                autoCapitalize="words"
+                autoCorrect={false}
+                editable
+                onChangeText={(trainingProvider) =>
+                  this.setState({ trainingProvider })
+                }
+                style={styles.textInputStyle}
+                underlineColorAndroid="transparent"
+                value={this.state.trainingProvider}
+              />
+            </Cell>
+            <TouchableOpacity onPress={() => this.onAttendees(eventId)}>
+              <Cell arrow label="Attendees:">
+                <TextInput
+                  autoCapitalize="words"
+                  autoCorrect={false}
+                  editable={false}
+                  pointerEvents="none"
+                  style={{
+                    ...styles.textInputStyle,
+                    color: Colors.blue,
+                    fontWeight: '700',
+                  }}
+                  underlineColorAndroid="transparent"
+                  value={attendees.length.toString()}
+                />
+              </Cell>
+            </TouchableOpacity>
+          </View>
+          <Button
+            buttonStyle={styles.updateButton}
+            containerStyle={styles.buttonContainer}
+            loading={this.state.isUpdating}
+            onPress={this.onUpdate}
+            title="Update Event"
+            titleStyle={styles.buttonTitle}
           />
-          <UserInput
-            datePicker
-            label={'Date:'}
-            onDateChanged={(date) => this.setState({ date })}
-            value={this.state.date}
+          <Button
+            buttonStyle={styles.deleteButton}
+            containerStyle={styles.buttonContainer}
+            loading={this.state.isDeleting}
+            onPress={this.onDelete}
+            title="Delete Event"
+            titleStyle={styles.buttonTitle}
           />
-          <UserInput
-            label={'Address:'}
-            onChangeText={(address) => this.setState({ address })}
-            value={this.state.address}
-          />
-          <UserInput
-            label={'City:'}
-            onChangeText={(city) => this.setState({ city })}
-            value={this.state.city}
-          />
-          <UserInput
-            label={'State:'}
-            onChangeText={(state) => this.setState({ state })}
-            value={this.state.state}
-          />
-          <UserInput
-            label={'Zip Code:'}
-            onChangeText={(zipcode) => this.setState({ zipcode })}
-            value={this.state.zipcode}
-          />
-          <UserInput
-            label={'Course #:'}
-            onChangeText={(courseNo) => this.setState({ courseNo })}
-            value={this.state.courseNo}
-          />
-          <UserInput
-            label={'Course Name:'}
-            onChangeText={(courseName) => this.setState({ courseName })}
-            value={this.state.courseName}
-          />
-          <UserInput
-            label={'Number of Course Credits:'}
-            onChangeText={(numberOfCourseCredits) =>
-              this.setState({
-                numberOfCourseCredits: parseInt(numberOfCourseCredits),
-              })
-            }
-            value={this.state.numberOfCourseCredits.toString()}
-          />
-          <UserInput
-            label={'Presenter Name:'}
-            onChangeText={(presenterName) => this.setState({ presenterName })}
-            value={this.state.presenterName}
-          />
-          <UserInput
-            label={'Training Provider:'}
-            onChangeText={(trainingProvider) =>
-              this.setState({ trainingProvider })
-            }
-            value={this.state.trainingProvider}
-          />
-          <UserInput
-            arrow
-            label={'Attendees:'}
-            onClickEvent={() =>
-              this.onAttendees(
-                this.props.navigation.state.params.index,
-                event._id
-              )
-            }
-            readOnly
-            value={attendees.length.toString()}
-          />
-        </View>
-        {/*<TouchableOpacity style={styles.buttonContainer} onPress={() => this.onDelete()}>
-                    <View style={styles.deleteButton}>
-                        <Text style={styles.buttonTitle}>Delete Event</Text>
-                    </View>
-                </TouchableOpacity>*/}
-        <Button
-          buttonStyle={styles.updateButton}
-          containerStyle={styles.buttonContainer}
-          loading={this.state.isUpdating}
-          onPress={() => this.onUpdate()}
-          title="Update Event"
-          titleStyle={styles.buttonTitle}
-        />
-        <Button
-          buttonStyle={styles.deleteButton}
-          containerStyle={styles.buttonContainer}
-          loading={this.state.isDeleting}
-          onPress={() => this.onDelete()}
-          title="Delete Event"
-          titleStyle={styles.buttonTitle}
-        />
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -317,6 +262,12 @@ class EventSummaryScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
+  },
+  textInputStyle: {
+    flex: 1,
+    marginRight: 10,
+    color: Colors.black,
+    fontWeight: '100',
   },
   inputFields: {
     paddingLeft: 20,
@@ -346,21 +297,3 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
 });
-
-const mapStateToProps = (state, props) => ({
-  token: state.auth.token,
-  event: state.event.events[props.navigation.state.params.index] || {},
-  attendees:
-    state.attendee.eventAttendees[props.navigation.state.params.id] || [],
-  certReceivers: state.settings.certReceivers,
-  sheetReceivers: state.settings.sheetReceivers,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators({ ...eventActions }, dispatch),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EventSummaryScreen);

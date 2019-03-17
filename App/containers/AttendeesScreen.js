@@ -6,24 +6,22 @@ import {
   FlatList,
   TouchableHighlight,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import { connect } from 'react-redux';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import _ from 'lodash';
 
 import { Colors, Styles } from '../Themes/';
+import { inject, observer } from 'mobx-react';
+import HeaderSubtitle from '../components/HeaderSubtitle';
 
+export default
+@inject('event')
+@observer
 class AttendeesScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'All Attendees',
     headerTitleStyle: Styles.nav.title,
     headerBackTitle: 'Back',
   });
-
-  constructor(props) {
-    super(props);
-
-    this._onItemClick = this._onItemClick.bind(this);
-  }
 
   _onItemClick = (attendee, attendeeIndex) => {
     const eventIndex = _.findIndex(
@@ -45,7 +43,7 @@ class AttendeesScreen extends Component {
   keyExtractor = (item, index) => index.toString();
 
   renderCell = ({ item, index }) => (
-    <TouchableHighlight onPress={this._onItemClick}>
+    <TouchableHighlight onPress={() => this._onItemClick(item, index)}>
       <View style={styles.listItemContainer}>
         <Icon
           name={item.isFilled ? 'check-square' : 'minus-square'}
@@ -66,15 +64,16 @@ class AttendeesScreen extends Component {
   );
 
   render() {
-    const { attendees } = this.props;
+    const eventId = this.props.navigation.getParam('id');
+    const attendees = this.props.event.attendeesById[eventId] || [];
 
     return (
       <View style={Styles.container}>
-        <View style={styles.totalEventsContainer}>
+        <HeaderSubtitle>
           <Text style={{ color: '#895353' }}>
             Total Attendees: {attendees.length}
           </Text>
-        </View>
+        </HeaderSubtitle>
         <FlatList
           data={attendees}
           keyExtractor={this.keyExtractor}
@@ -86,14 +85,6 @@ class AttendeesScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  totalEventsContainer: {
-    height: 42,
-    backgroundColor: Colors.darkBlack,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
   listItemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -113,14 +104,3 @@ const styles = StyleSheet.create({
     top: 13,
   },
 });
-
-const mapStateToProps = (state) => ({
-  events: state.event.events,
-  attendees: state.attendee.attendees,
-  eventAttendees: state.attendee.eventAttendees,
-});
-
-export default connect(
-  mapStateToProps,
-  null
-)(AttendeesScreen);

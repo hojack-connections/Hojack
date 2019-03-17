@@ -1,18 +1,12 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  Alert,
-  Platform,
-} from 'react-native';
-import { connect } from 'react-redux';
+import { View } from 'react-native';
 
-import normalize from '../helpers/normalizeText';
-import { Colors, Styles } from '../Themes/';
+import { Styles } from '../Themes/';
+import { inject, observer } from 'mobx-react';
 
+export default
+@inject()
+@observer
 class ShareScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Share',
@@ -28,14 +22,3 @@ class ShareScreen extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({});
-
-const mapStateToProps = (state) => ({
-  // connectivity: state.connectivity.connectivity,
-});
-
-export default connect(
-  mapStateToProps,
-  null
-)(ShareScreen);

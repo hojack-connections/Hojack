@@ -8,26 +8,24 @@ import {
   Platform,
 } from 'react-native';
 import { Button } from 'react-native-elements';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as authActions from '../actions/authActions';
 
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 import * as EmailValidator from 'email-validator';
 
-class SignupScreen extends Component {
-  constructor(props) {
-    super(props);
+import { inject, observer } from 'mobx-react';
 
-    this.state = {
-      firstname: '',
-      lastname: '',
-      email: '',
-      password: '',
-      warning: '',
-    };
-  }
+export default
+@inject('user', 'auth')
+@observer
+class SignupScreen extends Component {
+  state = {
+    firstname: '',
+    lastname: '',
+    email: '',
+    password: '',
+    warning: '',
+  };
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.isRegistered && nextProps.isRegistered) {
@@ -40,7 +38,15 @@ class SignupScreen extends Component {
       this.setState({ warning: 'Email is not valid' });
     } else {
       this.setState({ warning: '' });
-      this.props.actions.signupRequest(this.state);
+      this.props.user.signup(this.state)
+        .then(() => {
+          if (this.props.auth.authenticated) {
+            this.props.navigation.navigate('App');
+          }
+        })
+        .catch(() => {
+          alert('There was a problem logging in. Please try again.');
+        });
     }
   };
 
@@ -194,20 +200,3 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
 });
-
-const mapStateToProps = (state) => ({
-  error: state.auth.error,
-  isFetching: state.auth.isFetching,
-  isRegistered: state.auth.isRegistered,
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators({ ...authActions }, dispatch),
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SignupScreen);

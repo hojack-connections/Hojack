@@ -7,28 +7,22 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import _ from 'lodash';
+import { inject, observer } from 'mobx-react';
 
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 
+export default
+@inject('event', 'auth')
+@observer
 class EventAttendeesScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Attendees',
-    headerTitleStyle: Styles.nav.title,
-    headerTintColor: '#00eaea',
-    headerBackTitle: 'Back',
   });
-
-  constructor(props) {
-    super(props);
-
-    this._onItemClick = this._onItemClick.bind(this);
-    this._onAddClick = this._onAddClick.bind(this);
-  }
 
   _onAddClick = (id) => {
     this.props.navigation.navigate('AddAttendeeScreen', { id });
@@ -36,43 +30,31 @@ class EventAttendeesScreen extends Component {
 
   keyExtractor = (item, index) => index.toString();
 
-  renderItem = ({ attendee, index }) => {
-    const _onItemClick = () => {
-      const attendeeIndex = _.findIndex(
-        this.props.globalAttendees,
-        (item) => item._id === attendee._id
-      );
-      this.props.navigation.navigate('AttendeeSummaryScreen', {
-        event: this.props.navigation.state.params.index,
-        id: this.props.event._id,
-        attendee: index,
-        attendeeIndex,
-      });
-    };
-    return (
-      <TouchableHighlight onPress={_onItemClick}>
-        <View style={styles.listItemContainer}>
-          <Icon
-            name={item.isFilled ? 'check-square' : 'minus-square'}
-            size={18}
-            color={item.isFilled ? '#34bd3e' : '#ff575c'}
-          />
-          <Text style={styles.name}>
-            {item.firstname} {item.lastname}
-          </Text>
-          <Icon
-            name="chevron-right"
-            size={16}
-            color={'#797979'}
-            style={styles.arrow}
-          />
-        </View>
-      </TouchableHighlight>
-    );
-  };
+  renderItem = ({ item }) => (
+    <TouchableHighlight onPress={() => {}}>
+      <View style={styles.listItemContainer}>
+        <Icon
+          name={item.isFilled ? 'check-square' : 'minus-square'}
+          size={18}
+          color={item.isFilled ? '#34bd3e' : '#ff575c'}
+        />
+        <Text style={styles.name}>
+          {item.firstname} {item.lastname}
+        </Text>
+        <Icon
+          name="chevron-right"
+          size={16}
+          color={'#797979'}
+          style={styles.arrow}
+        />
+      </View>
+    </TouchableHighlight>
+  );
 
   render() {
-    const { event, attendees } = this.props;
+    const eventId = this.props.navigation.getParam('id');
+    const event = this.props.event.eventsById[eventId] || {};
+    const attendees = this.props.event.attendeesById[eventId] || [];
 
     return (
       <View style={Styles.container}>
@@ -175,15 +157,3 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
 });
-
-const mapStateToProps = (state, props) => ({
-  event: state.event.events[props.navigation.state.params.index] || {},
-  attendees:
-    state.attendee.eventAttendees[props.navigation.state.params.id] || [],
-  globalAttendees: state.attendee.attendees,
-});
-
-export default connect(
-  mapStateToProps,
-  null
-)(EventAttendeesScreen);

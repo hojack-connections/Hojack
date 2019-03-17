@@ -8,31 +8,39 @@ import {
   Platform,
 } from 'react-native';
 import { Button } from 'react-native-elements';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as authActions from '../actions/authActions';
 
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 import * as EmailValidator from 'email-validator';
+import { inject, observer } from 'mobx-react';
 
+export default
+@inject('user', 'auth')
+@observer
 class LoginScreen extends Component {
-  constructor(props) {
-    super(props);
+  state = {
+    email: '',
+    password: '',
+    warning: '',
+  };
 
-    this.state = {
-      email: '',
-      password: '',
-      warning: '',
-    };
-  }
+  passwordTextInputRef;
 
   onLogin = () => {
     if (!EmailValidator.validate(this.state.email)) {
       this.setState({ warning: 'Email is not valid' });
     } else {
       this.setState({ warning: '' });
-      this.props.actions.loginRequest(this.state);
+      this.props.user
+        .login(this.state)
+        .then(() => {
+          if (this.props.auth.authenticated) {
+            this.props.navigation.navigate('App');
+          }
+        })
+        .catch(() => {
+          alert('There was a problem logging in. Please try again.');
+        });
     }
   };
 
@@ -53,6 +61,7 @@ class LoginScreen extends Component {
               style={styles.input}
               value={email}
               onChangeText={(email) => this.setState({ email })}
+              onSubmitEditing={() => this.passwordTextInputRef.focus()}
               autoCapitalize="none"
               autoCorrect={false}
               underlineColorAndroid="transparent"
@@ -63,10 +72,14 @@ class LoginScreen extends Component {
           <View style={styles.inputField}>
             <Text style={styles.label}>Password: </Text>
             <TextInput
+              ref={(input) => {
+                this.passwordTextInputRef = input;
+              }}
               secureTextEntry
               style={styles.input}
               value={password}
               onChangeText={(password) => this.setState({ password })}
+              onSubmitEditing={this.onLogin}
               autoCapitalize="none"
               autoCorrect={false}
               underlineColorAndroid="transparent"
@@ -75,7 +88,7 @@ class LoginScreen extends Component {
           </View>
           <View style={styles.errorField}>
             <Text style={styles.errorLabel}>
-              {warning !== '' ? warning : error ? error.data : null}
+              {/*warning !== '' ? warning : error ? error.data : null*/}
             </Text>
           </View>
           <Button
@@ -156,19 +169,3 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
 });
-
-const mapStateToProps = (state) => ({
-  error: state.auth.error,
-  isFetching: state.auth.isFetching,
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators({ ...authActions }, dispatch),
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LoginScreen);

@@ -1,24 +1,29 @@
-/**
- * @flow
- */
-
 import React, { Component } from 'react';
 import { StyleSheet, View, StatusBar, YellowBox } from 'react-native';
-import RootNavigation from './navigation/MainTabNavigator';
+import RootNavigation from './navigation/RootNavigation';
 import AuthStackNavigation from './navigation/AuthStackNavigation';
-import { connect } from 'react-redux';
+import AuthLoading from './containers/AuthLoading';
+import { createSwitchNavigator, createAppContainer } from 'react-navigation';
+
 YellowBox.ignoreWarnings([
   'Warning: isMounted(...) is deprecated',
   'Module RCTImageLoader',
 ]);
 StatusBar.setBarStyle('light-content', true);
 
-class App extends Component {
+const AppContainer = createAppContainer(
+  createSwitchNavigator({
+    AuthLoading,
+    Auth: AuthStackNavigation,
+    App: RootNavigation,
+  })
+);
+
+export default class App extends Component {
   render() {
-    const { isLogged } = this.props;
     return (
       <View style={styles.container}>
-        {isLogged ? <RootNavigation /> : <AuthStackNavigation />}
+        <AppContainer />
       </View>
     );
   }
@@ -30,12 +35,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
 });
-
-const mapStateToProps = (state) => ({
-  isLogged: state.auth.isLogged,
-});
-
-export default connect(
-  mapStateToProps,
-  null
-)(App);

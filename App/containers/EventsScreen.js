@@ -1,74 +1,55 @@
 import React, { Component } from 'react';
 import {
-  Platform,
   View,
   Text,
   StyleSheet,
   FlatList,
-  TouchableHighlight,
+  TouchableOpacity,
 } from 'react-native';
 import moment from 'moment';
-import axios from 'axios';
-import _ from 'lodash';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as eventActions from '../actions/eventActions';
-import * as attendeeActions from '../actions/attendeeActions';
-
-import API_BASE_URL from '../sagas/config';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 import { Colors, Styles } from '../Themes/';
+import { inject, observer } from 'mobx-react';
+import HeaderSubtitle from '../components/HeaderSubtitle';
 
+export default
+@inject('user', 'auth', 'event', 'attendee')
+@observer
 class EventsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Events',
-    headerTitleStyle: Styles.nav.title,
-    headerBackTitle: 'Back',
+    headerLeft: (
+      <TouchableOpacity
+        style={{ padding: 8, marginLeft: 8 }}
+        onPress={() => navigation.navigate('AddEventScreen')}
+      >
+        <Ionicon name="ios-add-circle-outline" color="white" size={30} />
+      </TouchableOpacity>
+    ),
+    headerRight: (
+      <TouchableOpacity
+        style={{ padding: 8, marginRight: 8 }}
+        onPress={() => navigation.navigate('SettingsScreen')}
+      >
+        <Ionicon name="ios-cog" color="white" size={30} />
+      </TouchableOpacity>
+    ),
   });
 
-  constructor(props) {
-    super(props);
-
-    this.reloadData = this.reloadData.bind(this);
-  }
-
   componentDidMount() {
-    this.reloadData();
+    this.props.event.loadEvents();
+    this.props.attendee.loadTotalAttendeeCount();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!_.isEqual(this.props.events, nextProps.events)) {
-      nextProps.events.map((event) =>
-        // get attendees of each event
-        axios
-          .get(API_BASE_URL.event + '/' + event._id + '/attendees', {
-            params: { token: this.props.token },
-          })
-          .then((response) => {
-            const payload = {};
-            payload[event._id] = response.data;
-            this.props.actions.loadAttendees(payload);
-          })
-          .catch((error) => {
-            console.log(error);
-          })
-      );
-    }
-  }
-
-  reloadData() {
-    this.props.actions.getEventsRequest({ token: this.props.token });
-    this.props.actions.getAttendeesRequest({ token: this.props.token });
-  }
-
-  _onItemClick(index, id) {
-    this.props.navigation.navigate('EventSummaryScreen', { index, id });
-  }
+  _onItemClick = (index, id) => {
+    this.props.navigation.navigate('EventDetailScreen', { index, id });
+  };
 
   keyExtractor = (item, index) => index.toString();
 
   renderItem = ({ item, index }) => (
-    <TouchableHighlight onPress={() => this._onItemClick(index, item._id)}>
+    <TouchableOpacity onPress={() => this._onItemClick(index, item._id)}>
       <View style={styles.listItemContainer}>
         <Text style={styles.eventDate}>
           {moment(item.date).format('MMM DD, YYYY')}
@@ -77,9 +58,7 @@ class EventsScreen extends Component {
         <View style={styles.subDetails}>
           <Text style={styles.categoryTitle}>{item.name}</Text>
           <Text style={{ color: item.isSubmitted ? '#34bd3e' : '#ff575c' }}>
-            {this.props.eventAttendees[item._id]
-              ? this.props.eventAttendees[item._id].length.toLocaleString()
-              : '0'}
+            {(this.props.event.attendeesById[item._id] || []).length}
           </Text>
         </View>
         <Icon
@@ -89,40 +68,24 @@ class EventsScreen extends Component {
           style={styles.arrow}
         />
       </View>
-    </TouchableHighlight>
+    </TouchableOpacity>
   );
 
   render() {
-    const { events, attendees, eventAttendees } = this.props;
-
     return (
       <View style={Styles.container}>
-        <View style={styles.totalEventsContainer}>
+        <HeaderSubtitle>
           <Text style={{ color: '#895353' }}>
-            Total Attendees: {attendees.length}
+            Total Attendees: {this.props.attendee.totalAttendeeCount}
           </Text>
           <Text style={{ color: '#538989' }}>
-            Total Events: {events.length}
+            Total Events: {this.props.event.totalEventCount}
           </Text>
-        </View>
-        <View style={styles.allEventsContainer}>
-          <Text>All Attendees</Text>
-          <Text style={{ color: '#34bd3e' }}>
-            {attendees.length.toLocaleString()}
-          </Text>
-          <Icon
-            color={'#797979'}
-            name="chevron-right"
-            size={16}
-            style={Styles.arrow}
-          />
-        </View>
+        </HeaderSubtitle>
         <FlatList
-          data={events}
-          extraData={eventAttendees}
+          data={this.props.event.events}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
-          // onEndReached={this.reloadData}
         />
       </View>
     );
@@ -130,13 +93,6 @@ class EventsScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  totalEventsContainer: {
-    height: 42,
-    backgroundColor: Colors.darkBlack,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
   allEventsContainer: {
     paddingHorizontal: 30,
     height: 44,
@@ -177,22 +133,3 @@ const styles = StyleSheet.create({
     top: 44,
   },
 });
-
-const mapStateToProps = (state) => ({
-  token: state.auth.token,
-  events: state.event.events,
-  attendees: state.attendee.attendees,
-  eventAttendees: state.attendee.eventAttendees,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators(
-    { ...eventActions, ...attendeeActions },
-    dispatch
-  ),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EventsScreen);

@@ -4,46 +4,38 @@ import {
   ScrollView,
   Dimensions,
   Text,
+  TextInput,
   StyleSheet,
   TouchableOpacity,
   Platform,
 } from 'react-native';
 import { Button } from 'react-native-elements';
-import UserInput from '../components/UserInput';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import SignatureCapture from 'react-native-signature-capture';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { NavigationActions } from 'react-navigation';
-import * as attendeeActions from '../actions/attendeeActions';
-import * as EmailValidator from 'email-validator';
-
+import { inject, observer } from 'mobx-react';
+import Cell from '../components/Cell';
 import normalize from '../helpers/normalizeText';
-import { Colors, Styles } from '../Themes/';
+import { Colors } from '../Themes/';
 
+export default
+@inject('event', 'auth', 'attendee')
+@observer
 class AddAttendeeScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Add Attendee',
-    headerTintColor: '#00eaea',
-    headerTitleStyle: Styles.nav.title,
-    headerBackTitle: 'Back',
   });
 
-  constructor(props) {
-    super(props);
+  state = {
+    firstname: '',
+    lastname: '',
+    email: '',
+    phone: '',
+    warning: '',
+    signatureWidth: Dimensions.get('window').width - 50,
+  };
 
-    this.state = {
-      firstname: '',
-      lastname: '',
-      email: '',
-      phone: '',
-      warning: '',
-      signatureWidth: Dimensions.get('window').width - 50,
-    };
-
-    this.onSave = this.onSave.bind(this);
-    this._onSaveEvent = this._onSaveEvent.bind(this);
-  }
+  signatureRef = React.createRef();
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.created && nextProps.created) {
@@ -53,25 +45,27 @@ class AddAttendeeScreen extends Component {
   }
 
   onSave = () => {
-    if (!EmailValidator.validate(this.state.email)) {
-      this.setState({ warning: 'Email is not valid' });
-    } else {
-      this.setState({ warning: '' });
-      this.refs.sign.saveImage();
-    }
+    this.signatureRef.current.saveImage();
   };
 
-  _onSaveEvent(result) {
-    const payload = {
-      ...this.state,
-      signature: result.encoded,
-      event: this.props.navigation.state.params.id,
-      token: this.props.token,
-    };
-    this.props.actions.createAttendeeRequest(payload);
-  }
+  onSignatureSave = (result) => {
+    const eventId = this.props.navigation.getParam('id');
+    this.props.attendee
+      .create(eventId, {
+        ...this.state,
+        signature: result.encoded,
+        event: eventId,
+      })
+      .then(() => {
+        this.props.event.loadEventAttendees(eventId);
+        this.props.navigation.goBack();
+      })
+      .catch(() => {
+        alert('There was a problem creating the attendee.');
+      });
+  };
 
-  onLayout = (e) => {
+  onLayout = () => {
     const { width } = Dimensions.get('window');
     this.setState({ signatureWidth: width - 50 });
   };
@@ -83,43 +77,67 @@ class AddAttendeeScreen extends Component {
     return (
       <ScrollView style={styles.container} onLayout={this.onLayout}>
         <View style={styles.inputFields}>
-          <UserInput
-            label={'First Name:'}
-            placeholder={'First Name'}
-            value={firstname}
-            onChangeText={(firstname) => this.setState({ firstname })}
-          />
-          <UserInput
-            label={'Last Name:'}
-            placeholder={'Last Name'}
-            value={lastname}
-            onChangeText={(lastname) => this.setState({ lastname })}
-          />
-          <UserInput
-            label={'Email:'}
-            placeholder={'Email'}
-            value={email}
-            onChangeText={(email) => this.setState({ email })}
-          />
-          <UserInput
-            label={'Phone:'}
-            placeholder={'Phone'}
-            value={phone}
-            onChangeText={(phone) => this.setState({ phone })}
-          />
+          <Cell label="First Name:">
+            <TextInput
+              autoCapitalize="words"
+              autoCorrect={false}
+              editable
+              onChangeText={(firstname) => this.setState({ firstname })}
+              placeholder="John"
+              style={styles.textInputStyle}
+              underlineColorAndroid="transparent"
+              value={this.state.firstname}
+            />
+          </Cell>
+          <Cell label="Last Name:">
+            <TextInput
+              autoCapitalize="words"
+              autoCorrect={false}
+              editable
+              onChangeText={(lastname) => this.setState({ lastname })}
+              placeholder="Doe"
+              style={styles.textInputStyle}
+              underlineColorAndroid="transparent"
+              value={this.state.lastname}
+            />
+          </Cell>
+          <Cell label="Email:">
+            <TextInput
+              autoCapitalize="none"
+              autoCorrect={false}
+              editable
+              onChangeText={(email) => this.setState({ email })}
+              placeholder="john.doe@email.com"
+              style={styles.textInputStyle}
+              underlineColorAndroid="transparent"
+              value={this.state.email}
+            />
+          </Cell>
+          <Cell label="Phone:">
+            <TextInput
+              autoCapitalize="none"
+              autoCorrect={false}
+              editable
+              onChangeText={(phone) => this.setState({ phone })}
+              placeholder="8125553974"
+              style={styles.textInputStyle}
+              underlineColorAndroid="transparent"
+              value={this.state.phone}
+            />
+          </Cell>
         </View>
         <View style={styles.signatureField}>
           <Text style={styles.signatureLabel}>Signature:</Text>
           <TouchableOpacity
             style={{ zIndex: 1, position: 'absolute', right: 10, top: 5 }}
             onPress={() => {
-              this.refs.sign.resetImage();
+              this.signatureRef.current.resetImage();
             }}
           >
             <Text style={{ color: 'blue', fontSize: 14 }}>Reset</Text>
           </TouchableOpacity>
           <SignatureCapture
-            ref="sign"
+            ref={this.signatureRef}
             style={{
               width: this.state.signatureWidth,
               paddingTop: 10,
@@ -129,7 +147,7 @@ class AddAttendeeScreen extends Component {
             showBorder={false}
             showTitleLabel={false}
             viewMode={'portrait'}
-            onSaveEvent={this._onSaveEvent}
+            onSaveEvent={this.onSignatureSave}
           />
         </View>
         <View style={styles.errorField}>
@@ -159,6 +177,12 @@ const styles = StyleSheet.create({
   inputFields: {
     paddingLeft: 20,
     paddingTop: 10,
+  },
+  textInputStyle: {
+    flex: 1,
+    marginRight: 10,
+    color: Colors.black,
+    fontWeight: '100',
   },
   signatureField: {
     height: 100,
@@ -208,19 +232,3 @@ const styles = StyleSheet.create({
     color: 'red',
   },
 });
-
-const mapStateToProps = (state) => ({
-  token: state.auth.token,
-  error: state.attendee.error,
-  created: state.attendee.created,
-  isCreating: state.attendee.isCreating,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  actions: bindActionCreators({ ...attendeeActions }, dispatch),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AddAttendeeScreen);
