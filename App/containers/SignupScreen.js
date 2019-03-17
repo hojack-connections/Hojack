@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Platform,
+  StatusBar,
 } from 'react-native';
 import { Button } from 'react-native-elements';
 
@@ -38,7 +39,8 @@ class SignupScreen extends Component {
       this.setState({ warning: 'Email is not valid' });
     } else {
       this.setState({ warning: '' });
-      this.props.user.signup(this.state)
+      this.props.user
+        .signup(this.state)
         .then(() => {
           if (this.props.auth.authenticated) {
             this.props.navigation.navigate('App');
@@ -60,6 +62,7 @@ class SignupScreen extends Component {
 
     return (
       <View style={Styles.container}>
+        <StatusBar barStyle="dark-content" />
         <View style={styles.subContainer}>
           <View style={styles.inputField}>
             <Text style={styles.label}>First Name: </Text>

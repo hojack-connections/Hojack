@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Platform,
+  StatusBar,
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import normalize from '../helpers/normalizeText';
@@ -55,6 +56,7 @@ class LoginScreen extends Component {
   render() {
     return (
       <View style={Styles.container}>
+        <StatusBar barStyle="dark-content" />
         <View style={styles.subContainer}>
           <View style={styles.inputField}>
             <Text style={styles.label}>Email: </Text>
