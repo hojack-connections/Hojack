@@ -44,7 +44,6 @@
 		55654637CA5E44A59E5BAE9E /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 373A86E63E4F45DB91EC3DE8 /* Entypo.ttf */; };
 		59F8AA347B5342379DC96812 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C170495D7D449CCA525BDCE /* libRNVectorIcons.a */; };
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
-		7887975094314E4382CA823B /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FCFA0AB36DCC4F138A523A5C /* Ionicons.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		8F4A8256AEEC4841A09C5C9D /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AAEA9E6609C14BF7B3D04762 /* MaterialIcons.ttf */; };
 		98EF26E948644DECAA3F5CC1 /* libRSSignatureCapture.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BFCF28059C494312AAC60654 /* libRSSignatureCapture.a */; };
@@ -53,7 +52,6 @@
 		B98C62F19D33495487249F0D /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D1552607005648009F288B02 /* EvilIcons.ttf */; };
 		DAC03903F752425EBBAC95C8 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 39BAEFE6808F4AF0AF3CEC5D /* Foundation.ttf */; };
 		FA0C7194E818468387EC93D3 /* libRNGestureHandler-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93A6254E64AD455288CA923B /* libRNGestureHandler-tvOS.a */; };
-		31EDA1D779FA4BA790A2D8BB /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9E8DA998641F405E9EB51958 /* Ionicons.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -406,7 +404,6 @@
 		EAB9268329E84E3FA550E4BA /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		F9CA11BE07F249BABEE6DB35 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
 		FCFA0AB36DCC4F138A523A5C /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
-		9E8DA998641F405E9EB51958 /* Ionicons.ttf */ = {isa = PBXFileReference; name = "Ionicons.ttf"; path = "../node_modules/react-native-ionicons/fonts/Ionicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -729,7 +726,6 @@
 				CC8522D2897443ABA79367EF /* Octicons.ttf */,
 				A9FF3BB2BCB34882A156B212 /* SimpleLineIcons.ttf */,
 				EAB9268329E84E3FA550E4BA /* Zocial.ttf */,
-				9E8DA998641F405E9EB51958 /* Ionicons.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1230,7 +1226,6 @@
 				2B1929C35F0B441CA24318B4 /* Feather.ttf in Resources */,
 				034C8C7A6ABD4CF196E1BAFB /* FontAwesome.ttf in Resources */,
 				DAC03903F752425EBBAC95C8 /* Foundation.ttf in Resources */,
-				7887975094314E4382CA823B /* Ionicons.ttf in Resources */,
 				1B0A59E7D5604CD9AE169419 /* MaterialCommunityIcons.ttf in Resources */,
 				8F4A8256AEEC4841A09C5C9D /* MaterialIcons.ttf in Resources */,
 				3C1428430EDC4A80AB62194E /* Octicons.ttf in Resources */,
@@ -1420,7 +1415,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Ian Kuchman (RZVPT4D7K3)";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
@@ -1440,8 +1435,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = goCert.io;
 				PRODUCT_NAME = certifio;
-				PROVISIONING_PROFILE = "a98eb590-f06e-4b2e-a891-4da12460b4f6";
-				PROVISIONING_PROFILE_SPECIFIER = certfio_distribution_profile;
+				PROVISIONING_PROFILE = "8ba4a638-dc18-4bfa-af31-ecd25d39c557";
+				PROVISIONING_PROFILE_SPECIFIER = "hojack-031619";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1450,7 +1445,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Ian Kuchman (RZVPT4D7K3)";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = RZVPT4D7K3;
@@ -1469,8 +1464,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = goCert.io;
 				PRODUCT_NAME = certifio;
-				PROVISIONING_PROFILE = "a98eb590-f06e-4b2e-a891-4da12460b4f6";
-				PROVISIONING_PROFILE_SPECIFIER = certfio_distribution_profile;
+				PROVISIONING_PROFILE = "8ba4a638-dc18-4bfa-af31-ecd25d39c557";
+				PROVISIONING_PROFILE_SPECIFIER = "hojack-031619";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

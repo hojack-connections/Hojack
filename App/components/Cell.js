@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import normalize from '../helpers/normalizeText';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default class Cell extends React.Component {
   render() {

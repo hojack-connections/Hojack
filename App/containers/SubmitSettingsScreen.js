@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import Ionicon from 'react-native-ionicons';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import Ionicon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 import * as EmailValidator from 'email-validator';

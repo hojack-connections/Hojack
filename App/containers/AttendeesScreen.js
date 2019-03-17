@@ -6,7 +6,7 @@ import {
   FlatList,
   TouchableHighlight,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 

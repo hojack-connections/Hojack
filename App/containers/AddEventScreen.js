@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import UserInput from '../components/UserInput';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 import { inject, observer } from 'mobx-react';

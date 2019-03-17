@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import moment from 'moment';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import Ionicon from 'react-native-ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 import { Colors, Styles } from '../Themes/';
 import { inject, observer } from 'mobx-react';
 
