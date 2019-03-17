@@ -41,6 +41,7 @@
 		3C1428430EDC4A80AB62194E /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CC8522D2897443ABA79367EF /* Octicons.ttf */; };
 		47C09FAB14934AF9A58B8EF9 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A9FF3BB2BCB34882A156B212 /* SimpleLineIcons.ttf */; };
 		4C5E171D221FF40E003D410F /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C5E16ED221FF40D003D410F /* JavaScriptCore.framework */; };
+		4C7A5C27223E4D6B00BA283B /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FCFA0AB36DCC4F138A523A5C /* Ionicons.ttf */; };
 		515C410838C4499782851A71 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EAB9268329E84E3FA550E4BA /* Zocial.ttf */; };
 		55654637CA5E44A59E5BAE9E /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 373A86E63E4F45DB91EC3DE8 /* Entypo.ttf */; };
 		59F8AA347B5342379DC96812 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C170495D7D449CCA525BDCE /* libRNVectorIcons.a */; };
@@ -1235,6 +1236,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C7A5C27223E4D6B00BA283B /* Ionicons.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				55654637CA5E44A59E5BAE9E /* Entypo.ttf in Resources */,
