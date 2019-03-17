@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  TouchableHighlight,
   TouchableOpacity,
 } from 'react-native';
 import moment from 'moment';
@@ -12,6 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { Colors, Styles } from '../Themes/';
 import { inject, observer } from 'mobx-react';
+import HeaderSubtitle from '../components/HeaderSubtitle';
 
 export default
 @inject('user', 'auth', 'event')
@@ -42,13 +42,13 @@ class EventsScreen extends Component {
   }
 
   _onItemClick = (index, id) => {
-    this.props.navigation.navigate('SubmitSettingsScreen', { index, id });
+    this.props.navigation.navigate('EventDetailScreen', { index, id });
   };
 
   keyExtractor = (item, index) => index.toString();
 
   renderItem = ({ item, index }) => (
-    <TouchableHighlight onPress={() => this._onItemClick(index, item._id)}>
+    <TouchableOpacity onPress={() => this._onItemClick(index, item._id)}>
       <View style={styles.listItemContainer}>
         <Text style={styles.eventDate}>
           {moment(item.date).format('MMM DD, YYYY')}
@@ -69,21 +69,20 @@ class EventsScreen extends Component {
           style={styles.arrow}
         />
       </View>
-    </TouchableHighlight>
+    </TouchableOpacity>
   );
 
   render() {
     return (
       <View style={Styles.container}>
-        <View style={styles.totalEventsContainer}>
+        <HeaderSubtitle>
           <Text style={{ color: '#895353' }}>
-            {/* TODO: Make this a rest call, shouldn't be calculating on client side */}
-            Total Attendees: {0}
+            Total Attendees: {this.props.event.totalAttendeeCount}
           </Text>
           <Text style={{ color: '#538989' }}>
-            Total Events: {this.props.event.events.length}
+            Total Events: {this.props.event.totalEventCount}
           </Text>
-        </View>
+        </HeaderSubtitle>
         <View style={styles.allEventsContainer}>
           <Text>All Attendees</Text>
           <Text style={{ color: '#34bd3e' }}>
@@ -109,13 +108,6 @@ class EventsScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  totalEventsContainer: {
-    height: 42,
-    backgroundColor: Colors.darkBlack,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
   allEventsContainer: {
     paddingHorizontal: 30,
     height: 44,

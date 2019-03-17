@@ -7,7 +7,7 @@ import SettingsScreen from '../containers/SettingsScreen';
 import EventSummaryScreen from '../containers/EventSummaryScreen';
 import EventAttendeesScreen from '../containers/EventAttendeesScreen';
 import AddAttendeeScreen from '../containers/AddAttendeeScreen';
-import SubmitSettingsScreen from '../containers/SubmitSettingsScreen';
+import EventDetailScreen from '../containers/EventDetailScreen';
 
 export default createStackNavigator(
   {
@@ -18,7 +18,7 @@ export default createStackNavigator(
     AddAttendeeScreen: { screen: AddAttendeeScreen },
     AddEventScreen: { screen: AddEventScreen },
     SettingsScreen: { screen: SettingsScreen },
-    SubmitSettingsScreen: { screen: SubmitSettingsScreen },
+    EventDetailScreen: { screen: EventDetailScreen },
   },
   {
     initialRouteName: 'Home',

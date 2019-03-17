@@ -7,11 +7,11 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import { Colors, Styles } from '../Themes/';
 import { inject, observer } from 'mobx-react';
+import HeaderSubtitle from '../components/HeaderSubtitle';
 
 export default
 @inject('event')
@@ -69,11 +69,11 @@ class AttendeesScreen extends Component {
 
     return (
       <View style={Styles.container}>
-        <View style={styles.totalEventsContainer}>
+        <HeaderSubtitle>
           <Text style={{ color: '#895353' }}>
             Total Attendees: {attendees.length}
           </Text>
-        </View>
+        </HeaderSubtitle>
         <FlatList
           data={attendees}
           keyExtractor={this.keyExtractor}
@@ -85,14 +85,6 @@ class AttendeesScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  totalEventsContainer: {
-    height: 42,
-    backgroundColor: Colors.darkBlack,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
   listItemContainer: {
     flexDirection: 'row',
     alignItems: 'center',

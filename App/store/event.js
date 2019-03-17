@@ -9,6 +9,9 @@ export default class EventStore {
   @observable eventsById = {};
   @observable events = [];
 
+  @observable totalEventCount = 0;
+  @observable totalAttendeeCount = 0;
+
   constructor(_authStore) {
     this.authStore = _authStore;
   }
@@ -38,6 +41,20 @@ export default class EventStore {
     }
   }
 
+  async loadTotalEventCount() {
+    try {
+      const res = await axios.get(URLs.users.eventsCount, {
+        params: {
+          token: this.authStore.token,
+        },
+      });
+      this.totalEventCount = res.data.count;
+    } catch (err) {
+      console.log('Error loading total event count', err);
+      throw err;
+    }
+  }
+
   async loadEvents() {
     try {
       const res = await axios.get(URLs.users.events, {
@@ -49,6 +66,7 @@ export default class EventStore {
       this.events.forEach((event) => {
         this.eventsById[event._id] = event;
       });
+      await this.loadTotalEventCount();
     } catch (err) {
       console.log('Error loading events', err);
       throw err;

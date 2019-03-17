@@ -15,6 +15,7 @@ import { Colors, Styles } from '../Themes/';
 import * as EmailValidator from 'email-validator';
 import { inject, observer } from 'mobx-react';
 import { Button } from 'react-native-elements';
+import HeaderSubtitle from '../components/HeaderSubtitle';
 
 export default
 @inject('receiver', 'event')
@@ -101,7 +102,7 @@ class SubmitSettingsScreen extends Component {
     } else {
       Alert.alert(
         'Warning',
-        "Please input valid email address or '<<All Attendees>>'"
+        `Please input valid email address or '<<All Attendees>>'`
       );
       this.setState({ newSheetReceiver: '' });
     }
@@ -147,6 +148,34 @@ class SubmitSettingsScreen extends Component {
 
     return (
       <ScrollView style={Styles.container}>
+        <HeaderSubtitle>
+          <Text style={{ color: '#538989' }}>
+            {/* TODO: Make this a rest call, shouldn't be calculating on client side */}
+            Total Attendees: {0}
+          </Text>
+        </HeaderSubtitle>
+        <View style={styles.allEventsContainer}>
+          <Text>All Attendees</Text>
+          <Text style={{ color: '#34bd3e' }}>
+            {/* TODO: Make this a rest call, shouldn't be calculating on client side */}
+            {0}
+          </Text>
+          <Icon
+            color={'#797979'}
+            name="chevron-right"
+            size={16}
+            style={Styles.arrow}
+          />
+        </View>
+        <Button
+          buttonStyle={styles.updateButton}
+          containerStyle={styles.buttonContainer}
+          onPress={() =>
+            this.props.navigation.navigate('AddAttendeeScreen', { id: eventId })
+          }
+          title="Add Attendee"
+          titleStyle={styles.buttonTitle}
+        />
         <View style={styles.section}>
           <Text
             style={{
@@ -244,6 +273,15 @@ class SubmitSettingsScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  allEventsContainer: {
+    paddingHorizontal: 30,
+    height: 44,
+    marginBottom: 10,
+    backgroundColor: Colors.white,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   buttonContainer: {
     marginTop: 15,
     marginBottom: 15,
