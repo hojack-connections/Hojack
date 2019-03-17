@@ -183,7 +183,9 @@ class SubmitSettingsScreen extends Component {
             buttonStyle={styles.updateButton}
             containerStyle={styles.buttonContainer}
             onPress={() =>
-              this.props.navigation.navigate('AddAttendeeScreen', { id: eventId })
+              this.props.navigation.navigate('AddAttendeeScreen', {
+                id: eventId,
+              })
             }
             title="Add Attendee"
             titleStyle={styles.buttonTitle}
@@ -201,7 +203,9 @@ class SubmitSettingsScreen extends Component {
           </View>
           {sheetReceivers.map((item, index) => (
             <View key={index} style={styles.listItemContainer}>
-              <TouchableOpacity onPress={() => this._onRemoveSheetReceiver(item)}>
+              <TouchableOpacity
+                onPress={() => this._onRemoveSheetReceiver(item)}
+              >
                 <Icon color={Colors.black} name={'minus-square'} size={20} />
               </TouchableOpacity>
               <Text style={styles.name}>{item}</Text>
@@ -243,7 +247,9 @@ class SubmitSettingsScreen extends Component {
           </View>
           {certReceivers.map((item, index) => (
             <View key={index} style={styles.listItemContainer}>
-              <TouchableOpacity onPress={() => this._onRemoveCertReceiver(item)}>
+              <TouchableOpacity
+                onPress={() => this._onRemoveCertReceiver(item)}
+              >
                 <Icon color={Colors.black} name={'minus-square'} size={20} />
               </TouchableOpacity>
               <Text style={styles.name}>{item}</Text>
