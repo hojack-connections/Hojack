@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -292,6 +293,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = ED296FEE214C9CF800B7C4FE;
 			remoteInfo = "jsiexecutor-tvOS";
+		};
+		4C7A5C07223E458600BA283B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F9CA11BE07F249BABEE6DB35 /* RNVectorIcons.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A39873CE1EA65EE60051E01A;
+			remoteInfo = "RNVectorIcons-tvOS";
 		};
 		4CD571302237280B006F75D7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -624,6 +632,7 @@
 			isa = PBXGroup;
 			children = (
 				6703AB1720AA86700003B944 /* libRNVectorIcons.a */,
+				4C7A5C08223E458600BA283B /* libRNVectorIcons-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1142,6 +1151,13 @@
 			remoteRef = 4C5E1719221FF40D003D410F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		4C7A5C08223E458600BA283B /* libRNVectorIcons-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNVectorIcons-tvOS.a";
+			remoteRef = 4C7A5C07223E458600BA283B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		4CD571312237280B006F75D7 /* libRNGestureHandler.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1231,7 +1247,6 @@
 				3C1428430EDC4A80AB62194E /* Octicons.ttf in Resources */,
 				47C09FAB14934AF9A58B8EF9 /* SimpleLineIcons.ttf in Resources */,
 				515C410838C4499782851A71 /* Zocial.ttf in Resources */,
-				31EDA1D779FA4BA790A2D8BB /* Ionicons.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

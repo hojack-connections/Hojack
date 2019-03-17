@@ -84,18 +84,6 @@ class EventsScreen extends Component {
             Total Events: {this.props.event.totalEventCount}
           </Text>
         </HeaderSubtitle>
-        <View style={styles.allEventsContainer}>
-          <Text>All Attendees</Text>
-          <Text style={{ color: '#34bd3e' }}>
-            {this.props.event.totalAttendeeCount}
-          </Text>
-          <Icon
-            color={'#797979'}
-            name="chevron-right"
-            size={16}
-            style={Styles.arrow}
-          />
-        </View>
         <FlatList
           data={this.props.event.events}
           extraData={{}}
