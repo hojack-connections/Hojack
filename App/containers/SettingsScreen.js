@@ -1,5 +1,8 @@
 import React from 'react';
-import { Button } from 'react-native';
+import { StyleSheet } from 'react-native';
+import normalize from '../helpers/normalizeText';
+import { Colors } from '../Themes/';
+import { Button } from 'react-native-elements';
 import { inject, observer } from 'mobx-react';
 
 export default
@@ -10,17 +13,43 @@ class SettingsScreen extends React.Component {
     title: 'Settings',
   });
 
+  logout = () => {
+    this.props.auth
+      .logout()
+      .then(() => this.props.navigation.navigate('Auth'))
+      .catch(() => alert('There was a problem logging you out.'))
+  };
+
   render() {
     return (
       <Button
-        onPress={() =>
-          this.props.auth
-            .logout()
-            .then(() => this.props.navigation.navigate('Auth'))
-            .catch(() => alert('There was a problem loggin you out.'))
-        }
-        title="logout"
+        buttonStyle={styles.deleteButton}
+        containerStyle={styles.buttonContainer}
+        onPress={this.logout}
+        title="Logout"
+        titleStyle={styles.buttonTitle}
       />
     );
   }
 }
+
+const styles = StyleSheet.create({
+  buttonContainer: {
+    marginTop: 15,
+    marginBottom: 15,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+  },
+  deleteButton: {
+    backgroundColor: '#ff575c',
+    borderRadius: 10,
+    width: '100%',
+    height: 60,
+  },
+  buttonTitle: {
+    marginLeft: 10,
+    fontSize: normalize(20),
+    color: Colors.white,
+  },
+});
