@@ -159,6 +159,25 @@ class SubmitSettingsScreen extends Component {
             {(this.props.event.attendeesById[eventId] || []).length}
           </Text>
         </HeaderSubtitle>
+        <TouchableOpacity
+          style={styles.allEventsContainer}
+          onPress={() => {
+            this.props.navigation.navigate('EventAttendeesScreen', {
+              id: eventId,
+            });
+          }}
+        >
+          <Text>All Attendees</Text>
+          <Text style={{ color: '#34bd3e' }}>
+            {(this.props.event.attendeesById[eventId] || []).length}
+          </Text>
+          <Icon
+            color={'#797979'}
+            name="chevron-right"
+            size={16}
+            style={Styles.arrow}
+          />
+        </TouchableOpacity>
         <Button
           buttonStyle={styles.updateButton}
           containerStyle={styles.buttonContainer}
