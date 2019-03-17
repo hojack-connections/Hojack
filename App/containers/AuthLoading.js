@@ -6,15 +6,8 @@ export default
 @inject('auth')
 @observer
 class AuthLoading extends React.Component {
-  componentDidUpdate(prevProps) {
-    if (this.props.auth.authenticated === prevProps.auth.authenticated) {
-      return;
-    }
-    this.updateNavigation();
-  }
-
   componentDidMount() {
-    this.updateNavigation();
+    this.props.auth.onInitialLoad(this.updateNavigation);
   }
 
   updateNavigation = () => {

@@ -4,17 +4,34 @@ import { AsyncStorage } from 'react-native';
 export default class AuthStore {
   @observable token;
 
+  initialLoadCompleted = false;
+  initialLoadCallbacks = [];
+
   constructor() {
     AsyncStorage.getItem('token', (err, token) => {
       if (err) {
         // No stored token
+        this.executeInitialLoadCallbacks();
         return;
       }
       this.token = token;
       if (typeof this.token !== 'string' || this.token.length === 0) {
         this.token = undefined;
       }
+      this.executeInitialLoadCallbacks();
     });
+  }
+
+  onInitialLoad(callback) {
+    if (this.initialLoadCompleted) return callback();
+    this.initialLoadCallbacks.push(callback);
+  }
+
+  executeInitialLoadCallbacks() {
+    this.initialLoadCompleted = true;
+    while (this.initialLoadCallbacks.length) {
+      this.initialLoadCallbacks.pop()();
+    }
   }
 
   @computed
