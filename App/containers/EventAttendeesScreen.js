@@ -30,46 +30,31 @@ class EventAttendeesScreen extends Component {
 
   keyExtractor = (item, index) => index.toString();
 
-  renderItem = ({ attendee, index }) => {
-    const _onItemClick = () => {
-      const attendeeIndex = _.findIndex(
-        this.props.globalAttendees,
-        (item) => item._id === attendee._id
-      );
-      this.props.navigation.navigate('AttendeeSummaryScreen', {
-        event: this.props.navigation.state.params.index,
-        id: this.props.event._id,
-        attendee: index,
-        attendeeIndex,
-      });
-    };
-    return (
-      <TouchableHighlight onPress={_onItemClick}>
-        <View style={styles.listItemContainer}>
-          <Icon
-            name={item.isFilled ? 'check-square' : 'minus-square'}
-            size={18}
-            color={item.isFilled ? '#34bd3e' : '#ff575c'}
-          />
-          <Text style={styles.name}>
-            {item.firstname} {item.lastname}
-          </Text>
-          <Icon
-            name="chevron-right"
-            size={16}
-            color={'#797979'}
-            style={styles.arrow}
-          />
-        </View>
-      </TouchableHighlight>
-    );
-  };
+  renderItem = ({ item }) => (
+    <TouchableHighlight onPress={() => {}}>
+      <View style={styles.listItemContainer}>
+        <Icon
+          name={item.isFilled ? 'check-square' : 'minus-square'}
+          size={18}
+          color={item.isFilled ? '#34bd3e' : '#ff575c'}
+        />
+        <Text style={styles.name}>
+          {item.firstname} {item.lastname}
+        </Text>
+        <Icon
+          name="chevron-right"
+          size={16}
+          color={'#797979'}
+          style={styles.arrow}
+        />
+      </View>
+    </TouchableHighlight>
+  );
 
   render() {
-    const event = this.props.event.eventsById[
-      this.props.navigation.getParam('id')
-    ];
-    const attendees = event.attendees || [];
+    const eventId = this.props.navigation.getParam('id');
+    const event = this.props.event.eventsById[eventId] || {};
+    const attendees = this.props.event.attendeesById[eventId] || [];
 
     return (
       <View style={Styles.container}>

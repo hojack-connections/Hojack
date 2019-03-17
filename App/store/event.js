@@ -10,7 +10,6 @@ export default class EventStore {
   @observable events = [];
 
   @observable totalEventCount = 0;
-  @observable totalAttendeeCount = 0;
 
   constructor(_authStore) {
     this.authStore = _authStore;

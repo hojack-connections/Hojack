@@ -14,7 +14,7 @@ import { inject, observer } from 'mobx-react';
 import HeaderSubtitle from '../components/HeaderSubtitle';
 
 export default
-@inject('user', 'auth', 'event')
+@inject('user', 'auth', 'event', 'attendee')
 @observer
 class EventsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -39,6 +39,7 @@ class EventsScreen extends Component {
 
   componentDidMount() {
     this.props.event.loadEvents();
+    this.props.attendee.loadTotalAttendeeCount();
   }
 
   _onItemClick = (index, id) => {
@@ -77,7 +78,7 @@ class EventsScreen extends Component {
       <View style={Styles.container}>
         <HeaderSubtitle>
           <Text style={{ color: '#895353' }}>
-            Total Attendees: {this.props.event.totalAttendeeCount}
+            Total Attendees: {this.props.attendee.totalAttendeeCount}
           </Text>
           <Text style={{ color: '#538989' }}>
             Total Events: {this.props.event.totalEventCount}
