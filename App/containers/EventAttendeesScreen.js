@@ -8,11 +8,8 @@ import {
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { connect } from 'react-redux';
 import moment from 'moment';
-import _ from 'lodash';
 import { inject, observer } from 'mobx-react';
-
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 
