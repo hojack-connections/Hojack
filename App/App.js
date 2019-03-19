@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, StatusBar, YellowBox } from 'react-native';
+import { View, StatusBar, YellowBox } from 'react-native';
 import RootNavigation from './navigation/RootNavigation';
 import AuthStackNavigation from './navigation/AuthStackNavigation';
 import AuthLoading from './containers/AuthLoading';
@@ -22,16 +22,14 @@ const AppContainer = createAppContainer(
 export default class App extends Component {
   render() {
     return (
-      <View style={styles.container}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: '#F5FCFF',
+        }}
+      >
         <AppContainer />
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5FCFF',
-  },
-});
