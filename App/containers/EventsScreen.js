@@ -38,12 +38,11 @@ class EventsScreen extends Component {
   });
 
   componentDidMount() {
-    this.props.subscription.loadActiveSubscription()
-      .then(() => {
-        if (!this.props.subscription.hasActiveSubscription) {
-          this.props.navigation.navigate('StartTrial');
-        }
-      });
+    this.props.subscription.loadActiveSubscription().then(() => {
+      if (!this.props.subscription.hasActiveSubscription) {
+        this.props.navigation.navigate('PurchaseSubscription');
+      }
+    });
     this.props.event.loadEvents();
     this.props.attendee.loadTotalAttendeeCount();
   }
