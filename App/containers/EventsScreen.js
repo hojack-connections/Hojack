@@ -39,7 +39,10 @@ class EventsScreen extends Component {
 
   componentDidMount() {
     this.props.subscription.loadActiveSubscription().then(() => {
-      if (!this.props.subscription.hasActiveSubscription) {
+      if (this.props.subscription.hasActiveSubscription) return;
+      if (this.props.subscription.freeTrialEligible) {
+        this.props.navigation.navigate('StartTrial');
+      } else {
         this.props.navigation.navigate('PurchaseSubscription');
       }
     });

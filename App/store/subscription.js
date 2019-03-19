@@ -5,6 +5,7 @@ import axios from 'axios';
 export default class SubscriptionStore {
   authStore;
   @observable activeSubscription = null;
+  @observable freeTrialEligible = false;
 
   constructor(_authStore) {
     this.authStore = _authStore;
@@ -17,12 +18,13 @@ export default class SubscriptionStore {
 
   async loadActiveSubscription() {
     try {
-      const res = await axios.get(`${BASE_URL}/subscriptions/active`, {
+      const res = await axios.get(`${BASE_URL}/subscriptions/status`, {
         params: {
           token: this.authStore.token,
         },
       });
-      this.activeSubscription = res.data;
+      this.activeSubscription = res.data.activeSubscription;
+      this.freeTrialEligible = res.data.freeTrialEligible;
     } catch (err) {
       console.log('Error loading active subscription', err);
       throw err;
