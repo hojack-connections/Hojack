@@ -14,7 +14,7 @@ import { inject, observer } from 'mobx-react';
 import HeaderSubtitle from '../components/HeaderSubtitle';
 
 export default
-@inject('user', 'auth', 'event', 'attendee')
+@inject('user', 'auth', 'event', 'attendee', 'subscription')
 @observer
 class EventsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -38,6 +38,12 @@ class EventsScreen extends Component {
   });
 
   componentDidMount() {
+    this.props.subscription.loadActiveSubscription()
+      .then(() => {
+        if (!this.props.subscription.hasActiveSubscription) {
+          this.props.navigation.navigate('StartTrial');
+        }
+      });
     this.props.event.loadEvents();
     this.props.attendee.loadTotalAttendeeCount();
   }

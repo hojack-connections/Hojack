@@ -7,6 +7,7 @@ import UserStore from './App/store/user';
 import EventStore from './App/store/event';
 import AuthStore from './App/store/auth';
 import ReceiverStore from './App/store/receiver';
+import SubscriptionStore from './App/store/subscription';
 
 const auth = new AuthStore();
 
@@ -16,6 +17,7 @@ const stores = {
   user: new UserStore(auth),
   event: new EventStore(auth),
   receiver: new ReceiverStore(auth),
+  subscription: new SubscriptionStore(auth),
 };
 
 const Root = () => (
