@@ -1,6 +1,8 @@
 // const NEW_BASE_URL = 'http://localhost:4000';
 const NEW_BASE_URL = 'https://api.gocert.io';
 
+export const BASE_URL = NEW_BASE_URL;
+
 export default {
   users: {
     _: `${NEW_BASE_URL}/users`,

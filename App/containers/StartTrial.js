@@ -3,6 +3,7 @@ import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { VFlex, HFlex } from '../components/Shared';
 import styled from 'styled-components';
 import Colors from '../Themes/Colors';
+import { observer, inject } from 'mobx-react';
 
 const HeaderBackground = styled.View`
   background-color: ${Colors.navigation};
@@ -54,7 +55,25 @@ const FooterView = styled.View`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
-export default class StartTrial extends React.Component {
+export default
+@inject('auth', 'subscription')
+@observer
+class StartTrial extends React.Component {
+  static navigationOptions = () => ({
+    headerStyle: {
+      display: 'none',
+    },
+  });
+
+  startTrial = () => {
+    this.props.subscription
+      .startTrial()
+      .then(() => this.props.subscription.loadActiveSubscription())
+      .then(() => {
+        this.props.navigation.goBack();
+      });
+  };
+
   render() {
     return (
       <>
@@ -157,7 +176,7 @@ export default class StartTrial extends React.Component {
         </ScrollView>
         <FooterView>
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={this.startTrial}
             style={{
               alignItems: 'center',
               backgroundColor: 'rgba(0, 234, 234, 1)',

@@ -1,34 +1,49 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import normalize from '../helpers/normalizeText';
 import { Colors } from '../Themes/';
 import { Button } from 'react-native-elements';
 import { inject, observer } from 'mobx-react';
+import moment from 'moment';
 
 export default
-@inject('auth')
+@inject('auth', 'subscription')
 @observer
 class SettingsScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = () => ({
     title: 'Settings',
   });
+
+  componentWillMount() {
+    this.props.subscription.loadActiveSubscription();
+  }
 
   logout = () => {
     this.props.auth
       .logout()
       .then(() => this.props.navigation.navigate('Auth'))
-      .catch(() => alert('There was a problem logging you out.'))
+      .catch(() => alert('There was a problem logging you out.'));
   };
 
   render() {
+    const { expirationDate } = this.props.subscription.activeSubscription || {};
+    const monthDifference = moment(expirationDate).diff(moment(), 'months');
+    const dayDifference = moment(expirationDate).diff(moment(), 'days');
+    const expirationText =
+      monthDifference <= 1
+        ? `${dayDifference} days`
+        : `${monthDifference} months`;
     return (
-      <Button
-        buttonStyle={styles.deleteButton}
-        containerStyle={styles.buttonContainer}
-        onPress={this.logout}
-        title="Logout"
-        titleStyle={styles.buttonTitle}
-      />
+      <>
+        <Text>Current subscription expires in {expirationText}</Text>
+        <Button
+          buttonStyle={styles.deleteButton}
+          containerStyle={styles.buttonContainer}
+          onPress={this.logout}
+          title="Logout"
+          titleStyle={styles.buttonTitle}
+        />
+      </>
     );
   }
 }
