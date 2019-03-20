@@ -10,6 +10,7 @@ import AddAttendeeScreen from '../containers/AddAttendeeScreen';
 import EventDetailScreen from '../containers/EventDetailScreen';
 import StartTrial from '../containers/StartTrial';
 import PurchaseSubscription from '../containers/PurchaseSubscription';
+import RenewSubscription from '../containers/RenewSubscription';
 
 import { fromBottom } from 'react-navigation-transitions';
 
@@ -18,7 +19,8 @@ const handleCustomTransition = ({ scenes }) => {
   const nextScene = scenes[scenes.length - 1];
   if (
     nextScene.route.routeName === 'StartTrial' ||
-    nextScene.route.routeName === 'PurchaseSubscription'
+    nextScene.route.routeName === 'PurchaseSubscription' ||
+    nextScene.route.routeName === 'RenewSubscription'
   ) {
     return fromBottom();
   }
@@ -37,6 +39,7 @@ export default createStackNavigator(
     EventDetailScreen: { screen: EventDetailScreen },
     StartTrial: { screen: StartTrial },
     PurchaseSubscription: { screen: PurchaseSubscription },
+    RenewSubscription: { screen: RenewSubscription },
   },
   {
     initialRouteName: 'Home',

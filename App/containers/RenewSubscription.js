@@ -80,12 +80,12 @@ class PurchaseSubscription extends React.Component {
               source={require('../../assets/gocert-logo.png')}
               style={{ width: 40, height: 40 }}
             />
-            <Text style={{ fontSize: 18 }}>FREE TRIAL</Text>
+            <Text style={{ fontSize: 18 }}>THE TIME HAS COME</Text>
             <Text style={{ fontSize: 18, fontWeight: 'bold', margin: 8 }}>
-              EXPIRED
+              TO RENEW
             </Text>
             <Text style={{ marginHorizontal: 32, textAlign: 'center' }}>
-              Choose a plan that works for you below
+              Choose a plan that works for you
             </Text>
           </HoveringBox>
           <VFlex>

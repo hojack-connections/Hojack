@@ -12,6 +12,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import { Colors, Styles } from '../Themes/';
 import { inject, observer } from 'mobx-react';
 import HeaderSubtitle from '../components/HeaderSubtitle';
+import idx from 'idx';
 
 export default
 @inject('user', 'auth', 'event', 'attendee', 'subscription')
@@ -42,8 +43,12 @@ class EventsScreen extends Component {
       if (this.props.subscription.hasActiveSubscription) return;
       if (this.props.subscription.freeTrialEligible) {
         this.props.navigation.navigate('StartTrial');
-      } else {
+      } else if (
+        idx(this.props, (_) => _.subscription.latestSubscription.isTrial)
+      ) {
         this.props.navigation.navigate('PurchaseSubscription');
+      } else {
+        this.props.navigation.navigate('RenewSubscription');
       }
     });
     this.props.event.loadEvents();

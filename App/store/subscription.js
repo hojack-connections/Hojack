@@ -6,6 +6,7 @@ import { Platform } from 'react-native';
 export default class SubscriptionStore {
   authStore;
   @observable activeSubscription = null;
+  @observable latestSubscription = null;
   @observable freeTrialEligible = false;
 
   constructor(_authStore) {
@@ -26,6 +27,7 @@ export default class SubscriptionStore {
       });
       this.activeSubscription = res.data.activeSubscription;
       this.freeTrialEligible = res.data.freeTrialEligible;
+      this.latestSubscription = res.data.latestSubscription;
     } catch (err) {
       console.log('Error loading active subscription', err);
       throw err;
