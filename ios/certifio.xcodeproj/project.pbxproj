@@ -1477,7 +1477,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Ian Kuchman (RZVPT4D7K3)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Ian Kuchman (S5AXF925M2)";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
@@ -1499,7 +1499,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = goCert.io;
 				PRODUCT_NAME = certifio;
 				PROVISIONING_PROFILE = "8ba4a638-dc18-4bfa-af31-ecd25d39c557";
-				PROVISIONING_PROFILE_SPECIFIER = "hojack-031619";
+				PROVISIONING_PROFILE_SPECIFIER = "hojack-031919";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
