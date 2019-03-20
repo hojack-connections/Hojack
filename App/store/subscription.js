@@ -1,5 +1,4 @@
 import { observable, computed } from 'mobx';
-import { BASE_URL } from '../URLs';
 import axios from 'axios';
 import { Platform } from 'react-native';
 
@@ -20,7 +19,7 @@ export default class SubscriptionStore {
 
   async loadActiveSubscription() {
     try {
-      const res = await axios.get(`${BASE_URL}/subscriptions/status`, {
+      const res = await axios.get(`/subscriptions/status`, {
         params: {
           token: this.authStore.token,
         },
@@ -36,7 +35,7 @@ export default class SubscriptionStore {
 
   async startTrial() {
     try {
-      await axios.post(`${BASE_URL}/subscriptions`, {
+      await axios.post(`/subscriptions`, {
         receiptData: 'void',
         isTrial: true,
         platform: Platform.OS === 'ios' ? 'ios' : 'android',

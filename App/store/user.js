@@ -1,6 +1,4 @@
-import { observable } from 'mobx';
 import axios from 'axios';
-import URLs from '../URLs';
 
 export default class UserStore {
   authStore;
@@ -11,7 +9,7 @@ export default class UserStore {
 
   async signup(data) {
     try {
-      await axios.post(URLs.users._, {
+      await axios.post('/users', {
         firstname: data.firstname,
         lastname: data.lastname,
         email: data.email,
@@ -26,7 +24,7 @@ export default class UserStore {
 
   async login(data) {
     try {
-      const res = await axios.post(URLs.users.login, {
+      const res = await axios.post('/users/login', {
         email: data.email,
         password: data.password,
       });
