@@ -1,7 +1,13 @@
 import * as RNIap from 'react-native-iap';
+import axios from 'axios';
+import { BASE_URL } from '../URLs';
+import { Platform } from 'react-native';
 
 export default class PurchaseStore {
-  constructor() {
+  authStore;
+
+  constructor(_authStore) {
+    this.authStore = _authStore;
     RNIap.initConnection();
   }
 
@@ -12,7 +18,11 @@ export default class PurchaseStore {
         throw new Error('Invalid subscription identifier supplied');
       }
       const purchase = await RNIap.buySubscription(id);
-      alert(JSON.stringify(purchase));
+      await axios.post(`${BASE_URL}/subscriptions`, {
+        token: this.authStore.token,
+        receiptData: purchase.transactionReceipt,
+        platform: Platform.OS === 'ios' ? 'ios' : 'android',
+      });
     } catch (err) {
       console.log('Error purchasing subscription', err);
       throw err;

@@ -19,7 +19,7 @@ const stores = {
   event: new EventStore(auth),
   receiver: new ReceiverStore(auth),
   subscription: new SubscriptionStore(auth),
-  purchase: new PurchaseStore(),
+  purchase: new PurchaseStore(auth),
 };
 
 const Root = () => (

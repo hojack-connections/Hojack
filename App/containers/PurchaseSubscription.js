@@ -61,6 +61,15 @@ class PurchaseSubscription extends React.Component {
     },
   });
 
+  purchaseSubscription = (id) => {
+    this.props.purchase
+      .purchaseSubscription(id)
+      .then(() => this.props.subscription.loadActiveSubscription())
+      .then(() => {
+        this.props.navigation.goBack();
+      });
+  };
+
   render() {
     return (
       <>
@@ -107,7 +116,7 @@ class PurchaseSubscription extends React.Component {
           <RoundedButton
             color="rgba(106, 121, 214, 1)"
             style={{ backgroundColor: 'transparent' }}
-            onPress={() => this.props.purchase.purchaseSubscription('onemonth')}
+            onPress={() => this.purchaseSubscription('onemonth')}
           >
             <ButtonText color="rgba(106, 121, 214, 1)">
               1 month - $14.99
@@ -116,9 +125,7 @@ class PurchaseSubscription extends React.Component {
           <RoundedButton
             color="rgba(1, 234, 234, 1)"
             style={{ backgroundColor: 'transparent' }}
-            onPress={() =>
-              this.props.purchase.purchaseSubscription('threemonth')
-            }
+            onPress={() => this.purchaseSubscription('threemonth')}
           >
             <ButtonText color="rgba(1, 234, 234, 1)">
               3 months - $39.99
@@ -127,7 +134,7 @@ class PurchaseSubscription extends React.Component {
           <RoundedButton
             color="rgba(164, 52, 198, 1)"
             style={{ backgroundColor: 'transparent' }}
-            onPress={() => this.props.purchase.purchaseSubscription('sixmonth')}
+            onPress={() => this.purchaseSubscription('sixmonth')}
           >
             <ButtonText color="rgba(164, 52, 198, 1)">
               6 months - $69.99
@@ -135,9 +142,7 @@ class PurchaseSubscription extends React.Component {
           </RoundedButton>
           <RoundedButton
             color="rgba(255, 223, 3, 1)"
-            onPress={() =>
-              this.props.purchase.purchaseSubscription('twelvemonth')
-            }
+            onPress={() => this.purchaseSubscription('twelvemonth')}
           >
             <ButtonText color="white">12 months - $99.99</ButtonText>
           </RoundedButton>
