@@ -1,5 +1,4 @@
 import axios from 'axios';
-import URLs from '../URLs';
 import { observable } from 'mobx';
 
 export default class AttendeeStore {
@@ -14,7 +13,7 @@ export default class AttendeeStore {
 
   async loadTotalAttendeeCount() {
     try {
-      const res = await axios.get(URLs.attendees._, {
+      const res = await axios.get('/attendees', {
         params: {
           token: this.authStore.token,
         },
@@ -29,7 +28,7 @@ export default class AttendeeStore {
 
   async create(eventId, data) {
     try {
-      await axios.post(URLs.attendees._, {
+      await axios.post('/attendees', {
         ...data,
         token: this.authStore.token,
       });

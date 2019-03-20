@@ -1,6 +1,5 @@
 import { observable } from 'mobx';
 import axios from 'axios';
-import URLs from '../URLs';
 
 export default class EventStore {
   authStore;
@@ -17,7 +16,7 @@ export default class EventStore {
 
   async create(data) {
     try {
-      await axios.post(URLs.events._, {
+      await axios.post('/events', {
         ...data,
         token: this.authStore.token,
       });
@@ -27,22 +26,9 @@ export default class EventStore {
     }
   }
 
-  async loadEvent(id) {
-    try {
-      await axios.get(URLs.event(id), {
-        params: {
-          token: this.authStore.token,
-        },
-      });
-    } catch (err) {
-      console.log('Error loading event');
-      throw err;
-    }
-  }
-
   async loadTotalEventCount() {
     try {
-      const res = await axios.get(URLs.users.eventsCount, {
+      const res = await axios.get('/users/events/count', {
         params: {
           token: this.authStore.token,
         },
@@ -56,7 +42,7 @@ export default class EventStore {
 
   async loadEvents() {
     try {
-      const res = await axios.get(URLs.users.events, {
+      const res = await axios.get('/users/events', {
         params: {
           token: this.authStore.token,
         },
@@ -74,7 +60,7 @@ export default class EventStore {
 
   async loadEventAttendees(id) {
     try {
-      const res = await axios.get(URLs.events.attendees, {
+      const res = await axios.get('/events/attendees', {
         params: {
           eventId: id,
           token: this.authStore.token,
@@ -89,7 +75,7 @@ export default class EventStore {
 
   async update(id, data) {
     try {
-      await axios.put(URLs.events._, {
+      await axios.put('/events', {
         ...data,
         token: this.authStore.token,
       });
@@ -101,7 +87,7 @@ export default class EventStore {
 
   async delete(id) {
     try {
-      await axios.delete(URLs.events._, {
+      await axios.delete('/events', {
         data: {
           _id: id,
           token: this.authStore.token,
@@ -115,7 +101,7 @@ export default class EventStore {
 
   async submit(id, certReceivers, sheetReceivers) {
     try {
-      await axios.post(URLs.events.submit, {
+      await axios.post('/events/submit', {
         _id: id,
         certReceivers,
         sheetReceivers,

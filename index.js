@@ -9,6 +9,11 @@ import AuthStore from './App/store/auth';
 import ReceiverStore from './App/store/receiver';
 import SubscriptionStore from './App/store/subscription';
 import PurchaseStore from './App/store/purchase';
+import Config from 'react-native-config';
+import axios from 'axios';
+
+axios.defaults.baseURL = 'https://api.gocert.io';
+axios.defaults.headers.common.APP_SECRET = Config.APP_SECRET;
 
 const auth = new AuthStore();
 
