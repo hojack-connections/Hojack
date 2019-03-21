@@ -3,16 +3,15 @@ import {
   View,
   ScrollView,
   Text,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
   Alert,
+  TextInput,
 } from 'react-native';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
-import * as EmailValidator from 'email-validator';
 import { inject, observer } from 'mobx-react';
 import { Button } from 'react-native-elements';
 import HeaderSubtitle from '../components/HeaderSubtitle';
@@ -38,14 +37,15 @@ class SubmitSettingsScreen extends Component {
   });
 
   state = {
-    newCertReceiver: '',
-    newSheetReceiver: '',
     isSubmitting: false,
+    newSheetReceiver: '',
   };
+  inputFieldRef = React.createRef();
 
   componentDidMount() {
     const eventId = this.props.navigation.getParam('id');
     this.props.event.loadEventAttendees(eventId);
+    this.props.event.loadReceiversForEvent(eventId);
   }
 
   _onSubmit = () => {
@@ -65,14 +65,6 @@ class SubmitSettingsScreen extends Component {
   };
 
   onSubmit = () => {
-    // let { certReceivers, sheetReceivers } = this.props;
-    //
-    // certReceivers = certReceivers.map((receiver) =>
-    //   receiver.replace('<<All Attendees>>', 'all')
-    // );
-    // sheetReceivers = sheetReceivers.map((receiver) =>
-    //   receiver.replace('<<All Attendees>>', 'all')
-    // );
     Alert.alert(
       'Confirm',
       'Would you like to submit this event?',
@@ -87,68 +79,35 @@ class SubmitSettingsScreen extends Component {
     );
   };
 
-  _onBeforeAddSheetReceiver = () => {
-    this.sheetReceiverInput.focus();
-  };
-
-  _onAddSheetReceiver = () => {
-    if (this.state.newSheetReceiver === '') return;
-    if (
-      this.state.newSheetReceiver === '<<All Attendees>>' ||
-      EmailValidator.validate(this.state.newSheetReceiver)
-    ) {
-      const eventId = this.props.navigation.getParam('id');
-      this.props.receiver.addSheetReceiver(
-        eventId,
-        this.state.newSheetReceiver
-      );
-      this.setState({ newSheetReceiver: '' });
+  plusIconPressed = () => {
+    if (this.state.newSheetReceiver === '') {
+      this.inputFieldRef.current.focus();
     } else {
-      Alert.alert(
-        'Warning',
-        `Please input valid email address or '<<All Attendees>>'`
-      );
-      this.setState({ newSheetReceiver: '' });
+      this.props.onAddItem(this.state.newSheetReceiver);
     }
   };
 
-  _onRemoveSheetReceiver = (item) => {
+  addSheetReceiver = (email) => {
     const eventId = this.props.navigation.getParam('id');
-    this.props.receiver.removeSheetReceiver(eventId, item);
+    this.props.event
+      .addReceiverForEvent(eventId, email)
+      .then(() => this.props.event.loadReceiversForEvent(eventId))
+      .then(() => this.setState({ newSheetReceiver: '' }))
+      .catch(() => alert('There was a problem adding the receiver.'));
   };
 
-  _onBeforeAddCertReceiver = () => {
-    this.certReceiverInput.focus();
-  };
-
-  _onAddCertReceiver = () => {
-    if (this.state.newCertReceiver === '') return;
-    if (
-      this.state.newCertReceiver === '<<All Attendees>>' ||
-      EmailValidator.validate(this.state.newCertReceiver)
-    ) {
-      const eventId = this.props.navigation.getParam('id');
-      this.props.receiver.addCertReceiver(eventId, this.state.newCertReceiver);
-      this.setState({ newCertReceiver: '' });
-    } else {
-      Alert.alert(
-        'Warning',
-        `Please input a valid email address or '<<All Attendees>>'`
-      );
-      this.setState({ newCertReceiver: '' });
-    }
-  };
-
-  _onRemoveCertReceiver = (item) => {
+  removeSheetReceiver = (receiver) => {
     const eventId = this.props.navigation.getParam('id');
-    this.props.receiver.removeCertReceiver(eventId, item);
+    this.props.event
+      .deleteReceiver(receiver._id)
+      .then(() => this.props.event.loadReceiversForEvent(eventId))
+      .catch(() => alert('There was a problem deleting the receiver.'));
   };
 
   render() {
     const eventId = this.props.navigation.getParam('id');
-    const certReceivers = this.props.receiver.certReceiversById[eventId] || [];
-    const sheetReceivers =
-      this.props.receiver.sheetReceiversById[eventId] || [];
+    const attendees = this.props.event.attendeesById[eventId] || [];
+    const receivers = this.props.event.receiversByEventId[eventId] || [];
 
     return (
       <>
@@ -168,9 +127,7 @@ class SubmitSettingsScreen extends Component {
             }}
           >
             <Text>All Attendees</Text>
-            <Text style={{ color: '#34bd3e' }}>
-              {(this.props.event.attendeesById[eventId] || []).length}
-            </Text>
+            <Text style={{ color: '#34bd3e' }}>{attendees.length}</Text>
             <Icon
               color={'#797979'}
               name="chevron-right"
@@ -189,25 +146,23 @@ class SubmitSettingsScreen extends Component {
               Send Attendence Summary To:
             </Text>
           </View>
-          {sheetReceivers.map((item, index) => (
+          {receivers.map((receiver, index) => (
             <View key={index} style={styles.listItemContainer}>
               <TouchableOpacity
-                onPress={() => this._onRemoveSheetReceiver(item)}
+                onPress={() => this.removeSheetReceiver(receiver)}
               >
                 <Icon color={Colors.black} name={'minus-square'} size={20} />
               </TouchableOpacity>
-              <Text style={styles.name}>{item}</Text>
+              <Text style={styles.name}>{receiver.email}</Text>
             </View>
           ))}
           <View style={styles.plusContainer}>
-            <TouchableOpacity onPress={this._onBeforeAddSheetReceiver}>
+            <TouchableOpacity onPress={this.plusIconPressed}>
               <Icon color={Colors.black} name={'plus'} size={21} />
             </TouchableOpacity>
             <TextInput
-              ref={(input) => {
-                this.sheetReceiverInput = input;
-              }}
-              style={{ flex: 1, marginLeft: 50, marginRight: 10, height: 46 }}
+              ref={this.inputFieldRef}
+              style={styles.textInput}
               textAlign={'left'}
               value={this.state.newSheetReceiver}
               onChangeText={(newSheetReceiver) =>
@@ -216,53 +171,8 @@ class SubmitSettingsScreen extends Component {
               autoCapitalize={'none'}
               autoCorrect={false}
               underlineColorAndroid="transparent"
+              onSubmitEditing={(e) => this.addSheetReceiver(e.nativeEvent.text)}
               placeholder="Input a new email address"
-              onSubmitEditing={this._onAddSheetReceiver}
-              onBlur={this._onAddSheetReceiver}
-            />
-          </View>
-
-          <View style={[styles.section, { marginTop: 15 }]}>
-            <Text
-              style={{
-                color: Colors.black,
-                fontSize: normalize(17),
-                fontWeight: '700',
-              }}
-            >
-              Send Certificates of Completion To:
-            </Text>
-          </View>
-          {certReceivers.map((item, index) => (
-            <View key={index} style={styles.listItemContainer}>
-              <TouchableOpacity
-                onPress={() => this._onRemoveCertReceiver(item)}
-              >
-                <Icon color={Colors.black} name={'minus-square'} size={20} />
-              </TouchableOpacity>
-              <Text style={styles.name}>{item}</Text>
-            </View>
-          ))}
-          <View style={styles.plusContainer}>
-            <TouchableOpacity onPress={this._onBeforeAddCertReceiver}>
-              <Icon color={Colors.black} name={'plus'} size={21} />
-            </TouchableOpacity>
-            <TextInput
-              ref={(input) => {
-                this.certReceiverInput = input;
-              }}
-              style={{ flex: 1, marginLeft: 50, marginRight: 10, height: 46 }}
-              textAlign={'left'}
-              value={this.state.newCertReceiver}
-              onChangeText={(newCertReceiver) =>
-                this.setState({ newCertReceiver })
-              }
-              autoCapitalize={'none'}
-              autoCorrect={false}
-              underlineColorAndroid="transparent"
-              placeholder="Input a new email address"
-              onSubmitEditing={this._onAddCertReceiver}
-              onBlur={this._onAddCertReceiver}
             />
           </View>
           <Button
@@ -325,6 +235,12 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderBottomWidth: 1,
     borderBottomColor: 'black',
+  },
+  textInput: {
+    flex: 1,
+    marginLeft: 50,
+    marginRight: 10,
+    height: 46,
   },
   plusContainer: {
     flexDirection: 'row',

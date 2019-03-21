@@ -7,6 +7,7 @@ export default class EventStore {
   @observable attendeesById = {};
   @observable eventsById = {};
   @observable events = [];
+  @observable receiversByEventId = {};
 
   @observable totalEventCount = 0;
 
@@ -109,6 +110,48 @@ export default class EventStore {
       });
     } catch (err) {
       console.log('Error submitting event', err);
+      throw err;
+    }
+  }
+
+  async addReceiverForEvent(eventId, email) {
+    try {
+      await axios.post('/receivers', {
+        eventId,
+        email,
+        token: this.authStore.token,
+      });
+    } catch (err) {
+      console.log('Error adding receiver for event', err);
+      throw err;
+    }
+  }
+
+  async deleteReceiver(receiverId) {
+    try {
+      await axios.delete('/receivers', {
+        data: {
+          _id: receiverId,
+          token: this.authStore.token,
+        },
+      });
+    } catch (err) {
+      console.log('Error deleting sheet receiver', err);
+      throw err;
+    }
+  }
+
+  async loadReceiversForEvent(eventId) {
+    try {
+      const { data } = await axios.get('/events/receivers', {
+        params: {
+          eventId,
+          token: this.authStore.token,
+        },
+      });
+      this.receiversByEventId[eventId] = data;
+    } catch (err) {
+      console.log('Error loading sheet receivers for event', err);
       throw err;
     }
   }
