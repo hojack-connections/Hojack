@@ -19,8 +19,8 @@ import normalize from '../helpers/normalizeText';
 import { Colors } from '../Themes/';
 
 export default
-@inject('event', 'auth', 'attendee')
 @observer
+@inject('event', 'auth', 'attendee')
 class AddAttendeeScreen extends Component {
   static navigationOptions = () => ({
     title: 'Add Attendee',
@@ -31,8 +31,6 @@ class AddAttendeeScreen extends Component {
     lastname: '',
     email: '',
     phone: '',
-    warning: '',
-    signatureWidth: Dimensions.get('window').width - 50,
   };
 
   signatureRef = React.createRef();
@@ -53,29 +51,20 @@ class AddAttendeeScreen extends Component {
     this.props.attendee
       .create(eventId, {
         ...this.state,
-        signature: result.encoded,
-        event: eventId,
+        signature: result.encoded.toString(),
+        event: `${eventId}`,
       })
-      .then(() => {
-        this.props.event.loadEventAttendees(eventId);
-        this.props.navigation.goBack();
-      })
+      .then(() => this.props.event.loadEventAttendees(eventId))
+      .then(() => this.props.navigation.goBack())
       .catch(() => {
         alert('There was a problem creating the attendee.');
       });
   };
 
-  onLayout = () => {
-    const { width } = Dimensions.get('window');
-    this.setState({ signatureWidth: width - 50 });
-  };
-
   render() {
-    const { error, isCreating } = this.props;
-    const { warning, firstname, lastname, email, phone } = this.state;
-
+    const signatureWidth = Dimensions.get('window').width - 50;
     return (
-      <ScrollView style={styles.container} onLayout={this.onLayout}>
+      <ScrollView style={styles.container}>
         <View style={styles.inputFields}>
           <Cell label="First Name:">
             <TextInput
@@ -139,7 +128,7 @@ class AddAttendeeScreen extends Component {
           <SignatureCapture
             ref={this.signatureRef}
             style={{
-              width: this.state.signatureWidth,
+              width: signatureWidth,
               paddingTop: 10,
               backgroundColor: 'transparent',
             }}
@@ -150,15 +139,14 @@ class AddAttendeeScreen extends Component {
             onSaveEvent={this.onSignatureSave}
           />
         </View>
-        <View style={styles.errorField}>
-          <Text style={styles.errorLabel}>
-            {warning || (error && error.data)}
-          </Text>
-        </View>
         <Button
           title="Save Attendee"
-          disabled={firstname === '' || lastname === '' || email === ''}
-          loading={isCreating}
+          disabled={
+            this.state.firstname === '' ||
+            this.state.lastname === '' ||
+            this.state.email === ''
+          }
+          loading={this.props.isCreating}
           icon={<Icon name="check-circle" size={25} color={Colors.white} />}
           onPress={this.onSave}
           titleStyle={styles.buttonTitle}

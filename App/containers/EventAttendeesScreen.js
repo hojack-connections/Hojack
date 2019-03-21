@@ -14,15 +14,16 @@ import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 
 export default
-@inject('event', 'auth')
 @observer
+@inject('event', 'auth')
 class EventAttendeesScreen extends Component {
   static navigationOptions = () => ({
     title: 'Attendees',
   });
 
-  _onAddClick = (id) => {
-    this.props.navigation.navigate('AddAttendeeScreen', { id });
+  onAddClick = () => {
+    const eventId = this.props.navigation.getParam('id');
+    this.props.navigation.navigate('AddAttendeeScreen', { id: eventId });
   };
 
   keyExtractor = (item, index) => index.toString();
@@ -89,7 +90,7 @@ class EventAttendeesScreen extends Component {
         <Button
           title="Add Attendee"
           icon={<Icon name="plus-circle" size={25} color={Colors.white} />}
-          onPress={this._onAddClick}
+          onPress={this.onAddClick}
           titleStyle={styles.buttonTitle}
           buttonStyle={styles.addButton}
           containerStyle={styles.buttonContainer}

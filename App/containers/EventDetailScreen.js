@@ -17,8 +17,8 @@ import { Button } from 'react-native-elements';
 import HeaderSubtitle from '../components/HeaderSubtitle';
 
 export default
-@inject('receiver', 'event')
 @observer
+@inject('receiver', 'event')
 class SubmitSettingsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Event Settings',
@@ -110,8 +110,7 @@ class SubmitSettingsScreen extends Component {
       <>
         <HeaderSubtitle>
           <Text style={{ color: '#538989' }}>
-            Total Attendees:{' '}
-            {(this.props.event.attendeesById[eventId] || []).length}
+            Total Attendees: {attendees.length}
           </Text>
         </HeaderSubtitle>
         <ScrollView style={Styles.container}>
