@@ -19,7 +19,7 @@ export default
 @inject('event')
 @observer
 class EventSummaryScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = () => ({
     title: 'Edit Event',
   });
 

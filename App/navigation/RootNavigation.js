@@ -11,6 +11,7 @@ import EventDetailScreen from '../containers/EventDetailScreen';
 import StartTrial from '../containers/StartTrial';
 import PurchaseSubscription from '../containers/PurchaseSubscription';
 import RenewSubscription from '../containers/RenewSubscription';
+import AttendeeDetail from '../containers/AttendeeDetail';
 
 import { fromBottom } from 'react-navigation-transitions';
 
@@ -40,6 +41,7 @@ export default createStackNavigator(
     StartTrial: { screen: StartTrial },
     PurchaseSubscription: { screen: PurchaseSubscription },
     RenewSubscription: { screen: RenewSubscription },
+    AttendeeDetail: { screen: AttendeeDetail },
   },
   {
     initialRouteName: 'Home',

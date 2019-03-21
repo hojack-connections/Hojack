@@ -17,7 +17,7 @@ export default
 @inject('event', 'auth')
 @observer
 class EventAttendeesScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = () => ({
     title: 'Attendees',
   });
 
@@ -28,7 +28,14 @@ class EventAttendeesScreen extends Component {
   keyExtractor = (item, index) => index.toString();
 
   renderItem = ({ item }) => (
-    <TouchableHighlight onPress={() => {}}>
+    <TouchableHighlight
+      onPress={() => {
+        this.props.navigation.navigate('AttendeeDetail', {
+          attendeeId: item._id,
+          eventId: item.event,
+        });
+      }}
+    >
       <View style={styles.listItemContainer}>
         <Icon
           name={item.isFilled ? 'check-square' : 'minus-square'}

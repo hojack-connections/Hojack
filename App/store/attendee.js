@@ -6,6 +6,7 @@ export default class AttendeeStore {
 
   @observable totalAttendeeCount = 0;
   @observable allAttendees = [];
+  @observable attendeesById = {};
 
   constructor(_authStore) {
     this.authStore = _authStore;
@@ -34,6 +35,32 @@ export default class AttendeeStore {
       });
     } catch (err) {
       console.log('Error creating attendee', err);
+      throw err;
+    }
+  }
+
+  async update(attendeeId, data) {
+    try {
+      await axios.put('/attendees', {
+        ...data,
+        token: this.authStore.token,
+      });
+    } catch (err) {
+      console.log('Error updating attendee', err);
+      throw err;
+    }
+  }
+
+  async delete(attendeeId) {
+    try {
+      await axios.delete('/attendees', {
+        data: {
+          _id: attendeeId,
+          token: this.authStore.token,
+        },
+      });
+    } catch (err) {
+      console.log('Error deleting attendee', err);
       throw err;
     }
   }

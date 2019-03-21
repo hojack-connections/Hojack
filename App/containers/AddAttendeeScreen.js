@@ -22,7 +22,7 @@ export default
 @inject('event', 'auth', 'attendee')
 @observer
 class AddAttendeeScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = () => ({
     title: 'Add Attendee',
   });
 

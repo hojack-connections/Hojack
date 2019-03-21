@@ -7,7 +7,6 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import _ from 'lodash';
 
 import { Colors, Styles } from '../Themes/';
 import { inject, observer } from 'mobx-react';
@@ -17,33 +16,23 @@ export default
 @inject('event')
 @observer
 class AttendeesScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = () => ({
     title: 'All Attendees',
     headerTitleStyle: Styles.nav.title,
     headerBackTitle: 'Back',
   });
 
-  _onItemClick = (attendee, attendeeIndex) => {
-    const eventIndex = _.findIndex(
-      this.props.events,
-      (event) => event._id === attendee.event._id
-    );
-    const localIndex = _.findIndex(
-      this.props.eventAttendees[attendee.event._id],
-      (item) => item._id === attendee._id
-    );
-    this.props.navigation.navigate('AttendeeSummaryScreen', {
-      event: eventIndex,
-      id: attendee.event._id,
-      attendee: localIndex,
-      attendeeIndex,
+  _onItemClick = (attendee) => {
+    this.props.navigation.navigate('AttendeeDetail', {
+      eventId: attendee.event._id,
+      attendeeId: attendee._id,
     });
   };
 
   keyExtractor = (item, index) => index.toString();
 
-  renderCell = ({ item, index }) => (
-    <TouchableHighlight onPress={() => this._onItemClick(item, index)}>
+  renderCell = ({ item }) => (
+    <TouchableHighlight onPress={() => this._onItemClick(item)}>
       <View style={styles.listItemContainer}>
         <Icon
           name={item.isFilled ? 'check-square' : 'minus-square'}
