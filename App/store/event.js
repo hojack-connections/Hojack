@@ -4,7 +4,7 @@ import axios from 'axios';
 export default class EventStore {
   authStore;
 
-  @observable attendeesById = new Map();
+  @observable attendeesById = {};
   @observable eventsById = {};
   @observable events = [];
   @observable receiversByEventId = {};
