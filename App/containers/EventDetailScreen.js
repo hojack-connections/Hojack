@@ -48,6 +48,22 @@ class SubmitSettingsScreen extends Component {
     this.props.event.loadEventAttendees(eventId);
   }
 
+  _onSubmit = () => {
+    const eventId = this.props.navigation.getParam('id');
+    this.props.event
+      .submit(
+        eventId,
+        this.props.receiver.certReceiversById[eventId],
+        this.props.receiver.sheetReceiversById[eventId]
+      )
+      .then(() => {
+        Alert.alert('Success', 'Submitted this event successfully!');
+      })
+      .catch(() => {
+        Alert.alert('Error', 'There was a problem submitting your event.');
+      });
+  };
+
   onSubmit = () => {
     // let { certReceivers, sheetReceivers } = this.props;
     //
@@ -64,24 +80,7 @@ class SubmitSettingsScreen extends Component {
         { text: 'No', onPress: () => {}, style: 'cancel' },
         {
           text: 'Yes',
-          onPress: () => {
-            const eventId = this.props.navigation.getParam('id');
-            this.props.event
-              .submit(
-                eventId,
-                this.props.receiver.certReceiversById[eventId],
-                this.props.receiver.sheetReceiversById[eventId]
-              )
-              .then(() => {
-                Alert.alert('Success', 'Submitted this event successfully!');
-              })
-              .catch(() => {
-                Alert.alert(
-                  'Error',
-                  'There was a problem submitting your event.'
-                );
-              });
-          },
+          onPress: this._onSubmit,
         },
       ],
       { cancelable: false }
@@ -179,17 +178,6 @@ class SubmitSettingsScreen extends Component {
               style={Styles.arrow}
             />
           </TouchableOpacity>
-          <Button
-            buttonStyle={styles.updateButton}
-            containerStyle={styles.buttonContainer}
-            onPress={() =>
-              this.props.navigation.navigate('AddAttendeeScreen', {
-                id: eventId,
-              })
-            }
-            title="Add Attendee"
-            titleStyle={styles.buttonTitle}
-          />
           <View style={styles.section}>
             <Text
               style={{
