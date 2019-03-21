@@ -8,10 +8,9 @@ import {
   TextInput,
 } from 'react-native';
 import { Button } from 'react-native-elements';
-import UserInput from '../components/UserInput';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import normalize from '../helpers/normalizeText';
-import { Colors, Styles } from '../Themes/';
+import { Colors } from '../Themes/';
 import { inject, observer } from 'mobx-react';
 import Cell from '../components/Cell';
 import DatePicker from 'react-native-datepicker';
@@ -20,7 +19,7 @@ export default
 @inject('event')
 @observer
 class AddEventScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = () => ({
     title: 'Add Event',
   });
 

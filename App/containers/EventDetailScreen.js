@@ -17,8 +17,8 @@ import { Button } from 'react-native-elements';
 import HeaderSubtitle from '../components/HeaderSubtitle';
 
 export default
-@observer
 @inject('receiver', 'event')
+@observer
 class SubmitSettingsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Event Settings',

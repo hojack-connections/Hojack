@@ -14,8 +14,8 @@ import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 
 export default
-@observer
 @inject('event', 'auth')
+@observer
 class EventAttendeesScreen extends Component {
   static navigationOptions = () => ({
     title: 'Attendees',

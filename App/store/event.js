@@ -4,7 +4,7 @@ import axios from 'axios';
 export default class EventStore {
   authStore;
 
-  @observable attendeesById = {};
+  @observable attendeesById = new Map();
   @observable eventsById = {};
   @observable events = [];
   @observable receiversByEventId = {};
@@ -67,7 +67,7 @@ export default class EventStore {
           token: this.authStore.token,
         },
       });
-      this.attendeesById[id] = res.data;
+      this.attendeesById.set(id, res.data);
     } catch (err) {
       console.log('Error loading attendees for event', id);
       throw err;

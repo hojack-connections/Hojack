@@ -19,8 +19,8 @@ import normalize from '../helpers/normalizeText';
 import { Colors } from '../Themes/';
 
 export default
-@observer
 @inject('event', 'auth', 'attendee')
+@observer
 class AddAttendeeScreen extends Component {
   static navigationOptions = () => ({
     title: 'Add Attendee',

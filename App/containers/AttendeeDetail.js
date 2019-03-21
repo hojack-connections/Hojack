@@ -16,8 +16,8 @@ import { Colors } from '../Themes/';
 import Cell from '../components/Cell';
 
 export default
-@observer
 @inject('event', 'attendee')
+@observer
 class AttendeeDetail extends Component {
   static navigationOptions = () => ({
     title: 'Attendee',
