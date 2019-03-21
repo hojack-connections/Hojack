@@ -51,11 +51,7 @@ class SubmitSettingsScreen extends Component {
   _onSubmit = () => {
     const eventId = this.props.navigation.getParam('id');
     this.props.event
-      .submit(
-        eventId,
-        this.props.receiver.certReceiversById[eventId],
-        this.props.receiver.sheetReceiversById[eventId]
-      )
+      .submit(eventId)
       .then(() => {
         Alert.alert('Success', 'Submitted this event successfully!');
       })
@@ -88,6 +84,7 @@ class SubmitSettingsScreen extends Component {
   };
 
   addSheetReceiver = (email) => {
+    if (email === '') return;
     const eventId = this.props.navigation.getParam('id');
     this.props.event
       .addReceiverForEvent(eventId, email)
@@ -173,6 +170,7 @@ class SubmitSettingsScreen extends Component {
               underlineColorAndroid="transparent"
               onSubmitEditing={(e) => this.addSheetReceiver(e.nativeEvent.text)}
               placeholder="Input a new email address"
+              returnKeyType="done"
             />
           </View>
           <Button
