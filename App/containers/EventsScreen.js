@@ -61,31 +61,25 @@ class EventsScreen extends Component {
 
   keyExtractor = (item, index) => index.toString();
 
-  renderItem = ({ item, index }) => {
-    const attendees = this.props.event.attendeesById[item._id] || [];
-    return (
-      <TouchableOpacity onPress={() => this._onItemClick(index, item._id)}>
-        <View style={styles.listItemContainer}>
-          <Text style={styles.eventDate}>
-            {moment(item.date).format('MMM DD, YYYY')}
-          </Text>
-          <View style={styles.seperator} />
-          <View style={styles.subDetails}>
-            <Text style={styles.categoryTitle}>{item.name}</Text>
-            <Text style={{ color: item.isSubmitted ? '#34bd3e' : '#ff575c' }}>
-              {attendees.length}
-            </Text>
-          </View>
-          <Icon
-            name="chevron-right"
-            size={16}
-            color={'#797979'}
-            style={styles.arrow}
-          />
+  renderItem = ({ item, index }) => (
+    <TouchableOpacity onPress={() => this._onItemClick(index, item._id)}>
+      <View style={styles.listItemContainer}>
+        <Text style={styles.eventDate}>
+          {moment(item.date).format('MMM DD, YYYY')}
+        </Text>
+        <View style={styles.seperator} />
+        <View style={styles.subDetails}>
+          <Text style={styles.categoryTitle}>{item.name}</Text>
         </View>
-      </TouchableOpacity>
-    );
-  };
+        <Icon
+          name="chevron-right"
+          size={16}
+          color={'#797979'}
+          style={styles.arrow}
+        />
+      </View>
+    </TouchableOpacity>
+  );
 
   render() {
     return (
