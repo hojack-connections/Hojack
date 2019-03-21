@@ -38,9 +38,9 @@ class EventAttendeesScreen extends Component {
     >
       <View style={styles.listItemContainer}>
         <Icon
-          name={item.isFilled ? 'check-square' : 'minus-square'}
+          name={item.receivedCertificate ? 'check-square' : 'minus-square'}
           size={18}
-          color={item.isFilled ? '#34bd3e' : '#ff575c'}
+          color={item.receivedCertificate ? '#34bd3e' : '#ff575c'}
         />
         <Text style={styles.name}>
           {item.firstname} {item.lastname}
