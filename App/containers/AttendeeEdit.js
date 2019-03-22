@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
   View,
-  ScrollView,
   Text,
   StyleSheet,
   Platform,
@@ -17,6 +16,7 @@ import { inject, observer } from 'mobx-react';
 import normalize from '../helpers/normalizeText';
 import { Colors } from '../Themes/';
 import Cell from '../components/Cell';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default
 @inject('event', 'attendee')
@@ -128,7 +128,10 @@ class AttendeeEdit extends Component {
     const attendee =
       eventAttendees.find((_attendee) => _attendee._id === attendeeId) || {};
     return (
-      <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
+      <KeyboardAwareScrollView
+        style={styles.container}
+        keyboardShouldPersistTaps="handled"
+      >
         <Cell
           label="First Name:"
           onPress={() => this.textFieldsRefs[0].current.focus()}
@@ -230,7 +233,7 @@ class AttendeeEdit extends Component {
           buttonStyle={styles.deleteButton}
           containerStyle={styles.buttonContainer}
         />
-      </ScrollView>
+      </KeyboardAwareScrollView>
     );
   }
 }
