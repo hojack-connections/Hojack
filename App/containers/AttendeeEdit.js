@@ -86,7 +86,7 @@ class AttendeeEdit extends Component {
       });
   };
 
-  onDelete = () => {
+  _onDelete = () => {
     this.setState({ isDeleting: true });
     const attendeeId = this.props.navigation.getParam('attendeeId');
     const eventId = this.props.navigation.getParam('eventId');
@@ -95,7 +95,7 @@ class AttendeeEdit extends Component {
       .then(() => this.props.event.loadEventAttendees(eventId))
       .then(() => {
         this.setState({ isDeleting: false });
-        this.props.navigation.goBack();
+        this.props.navigation.pop(2);
       })
       .catch(() => {
         this.setState({ isDeleting: false });
@@ -111,7 +111,7 @@ class AttendeeEdit extends Component {
         { text: 'No', onPress: () => {}, style: 'cancel' },
         {
           text: 'Yes',
-          onPress: this.onDelete,
+          onPress: this._onDelete,
         },
       ],
       { cancelable: false }
@@ -129,90 +129,90 @@ class AttendeeEdit extends Component {
       eventAttendees.find((_attendee) => _attendee._id === attendeeId) || {};
     return (
       <ScrollView style={styles.container}>
-        <View style={styles.inputFields}>
-          <Cell
-            label="First Name:"
-            onPress={() => this.textFieldsRefs[0].current.focus()}
-          >
-            <TextInput
-              autoFocus
-              ref={this.textFieldsRefs[0]}
-              onSubmitEditing={() => this.textFieldsRefs[1].current.focus()}
-              autoCapitalize="words"
-              autoCorrect={false}
-              editable
-              onChangeText={(firstname) => this.setState({ firstname })}
-              placeholder={attendee.firstname}
-              returnKeyType="next"
-              style={styles.textInputStyle}
-              underlineColorAndroid="transparent"
-              value={this.state.firstname}
-            />
-          </Cell>
-          <Cell
-            label="Last Name:"
-            onPress={() => this.textFieldsRefs[1].current.focus()}
-          >
-            <TextInput
-              ref={this.textFieldsRefs[1]}
-              onSubmitEditing={() => this.textFieldsRefs[2].current.focus()}
-              autoCapitalize="words"
-              autoCorrect={false}
-              editable
-              onChangeText={(lastname) => this.setState({ lastname })}
-              placeholder={attendee.lastname}
-              returnKeyType="next"
-              style={styles.textInputStyle}
-              underlineColorAndroid="transparent"
-              value={this.state.lastname}
-            />
-          </Cell>
-          <Cell
-            label="Email:"
-            onPress={() => this.textFieldsRefs[2].current.focus()}
-          >
-            <TextInput
-              ref={this.textFieldsRefs[2]}
-              onSubmitEditing={() => this.textFieldsRefs[3].current.focus()}
-              autoCapitalize="words"
-              autoCorrect={false}
-              editable
-              onChangeText={(email) => this.setState({ email })}
-              placeholder={attendee.email}
-              returnKeyType="next"
-              style={styles.textInputStyle}
-              underlineColorAndroid="transparent"
-              value={this.state.email}
-            />
-          </Cell>
-          <Cell
-            label="Phone:"
-            onPress={() => this.textFieldsRefs[3].current.focus()}
-          >
-            <TextInput
-              ref={this.textFieldsRefs[3]}
-              autoCapitalize="words"
-              autoCorrect={false}
-              editable
-              onChangeText={(phone) => this.setState({ phone })}
-              placeholder={attendee.phone}
-              returnKeyType="done"
-              style={styles.textInputStyle}
-              underlineColorAndroid="transparent"
-              value={this.state.phone}
-            />
-          </Cell>
-          <Cell label="Event:">
-            <TextInput
-              autoCapitalize="words"
-              autoCorrect={false}
-              editable={false}
-              placeholder={event.name}
-              style={styles.textInputStyle}
-              underlineColorAndroid="transparent"
-            />
-          </Cell>
-        </View>
+        <Cell
+          label="First Name:"
+          onPress={() => this.textFieldsRefs[0].current.focus()}
+        >
+          <TextInput
+            autoFocus
+            ref={this.textFieldsRefs[0]}
+            onSubmitEditing={() => this.textFieldsRefs[1].current.focus()}
+            autoCapitalize="words"
+            autoCorrect={false}
+            editable
+            onChangeText={(firstname) => this.setState({ firstname })}
+            placeholder={attendee.firstname}
+            returnKeyType="next"
+            style={styles.textInputStyle}
+            underlineColorAndroid="transparent"
+            value={this.state.firstname}
+          />
+        </Cell>
+        <Cell
+          label="Last Name:"
+          onPress={() => this.textFieldsRefs[1].current.focus()}
+        >
+          <TextInput
+            ref={this.textFieldsRefs[1]}
+            onSubmitEditing={() => this.textFieldsRefs[2].current.focus()}
+            autoCapitalize="words"
+            autoCorrect={false}
+            editable
+            onChangeText={(lastname) => this.setState({ lastname })}
+            placeholder={attendee.lastname}
+            returnKeyType="next"
+            style={styles.textInputStyle}
+            underlineColorAndroid="transparent"
+            value={this.state.lastname}
+          />
+        </Cell>
+        <Cell
+          label="Email:"
+          onPress={() => this.textFieldsRefs[2].current.focus()}
+        >
+          <TextInput
+            ref={this.textFieldsRefs[2]}
+            onSubmitEditing={() => this.textFieldsRefs[3].current.focus()}
+            autoCapitalize="none"
+            autoCorrect={false}
+            editable
+            keyboardType="email-address"
+            onChangeText={(email) => this.setState({ email })}
+            placeholder={attendee.email}
+            returnKeyType="next"
+            style={styles.textInputStyle}
+            underlineColorAndroid="transparent"
+            value={this.state.email}
+          />
+        </Cell>
+        <Cell
+          label="Phone:"
+          onPress={() => this.textFieldsRefs[3].current.focus()}
+        >
+          <TextInput
+            ref={this.textFieldsRefs[3]}
+            autoCapitalize="words"
+            autoCorrect={false}
+            editable
+            keyboardType="phone-pad"
+            onChangeText={(phone) => this.setState({ phone })}
+            placeholder={attendee.phone}
+            returnKeyType="done"
+            style={styles.textInputStyle}
+            underlineColorAndroid="transparent"
+            value={this.state.phone}
+          />
+        </Cell>
+        <Cell label="Event:">
+          <TextInput
+            autoCapitalize="words"
+            autoCorrect={false}
+            editable={false}
+            placeholder={event.name}
+            style={styles.textInputStyle}
+            underlineColorAndroid="transparent"
+          />
+        </Cell>
         <View style={styles.signatureField}>
           <Text style={styles.signatureLabel}>Signature:</Text>
           {attendee.signature !== '' && (
@@ -244,10 +244,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     color: Colors.black,
     fontWeight: '100',
-  },
-  inputFields: {
-    paddingLeft: 20,
-    paddingTop: 10,
   },
   signatureField: {
     height: 100,

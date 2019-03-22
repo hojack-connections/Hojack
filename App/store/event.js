@@ -153,4 +153,18 @@ export default class EventStore {
       throw err;
     }
   }
+
+  async sendCertificate(eventId, attendeeId, email) {
+    try {
+      await axios.post('/events/certificate', {
+        _id: eventId,
+        attendeeId,
+        email,
+        token: this.authStore.token,
+      });
+    } catch (err) {
+      console.log('Error sending certificate to email', err);
+      throw err;
+    }
+  }
 }

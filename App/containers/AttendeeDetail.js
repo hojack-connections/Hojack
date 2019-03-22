@@ -9,6 +9,7 @@ import {
   Alert,
   TextInput,
   TouchableOpacity,
+  FlatList,
 } from 'react-native';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { Button } from 'react-native-elements';
@@ -39,9 +40,11 @@ class AttendeeDetail extends Component {
   });
 
   state = {
-    isUpdating: false,
-    isDeleting: false,
+    email: '',
+    isSending: false,
   };
+
+  emailRef = React.createRef();
 
   componentWillMount() {
     this.props.event.loadEventAttendees(
@@ -49,53 +52,19 @@ class AttendeeDetail extends Component {
     );
   }
 
-  onUpdate = () => {
-    this.setState({ isUpdating: true });
-    const attendeeId = this.props.navigation.getParam('attendeeId');
+  sendTestCert = () => {
+    // Send a test cert to this.state.email
+    this.setState({ isSending: true });
     const eventId = this.props.navigation.getParam('eventId');
-    this.props.attendee
-      .update(attendeeId, { ...this.state, _id: attendeeId })
-      .then(() => this.props.event.loadEventAttendees(eventId))
-      .then(() => {
-        this.setState({ isUpdating: false });
-        this.props.navigation.goBack();
-      })
-      .catch(() => {
-        this.setState({ isUpdating: false });
-        alert('There was a problem updating the attendee.');
-      });
-  };
-
-  _onDelete = () => {
-    this.setState({ isDeleting: true });
     const attendeeId = this.props.navigation.getParam('attendeeId');
-    const eventId = this.props.navigation.getParam('eventId');
-    this.props.attendee
-      .delete(attendeeId)
-      .then(() => this.props.event.loadEventAttendees(eventId))
-      .then(() => {
-        this.setState({ isDeleting: false });
-        this.props.navigation.goBack();
-      })
+    this.props.event
+      .sendCertificate(eventId, attendeeId, this.state.email)
+      .then(() => alert('Sent test certificate'))
+      .then(() => this.setState({ isSending: false, email: '' }))
       .catch(() => {
-        this.setState({ isDeleting: false });
-        alert('There was a problem deleting the attendee.');
+        this.setState({ isSending: false });
+        alert('There was a problem sending your test certificate.');
       });
-  };
-
-  onDelete = () => {
-    Alert.alert(
-      'Confirm',
-      'Do you really want to remove this attendee?',
-      [
-        { text: 'No', onPress: () => {}, style: 'cancel' },
-        {
-          text: 'Yes',
-          onPress: this._onDelete,
-        },
-      ],
-      { cancelable: false }
-    );
   };
 
   render() {
@@ -103,72 +72,14 @@ class AttendeeDetail extends Component {
     const attendeeId = this.props.navigation.getParam('attendeeId');
 
     const eventAttendees = this.props.event.attendeesById[eventId] || [];
-    const event = this.props.event.eventsById[eventId] || {};
-
     const attendee =
       eventAttendees.find((_attendee) => _attendee._id === attendeeId) || {};
 
     return (
       <ScrollView style={styles.container}>
-        <View style={styles.inputFields}>
-          <Cell label="First Name:">
-            <TextInput
-              autoCapitalize="words"
-              autoCorrect={false}
-              editable
-              onChangeText={(firstname) => this.setState({ firstname })}
-              placeholder={attendee.firstname}
-              style={styles.textInputStyle}
-              underlineColorAndroid="transparent"
-              value={this.state.firstname}
-            />
-          </Cell>
-          <Cell label="Last Name:">
-            <TextInput
-              autoCapitalize="words"
-              autoCorrect={false}
-              editable
-              onChangeText={(lastname) => this.setState({ lastname })}
-              placeholder={attendee.lastname}
-              style={styles.textInputStyle}
-              underlineColorAndroid="transparent"
-              value={this.state.lastname}
-            />
-          </Cell>
-          <Cell label="Email:">
-            <TextInput
-              autoCapitalize="words"
-              autoCorrect={false}
-              editable
-              onChangeText={(email) => this.setState({ email })}
-              placeholder={attendee.email}
-              style={styles.textInputStyle}
-              underlineColorAndroid="transparent"
-              value={this.state.email}
-            />
-          </Cell>
-          <Cell label="Phone:">
-            <TextInput
-              autoCapitalize="words"
-              autoCorrect={false}
-              editable
-              onChangeText={(phone) => this.setState({ phone })}
-              placeholder={attendee.phone}
-              style={styles.textInputStyle}
-              underlineColorAndroid="transparent"
-              value={this.state.phone}
-            />
-          </Cell>
-          <Cell label="Event:">
-            <TextInput
-              autoCapitalize="words"
-              autoCorrect={false}
-              editable={false}
-              placeholder={event.name}
-              style={styles.textInputStyle}
-              underlineColorAndroid="transparent"
-            />
-          </Cell>
+        <View style={styles.attendeeInfo}>
+          <Text>{`${attendee.firstname} ${attendee.lastname}`}</Text>
+          <Text>{`${attendee.email} - ${attendee.phone}`}</Text>
         </View>
         <View style={styles.signatureField}>
           <Text style={styles.signatureLabel}>Signature:</Text>
@@ -179,20 +90,31 @@ class AttendeeDetail extends Component {
             />
           )}
         </View>
+        <Cell
+          label="Send Test Cert:"
+          onPress={() => this.emailRef.current.focus()}
+        >
+          <TextInput
+            ref={this.emailRef}
+            onSubmitEditing={this.sendTestCert}
+            autoCapitalize="none"
+            autoCorrect={false}
+            editable
+            keyboardType="email-address"
+            onChangeText={(email) => this.setState({ email })}
+            placeholder="test@receiver.com"
+            returnKeyType="done"
+            style={styles.textInputStyle}
+            underlineColorAndroid="transparent"
+            value={this.state.email}
+          />
+        </Cell>
         <Button
-          title="Update Attendee"
-          loading={this.state.isUpdating}
-          onPress={this.onUpdate}
+          title="Send Test Cert"
+          loading={this.state.isSending}
+          onPress={this.sendTestCert}
           titleStyle={styles.buttonTitle}
-          buttonStyle={styles.updateButton}
-          containerStyle={styles.buttonContainer}
-        />
-        <Button
-          title="Delete Attendee"
-          loading={this.state.isDeleting}
-          onPress={this.onDelete}
-          titleStyle={styles.buttonTitle}
-          buttonStyle={styles.deleteButton}
+          buttonStyle={styles.sendButton}
           containerStyle={styles.buttonContainer}
         />
       </ScrollView>
@@ -210,9 +132,8 @@ const styles = StyleSheet.create({
     color: Colors.black,
     fontWeight: '100',
   },
-  inputFields: {
-    paddingLeft: 20,
-    paddingTop: 10,
+  attendeeInfo: {
+    padding: 20,
   },
   signatureField: {
     height: 100,
@@ -247,8 +168,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 60,
   },
-  deleteButton: {
-    backgroundColor: '#ff575c',
+  sendButton: {
     borderRadius: 10,
     width: '100%',
     height: 60,

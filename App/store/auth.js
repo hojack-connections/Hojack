@@ -1,8 +1,10 @@
 import { observable, computed } from 'mobx';
 import { AsyncStorage } from 'react-native';
+import axios from 'axios';
 
 export default class AuthStore {
   @observable token;
+  @observable active = {};
 
   initialLoadCompleted = false;
   initialLoadCallbacks = [];
@@ -18,6 +20,7 @@ export default class AuthStore {
       if (typeof this.token !== 'string' || this.token.length === 0) {
         this.token = undefined;
       }
+      if (this.token) this.loadCurrentUser();
       this.executeInitialLoadCallbacks();
     });
   }
@@ -37,6 +40,19 @@ export default class AuthStore {
   @computed
   get authenticated() {
     return !!this.token;
+  }
+
+  async loadCurrentUser() {
+    try {
+      const { data } = axios.get('/users/authenticated', {
+        params: {
+          token: this.token,
+        },
+      });
+      this.active = data;
+    } catch (err) {
+      console.log('Error loading current user');
+    }
   }
 
   async authChanged(token) {
