@@ -9,6 +9,7 @@ import {
   Alert,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { Button } from 'react-native-elements';
@@ -20,20 +21,19 @@ import Cell from '../components/Cell';
 export default
 @inject('event', 'attendee')
 @observer
-class AttendeeDetail extends Component {
+class AttendeeEdit extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Attendee',
+    title: 'Edit Attendee',
     headerRight: (
       <TouchableOpacity
         style={{ padding: 8, marginRight: 8 }}
-        onPress={() =>
-          navigation.navigate('AttendeeEdit', {
-            eventId: navigation.getParam('eventId'),
-            attendeeId: navigation.getParam('attendeeId'),
-          })
-        }
+        onPress={() => navigation.getParam('onSave')()}
       >
-        <Ionicon name="ios-create" color="white" size={30} />
+        {navigation.getParam('isUpdating') ? (
+          <ActivityIndicator animating color="white" />
+        ) : (
+          <Ionicon name="ios-save" color="white" size={30} />
+        )}
       </TouchableOpacity>
     ),
   });
@@ -43,30 +43,50 @@ class AttendeeDetail extends Component {
     isDeleting: false,
   };
 
+  // For editable text fields, need 4 refs
+  textFieldsRefs = [
+    React.createRef(),
+    React.createRef(),
+    React.createRef(),
+    React.createRef(),
+  ];
+
   componentWillMount() {
     this.props.event.loadEventAttendees(
       this.props.navigation.getParam('eventId')
     );
   }
 
-  onUpdate = () => {
-    this.setState({ isUpdating: true });
+  componentDidMount() {
+    this.props.navigation.setParams({
+      onSave: this.onSave,
+    });
+  }
+
+  onSave = () => {
+    this.props.navigation.setParams({
+      isUpdating: true,
+    });
     const attendeeId = this.props.navigation.getParam('attendeeId');
     const eventId = this.props.navigation.getParam('eventId');
     this.props.attendee
       .update(attendeeId, { ...this.state, _id: attendeeId })
       .then(() => this.props.event.loadEventAttendees(eventId))
       .then(() => {
-        this.setState({ isUpdating: false });
+        this.props.navigation.setParams({
+          isUpdating: false,
+        });
         this.props.navigation.goBack();
       })
       .catch(() => {
-        this.setState({ isUpdating: false });
+        this.props.navigation.setParams({
+          isUpdating: false,
+        });
         alert('There was a problem updating the attendee.');
       });
   };
 
-  _onDelete = () => {
+  onDelete = () => {
     this.setState({ isDeleting: true });
     const attendeeId = this.props.navigation.getParam('attendeeId');
     const eventId = this.props.navigation.getParam('eventId');
@@ -91,7 +111,7 @@ class AttendeeDetail extends Component {
         { text: 'No', onPress: () => {}, style: 'cancel' },
         {
           text: 'Yes',
-          onPress: this._onDelete,
+          onPress: this.onDelete,
         },
       ],
       { cancelable: false }
@@ -107,53 +127,76 @@ class AttendeeDetail extends Component {
 
     const attendee =
       eventAttendees.find((_attendee) => _attendee._id === attendeeId) || {};
-
     return (
       <ScrollView style={styles.container}>
         <View style={styles.inputFields}>
-          <Cell label="First Name:">
+          <Cell
+            label="First Name:"
+            onPress={() => this.textFieldsRefs[0].current.focus()}
+          >
             <TextInput
+              autoFocus
+              ref={this.textFieldsRefs[0]}
+              onSubmitEditing={() => this.textFieldsRefs[1].current.focus()}
               autoCapitalize="words"
               autoCorrect={false}
               editable
               onChangeText={(firstname) => this.setState({ firstname })}
               placeholder={attendee.firstname}
+              returnKeyType="next"
               style={styles.textInputStyle}
               underlineColorAndroid="transparent"
               value={this.state.firstname}
             />
           </Cell>
-          <Cell label="Last Name:">
+          <Cell
+            label="Last Name:"
+            onPress={() => this.textFieldsRefs[1].current.focus()}
+          >
             <TextInput
+              ref={this.textFieldsRefs[1]}
+              onSubmitEditing={() => this.textFieldsRefs[2].current.focus()}
               autoCapitalize="words"
               autoCorrect={false}
               editable
               onChangeText={(lastname) => this.setState({ lastname })}
               placeholder={attendee.lastname}
+              returnKeyType="next"
               style={styles.textInputStyle}
               underlineColorAndroid="transparent"
               value={this.state.lastname}
             />
           </Cell>
-          <Cell label="Email:">
+          <Cell
+            label="Email:"
+            onPress={() => this.textFieldsRefs[2].current.focus()}
+          >
             <TextInput
+              ref={this.textFieldsRefs[2]}
+              onSubmitEditing={() => this.textFieldsRefs[3].current.focus()}
               autoCapitalize="words"
               autoCorrect={false}
               editable
               onChangeText={(email) => this.setState({ email })}
               placeholder={attendee.email}
+              returnKeyType="next"
               style={styles.textInputStyle}
               underlineColorAndroid="transparent"
               value={this.state.email}
             />
           </Cell>
-          <Cell label="Phone:">
+          <Cell
+            label="Phone:"
+            onPress={() => this.textFieldsRefs[3].current.focus()}
+          >
             <TextInput
+              ref={this.textFieldsRefs[3]}
               autoCapitalize="words"
               autoCorrect={false}
               editable
               onChangeText={(phone) => this.setState({ phone })}
               placeholder={attendee.phone}
+              returnKeyType="done"
               style={styles.textInputStyle}
               underlineColorAndroid="transparent"
               value={this.state.phone}
@@ -179,14 +222,6 @@ class AttendeeDetail extends Component {
             />
           )}
         </View>
-        <Button
-          title="Update Attendee"
-          loading={this.state.isUpdating}
-          onPress={this.onUpdate}
-          titleStyle={styles.buttonTitle}
-          buttonStyle={styles.updateButton}
-          containerStyle={styles.buttonContainer}
-        />
         <Button
           title="Delete Attendee"
           loading={this.state.isDeleting}
