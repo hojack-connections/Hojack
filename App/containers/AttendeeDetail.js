@@ -6,10 +6,8 @@ import {
   StyleSheet,
   Platform,
   Image,
-  Alert,
   TextInput,
   TouchableOpacity,
-  FlatList,
 } from 'react-native';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { Button } from 'react-native-elements';
@@ -19,7 +17,7 @@ import { Colors } from '../Themes/';
 import Cell from '../components/Cell';
 
 export default
-@inject('event', 'attendee')
+@inject('event', 'attendee', 'auth')
 @observer
 class AttendeeDetail extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -57,8 +55,9 @@ class AttendeeDetail extends Component {
     this.setState({ isSending: true });
     const eventId = this.props.navigation.getParam('eventId');
     const attendeeId = this.props.navigation.getParam('attendeeId');
+    const email = this.state.email || this.props.auth.active.email;
     this.props.event
-      .sendCertificate(eventId, attendeeId, this.state.email)
+      .sendCertificate(eventId, attendeeId, email)
       .then(() => alert('Sent test certificate'))
       .then(() => this.setState({ isSending: false, email: '' }))
       .catch(() => {
@@ -102,7 +101,7 @@ class AttendeeDetail extends Component {
             editable
             keyboardType="email-address"
             onChangeText={(email) => this.setState({ email })}
-            placeholder="test@receiver.com"
+            placeholder={this.props.auth.active.email}
             returnKeyType="done"
             style={styles.textInputStyle}
             underlineColorAndroid="transparent"

@@ -44,7 +44,7 @@ export default class AuthStore {
 
   async loadCurrentUser() {
     try {
-      const { data } = axios.get('/users/authenticated', {
+      const { data } = await axios.get('/users/authenticated', {
         params: {
           token: this.token,
         },
