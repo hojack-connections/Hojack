@@ -1,26 +1,33 @@
 import React, { Component } from 'react';
-import {
-  View,
-  ScrollView,
-  Text,
-  StyleSheet,
-  Alert,
-  TextInput,
-} from 'react-native';
-import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import normalize from '../helpers/normalizeText';
+import { StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../Themes/';
 import { inject, observer } from 'mobx-react';
 import Cell from '../components/Cell';
 import DatePicker from 'react-native-datepicker';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default
 @inject('event')
 @observer
 class AddEventScreen extends Component {
-  static navigationOptions = () => ({
+  static navigationOptions = ({ navigation }) => ({
     title: 'Add Event',
+    headerRight: (
+      <TouchableOpacity
+        style={{
+          padding: 8,
+          marginRight: 8,
+        }}
+        onPress={() => navigation.getParam('onSave')()}
+      >
+        {navigation.getParam('isCreating') ? (
+          <ActivityIndicator animating color="white" />
+        ) : (
+          <Ionicon name="ios-save" color="white" size={30} />
+        )}
+      </TouchableOpacity>
+    ),
   });
 
   state = {
@@ -51,32 +58,52 @@ class AddEventScreen extends Component {
     React.createRef(),
   ];
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.created && nextProps.created) {
-      // created event successfully
-      Alert.alert('Success', 'Created new event successfully!');
-    }
+  componentWillMount() {
+    this.props.navigation.setParams({
+      onSave: this.onSave,
+    });
   }
 
   onSave = () => {
-    this.setState({ isCreating: true });
+    if (this.saveDisabled()) {
+      alert('You are missing some fields, please fill them out then save.');
+      return;
+    }
+    this.props.navigation.setParams({
+      isCreating: true,
+    });
     this.props.event
       .create(this.state)
+      .then(() => this.props.event.loadEvents())
       .then(() => {
-        this.setState({ isCreating: false });
-        this.props.event.loadEvents();
+        this.props.navigation.setParams({
+          isCreating: false,
+        });
         this.props.navigation.goBack();
       })
-      .catch((err) => {
-        alert(err);
-        this.setState({ isCreating: false });
+      .catch(() => {
+        this.props.navigation.setParams({
+          isCreating: false,
+        });
         alert('There was a problem creating your event.');
       });
   };
 
+  saveDisabled = () =>
+    !this.state.name ||
+    !this.state.address ||
+    !this.state.city ||
+    !this.state.state ||
+    !this.state.zipcode ||
+    !this.state.courseNo ||
+    !this.state.courseName;
+
   render() {
     return (
-      <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
+      <KeyboardAwareScrollView
+        style={styles.container}
+        keyboardShouldPersistTaps="handled"
+      >
         <Cell
           label="Event Name:"
           onPress={() => this.textFieldsRefs[0].current.focus()}
@@ -89,6 +116,7 @@ class AddEventScreen extends Component {
             editable
             onChangeText={(name) => this.setState({ name })}
             placeholder="Event Name"
+            returnKeyType="next"
             style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.name}
@@ -115,11 +143,13 @@ class AddEventScreen extends Component {
         >
           <TextInput
             ref={this.textFieldsRefs[1]}
+            onSubmitEditing={() => this.textFieldsRefs[2].current.focus()}
             autoCapitalize="words"
             autoCorrect={false}
             editable
             onChangeText={(address) => this.setState({ address })}
             placeholder="Address"
+            returnKeyType="next"
             style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.address}
@@ -131,11 +161,13 @@ class AddEventScreen extends Component {
         >
           <TextInput
             ref={this.textFieldsRefs[2]}
+            onSubmitEditing={() => this.textFieldsRefs[3].current.focus()}
             autoCapitalize="words"
             autoCorrect={false}
             editable
             onChangeText={(city) => this.setState({ city })}
             placeholder="City"
+            returnKeyType="next"
             style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.city}
@@ -147,11 +179,13 @@ class AddEventScreen extends Component {
         >
           <TextInput
             ref={this.textFieldsRefs[3]}
+            onSubmitEditing={() => this.textFieldsRefs[4].current.focus()}
             autoCapitalize="none"
             autoCorrect={false}
             editable
             onChangeText={(state) => this.setState({ state })}
             placeholder="State"
+            returnKeyType="next"
             style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.state}
@@ -163,12 +197,14 @@ class AddEventScreen extends Component {
         >
           <TextInput
             ref={this.textFieldsRefs[4]}
+            onSubmitEditing={() => this.textFieldsRefs[5].current.focus()}
             autoCapitalize="words"
             autoCorrect={false}
             editable
             keyboardType="number-pad"
             onChangeText={(zipcode) => this.setState({ zipcode })}
             placeholder="Zip Code"
+            returnKeyType="next"
             style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.zipcode}
@@ -180,11 +216,14 @@ class AddEventScreen extends Component {
         >
           <TextInput
             ref={this.textFieldsRefs[5]}
+            onSubmitEditing={() => this.textFieldsRefs[6].current.focus()}
             autoCapitalize="words"
             autoCorrect={false}
             editable
+            keyboardType="number-pad"
             onChangeText={(courseNo) => this.setState({ courseNo })}
             placeholder="Course Number"
+            returnKeyType="next"
             style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.courseNo}
@@ -196,11 +235,13 @@ class AddEventScreen extends Component {
         >
           <TextInput
             ref={this.textFieldsRefs[6]}
+            onSubmitEditing={() => this.textFieldsRefs[7].current.focus()}
             autoCapitalize="words"
             autoCorrect={false}
             editable
             onChangeText={(courseName) => this.setState({ courseName })}
             placeholder="Course Name"
+            returnKeyType="next"
             style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.courseName}
@@ -212,6 +253,7 @@ class AddEventScreen extends Component {
         >
           <TextInput
             ref={this.textFieldsRefs[7]}
+            onSubmitEditing={() => this.textFieldsRefs[8].current.focus()}
             autoCapitalize="words"
             autoCorrect={false}
             editable
@@ -220,6 +262,7 @@ class AddEventScreen extends Component {
               this.setState({ numberOfCourseCredits })
             }
             placeholder="Course Credits"
+            returnKeyType="next"
             style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={`${this.state.numberOfCourseCredits}`}
@@ -231,11 +274,13 @@ class AddEventScreen extends Component {
         >
           <TextInput
             ref={this.textFieldsRefs[8]}
+            onSubmitEditing={() => this.textFieldsRefs[9].current.focus()}
             autoCapitalize="words"
             autoCorrect={false}
             editable
             onChangeText={(presenterName) => this.setState({ presenterName })}
             placeholder="Presenter Name"
+            returnKeyType="next"
             style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.presenterName}
@@ -254,35 +299,13 @@ class AddEventScreen extends Component {
               this.setState({ trainingProvider })
             }
             placeholder="Training Provider"
+            returnKeyType="done"
             style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.trainingProvider}
           />
         </Cell>
-        <View style={styles.errorField}>
-          <Text style={styles.errorLabel}>
-            {this.props.error && this.props.error.data}
-          </Text>
-        </View>
-        <Button
-          title="Save Event"
-          disabled={
-            this.state.name === '' ||
-            this.state.address === '' ||
-            this.state.city === '' ||
-            this.state.state === '' ||
-            this.state.zipcode === '' ||
-            this.state.courseNo === '' ||
-            this.state.courseName === ''
-          }
-          loading={this.state.isCreating}
-          icon={<Icon name="check-circle" size={25} color={Colors.white} />}
-          onPress={this.onSave}
-          titleStyle={styles.buttonTitle}
-          buttonStyle={styles.saveButton}
-          containerStyle={styles.buttonContainer}
-        />
-      </ScrollView>
+      </KeyboardAwareScrollView>
     );
   }
 }
@@ -290,31 +313,6 @@ class AddEventScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
-  },
-  buttonContainer: {
-    marginTop: 30,
-    marginBottom: 30,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  saveButton: {
-    borderRadius: 10,
-    width: '100%',
-    height: 60,
-  },
-  buttonTitle: {
-    marginLeft: 10,
-    fontSize: normalize(20),
-    color: Colors.white,
-  },
-  errorField: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  errorLabel: {
-    fontSize: normalize(14),
-    color: 'red',
   },
   textInputStyle: {
     textAlign: 'right',

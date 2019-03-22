@@ -28,6 +28,7 @@
     "react-native-elements": "1.0.0-beta5",
     "react-native-gesture-handler": "^1.1.0",
     "react-native-iap": "^2.4.2",
+    "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-native-signature-capture": "git+https://github.com/JChanceHud/react-native-signature-capture.git",
     "react-native-vector-icons": "^6.4.1",
     "react-navigation": "^3.3.2",
