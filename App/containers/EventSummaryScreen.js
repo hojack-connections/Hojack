@@ -40,6 +40,19 @@ class EventSummaryScreen extends Component {
     isDeleting: false,
   };
 
+  textFieldsRefs = [
+    React.createRef(),
+    React.createRef(),
+    React.createRef(),
+    React.createRef(),
+    React.createRef(),
+    React.createRef(),
+    React.createRef(),
+    React.createRef(),
+    React.createRef(),
+    React.createRef(),
+  ];
+
   componentDidMount() {
     this.props.navigation.setParams({
       onSave: this.onSave,
@@ -97,7 +110,8 @@ class EventSummaryScreen extends Component {
     );
   };
 
-  onAttendees = (id) => {
+  onAttendees = () => {
+    const id = this.props.navigation.getParam('id');
     this.props.navigation.navigate('EventAttendeesScreen', { id });
   };
 
@@ -111,8 +125,12 @@ class EventSummaryScreen extends Component {
         style={styles.container}
         keyboardShouldPersistTaps="handled"
       >
-        <Cell label="Event Name:">
+        <Cell
+          label="Event Name:"
+          onPress={() => this.textFieldsRefs[0].current.focus()}
+        >
           <TextInput
+            ref={this.textFieldsRefs[0]}
             autoCapitalize="words"
             autoCorrect={false}
             editable
@@ -139,8 +157,12 @@ class EventSummaryScreen extends Component {
             style={{ flex: 1, marginRight: 10, height: 40 }}
           />
         </Cell>
-        <Cell label="Address:">
+        <Cell
+          label="Address:"
+          onPress={() => this.textFieldsRefs[1].current.focus()}
+        >
           <TextInput
+            ref={this.textFieldsRefs[1]}
             autoCapitalize="words"
             autoCorrect={false}
             editable
@@ -151,8 +173,12 @@ class EventSummaryScreen extends Component {
             value={this.state.address}
           />
         </Cell>
-        <Cell label="City:">
+        <Cell
+          label="City:"
+          onPress={() => this.textFieldsRefs[2].current.focus()}
+        >
           <TextInput
+            ref={this.textFieldsRefs[2]}
             autoCapitalize="words"
             autoCorrect={false}
             editable
@@ -163,8 +189,12 @@ class EventSummaryScreen extends Component {
             value={this.state.city}
           />
         </Cell>
-        <Cell label="State:">
+        <Cell
+          label="State:"
+          onPress={() => this.textFieldsRefs[3].current.focus()}
+        >
           <TextInput
+            ref={this.textFieldsRefs[3]}
             autoCapitalize="none"
             autoCorrect={false}
             editable
@@ -175,8 +205,12 @@ class EventSummaryScreen extends Component {
             value={this.state.state}
           />
         </Cell>
-        <Cell label="Zip Code:">
+        <Cell
+          label="Zip Code:"
+          onPress={() => this.textFieldsRefs[4].current.focus()}
+        >
           <TextInput
+            ref={this.textFieldsRefs[4]}
             autoCapitalize="words"
             autoCorrect={false}
             editable
@@ -188,8 +222,12 @@ class EventSummaryScreen extends Component {
             value={this.state.zipcode}
           />
         </Cell>
-        <Cell label="Course #:">
+        <Cell
+          label="Course #:"
+          onPress={() => this.textFieldsRefs[5].current.focus()}
+        >
           <TextInput
+            ref={this.textFieldsRefs[5]}
             autoCapitalize="words"
             autoCorrect={false}
             editable
@@ -200,8 +238,12 @@ class EventSummaryScreen extends Component {
             value={this.state.courseNo}
           />
         </Cell>
-        <Cell label="Course Name:">
+        <Cell
+          label="Course Name:"
+          onPress={() => this.textFieldsRefs[6].current.focus()}
+        >
           <TextInput
+            ref={this.textFieldsRefs[6]}
             autoCapitalize="words"
             autoCorrect={false}
             editable
@@ -212,8 +254,12 @@ class EventSummaryScreen extends Component {
             value={this.state.courseName}
           />
         </Cell>
-        <Cell label="Course Credits:">
+        <Cell
+          label="Course Credits:"
+          onPress={() => this.textFieldsRefs[7].current.focus()}
+        >
           <TextInput
+            ref={this.textFieldsRefs[7]}
             autoCapitalize="words"
             autoCorrect={false}
             editable
@@ -227,8 +273,12 @@ class EventSummaryScreen extends Component {
             value={`${this.state.numberOfCourseCredits || ''}`}
           />
         </Cell>
-        <Cell label="Presenter Name:">
+        <Cell
+          label="Presenter Name:"
+          onPress={() => this.textFieldsRefs[8].current.focus()}
+        >
           <TextInput
+            ref={this.textFieldsRefs[8]}
             autoCapitalize="words"
             autoCorrect={false}
             editable
@@ -239,8 +289,12 @@ class EventSummaryScreen extends Component {
             value={this.state.presenterName}
           />
         </Cell>
-        <Cell label="Training Provider:">
+        <Cell
+          label="Training Provider:"
+          onPress={() => this.textFieldsRefs[9].current.focus()}
+        >
           <TextInput
+            ref={this.textFieldsRefs[9]}
             autoCapitalize="words"
             autoCorrect={false}
             editable
