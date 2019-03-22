@@ -52,6 +52,7 @@ class SubmitSettingsScreen extends Component {
     const eventId = this.props.navigation.getParam('id');
     this.props.event
       .submit(eventId)
+      .then(() => this.props.event.loadEventAttendees(eventId))
       .then(() => {
         Alert.alert('Success', 'Submitted this event successfully!');
       })

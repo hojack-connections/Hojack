@@ -24,7 +24,7 @@ class EventAttendeesScreen extends Component {
         style={{ padding: 8, marginRight: 8 }}
         onPress={() =>
           navigation.navigate('AddAttendeeScreen', {
-            eventId: navigation.getParam('id'),
+            id: navigation.getParam('id'),
           })
         }
       >

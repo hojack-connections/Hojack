@@ -8,11 +8,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
-import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 import SignatureCapture from 'react-native-signature-capture';
-import { NavigationActions } from 'react-navigation';
 import { inject, observer } from 'mobx-react';
 import Cell from '../components/Cell';
 import normalize from '../helpers/normalizeText';
@@ -22,8 +21,20 @@ export default
 @inject('event', 'auth', 'attendee')
 @observer
 class AddAttendeeScreen extends Component {
-  static navigationOptions = () => ({
+  static navigationOptions = ({ navigation }) => ({
     title: 'Add Attendee',
+    headerRight: (
+      <TouchableOpacity
+        style={{ padding: 8, marginRight: 8 }}
+        onPress={() => navigation.getParam('onSave')()}
+      >
+        {navigation.getParam('isUpdating') ? (
+          <ActivityIndicator animating color="white" />
+        ) : (
+          <Ionicon name="ios-save" color="white" size={30} />
+        )}
+      </TouchableOpacity>
+    ),
   });
 
   state = {
@@ -33,13 +44,18 @@ class AddAttendeeScreen extends Component {
     phone: '',
   };
 
+  textFieldsRefs = [
+    React.createRef(),
+    React.createRef(),
+    React.createRef(),
+    React.createRef(),
+  ];
   signatureRef = React.createRef();
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.created && nextProps.created) {
-      // created attendee successfully
-      this.props.navigation.dispatch(NavigationActions.back());
-    }
+  componentDidMount() {
+    this.props.navigation.setParams({
+      onSave: this.onSave,
+    });
   }
 
   onSave = () => {
@@ -47,6 +63,9 @@ class AddAttendeeScreen extends Component {
   };
 
   onSignatureSave = (result) => {
+    this.props.navigation.setParams({
+      isUpdating: true,
+    });
     const eventId = this.props.navigation.getParam('id');
     this.props.attendee
       .create(eventId, {
@@ -55,8 +74,16 @@ class AddAttendeeScreen extends Component {
         event: `${eventId}`,
       })
       .then(() => this.props.event.loadEventAttendees(eventId))
-      .then(() => this.props.navigation.goBack())
+      .then(() => {
+        this.props.navigation.setParams({
+          isUpdating: false,
+        });
+        this.props.navigation.goBack();
+      })
       .catch(() => {
+        this.props.navigation.setParams({
+          isUpdating: false,
+        });
         alert('There was a problem creating the attendee.');
       });
   };
@@ -65,56 +92,80 @@ class AddAttendeeScreen extends Component {
     const signatureWidth = Dimensions.get('window').width - 50;
     return (
       <ScrollView style={styles.container}>
-        <View style={styles.inputFields}>
-          <Cell label="First Name:">
-            <TextInput
-              autoCapitalize="words"
-              autoCorrect={false}
-              editable
-              onChangeText={(firstname) => this.setState({ firstname })}
-              placeholder="John"
-              style={styles.textInputStyle}
-              underlineColorAndroid="transparent"
-              value={this.state.firstname}
-            />
-          </Cell>
-          <Cell label="Last Name:">
-            <TextInput
-              autoCapitalize="words"
-              autoCorrect={false}
-              editable
-              onChangeText={(lastname) => this.setState({ lastname })}
-              placeholder="Doe"
-              style={styles.textInputStyle}
-              underlineColorAndroid="transparent"
-              value={this.state.lastname}
-            />
-          </Cell>
-          <Cell label="Email:">
-            <TextInput
-              autoCapitalize="none"
-              autoCorrect={false}
-              editable
-              onChangeText={(email) => this.setState({ email })}
-              placeholder="john.doe@email.com"
-              style={styles.textInputStyle}
-              underlineColorAndroid="transparent"
-              value={this.state.email}
-            />
-          </Cell>
-          <Cell label="Phone:">
-            <TextInput
-              autoCapitalize="none"
-              autoCorrect={false}
-              editable
-              onChangeText={(phone) => this.setState({ phone })}
-              placeholder="8125553974"
-              style={styles.textInputStyle}
-              underlineColorAndroid="transparent"
-              value={this.state.phone}
-            />
-          </Cell>
-        </View>
+        <Cell
+          label="First Name:"
+          onPress={() => this.textFieldsRefs[0].current.focus()}
+        >
+          <TextInput
+            autoFocus
+            ref={this.textFieldsRefs[0]}
+            onSubmitEditing={() => this.textFieldsRefs[1].current.focus()}
+            autoCapitalize="words"
+            autoCorrect={false}
+            editable
+            onChangeText={(firstname) => this.setState({ firstname })}
+            placeholder="John"
+            returnKeyType="next"
+            style={styles.textInputStyle}
+            underlineColorAndroid="transparent"
+            value={this.state.firstname}
+          />
+        </Cell>
+        <Cell
+          label="Last Name:"
+          onPress={() => this.textFieldsRefs[1].current.focus()}
+        >
+          <TextInput
+            ref={this.textFieldsRefs[1]}
+            onSubmitEditing={() => this.textFieldsRefs[2].current.focus()}
+            autoCapitalize="words"
+            autoCorrect={false}
+            editable
+            onChangeText={(lastname) => this.setState({ lastname })}
+            placeholder="Doe"
+            returnKeyType="next"
+            style={styles.textInputStyle}
+            underlineColorAndroid="transparent"
+            value={this.state.lastname}
+          />
+        </Cell>
+        <Cell
+          label="Email:"
+          onPress={() => this.textFieldsRefs[2].current.focus()}
+        >
+          <TextInput
+            ref={this.textFieldsRefs[2]}
+            onSubmitEditing={() => this.textFieldsRefs[3].current.focus()}
+            autoCapitalize="none"
+            autoCorrect={false}
+            editable
+            keyboardType="email-address"
+            onChangeText={(email) => this.setState({ email })}
+            placeholder="john.doe@email.com"
+            returnKeyType="next"
+            style={styles.textInputStyle}
+            underlineColorAndroid="transparent"
+            value={this.state.email}
+          />
+        </Cell>
+        <Cell
+          label="Phone:"
+          onPress={() => this.textFieldsRefs[3].current.focus()}
+        >
+          <TextInput
+            ref={this.textFieldsRefs[3]}
+            autoCapitalize="none"
+            autoCorrect={false}
+            editable
+            keyboardType="phone-pad"
+            onChangeText={(phone) => this.setState({ phone })}
+            placeholder="8125553974"
+            returnKeyType="next"
+            style={styles.textInputStyle}
+            underlineColorAndroid="transparent"
+            value={this.state.phone}
+          />
+        </Cell>
         <View style={styles.signatureField}>
           <Text style={styles.signatureLabel}>Signature:</Text>
           <TouchableOpacity
@@ -139,20 +190,6 @@ class AddAttendeeScreen extends Component {
             onSaveEvent={this.onSignatureSave}
           />
         </View>
-        <Button
-          title="Save Attendee"
-          disabled={
-            this.state.firstname === '' ||
-            this.state.lastname === '' ||
-            this.state.email === ''
-          }
-          loading={this.props.isCreating}
-          icon={<Icon name="check-circle" size={25} color={Colors.white} />}
-          onPress={this.onSave}
-          titleStyle={styles.buttonTitle}
-          buttonStyle={styles.saveButton}
-          containerStyle={styles.buttonContainer}
-        />
       </ScrollView>
     );
   }
@@ -161,10 +198,6 @@ class AddAttendeeScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
-  },
-  inputFields: {
-    paddingLeft: 20,
-    paddingTop: 10,
   },
   textInputStyle: {
     flex: 1,
