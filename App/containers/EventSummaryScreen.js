@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  View,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -110,7 +109,10 @@ class EventSummaryScreen extends Component {
 
     return (
       <KeyboardAvoidingView behavior="padding">
-        <ScrollView style={styles.container}>
+        <ScrollView
+          style={styles.container}
+          keyboardShouldPersistTaps="handled"
+        >
           <Cell label="Event Name:">
             <TextInput
               autoCapitalize="words"

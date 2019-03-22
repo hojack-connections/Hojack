@@ -128,7 +128,7 @@ class AttendeeEdit extends Component {
     const attendee =
       eventAttendees.find((_attendee) => _attendee._id === attendeeId) || {};
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
         <Cell
           label="First Name:"
           onPress={() => this.textFieldsRefs[0].current.focus()}

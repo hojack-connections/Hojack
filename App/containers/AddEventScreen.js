@@ -58,7 +58,7 @@ class AddEventScreen extends Component {
     }
   }
 
-  onClickSave = () => {
+  onSave = () => {
     this.setState({ isCreating: true });
     this.props.event
       .create(this.state)
@@ -76,13 +76,13 @@ class AddEventScreen extends Component {
 
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
         <Cell
           label="Event Name:"
           onPress={() => this.textFieldsRefs[0].current.focus()}
         >
           <TextInput
-            autofocus
+            autoFocus
             ref={this.textFieldsRefs[0]}
             autoCapitalize="words"
             autoCorrect={false}
@@ -277,7 +277,7 @@ class AddEventScreen extends Component {
           }
           loading={this.state.isCreating}
           icon={<Icon name="check-circle" size={25} color={Colors.white} />}
-          onPress={() => this.onClickSave()}
+          onPress={this.onSave}
           titleStyle={styles.buttonTitle}
           buttonStyle={styles.saveButton}
           containerStyle={styles.buttonContainer}
