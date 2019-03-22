@@ -103,15 +103,14 @@ class SubmitSettingsScreen extends Component {
 
   render() {
     const eventId = this.props.navigation.getParam('id');
+    const _event = this.props.event.eventsById[eventId] || {};
     const attendees = this.props.event.attendeesById[eventId] || [];
     const receivers = this.props.event.receiversByEventId[eventId] || [];
 
     return (
       <>
         <HeaderSubtitle>
-          <Text style={{ color: '#538989' }}>
-            Total Attendees: {attendees.length}
-          </Text>
+          <Text style={{ color: '#538989' }}>{_event.name}</Text>
         </HeaderSubtitle>
         <ScrollView style={Styles.container}>
           <TouchableOpacity
