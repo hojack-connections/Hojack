@@ -5,26 +5,33 @@ import {
   StyleSheet,
   FlatList,
   TouchableHighlight,
+  TouchableOpacity,
 } from 'react-native';
-import { Button } from 'react-native-elements';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import { inject, observer } from 'mobx-react';
-import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 
 export default
 @inject('event', 'auth')
 @observer
 class EventAttendeesScreen extends Component {
-  static navigationOptions = () => ({
+  static navigationOptions = ({ navigation }) => ({
     title: 'Attendees',
+    headerRight: (
+      <TouchableOpacity
+        style={{ padding: 8, marginRight: 8 }}
+        onPress={() =>
+          navigation.navigate('AddAttendeeScreen', {
+            eventId: navigation.getParam('id'),
+          })
+        }
+      >
+        <Ionicon name="ios-add-circle-outline" color="white" size={30} />
+      </TouchableOpacity>
+    ),
   });
-
-  onAddClick = () => {
-    const eventId = this.props.navigation.getParam('id');
-    this.props.navigation.navigate('AddAttendeeScreen', { id: eventId });
-  };
 
   keyExtractor = (item, index) => index.toString();
 
@@ -87,14 +94,6 @@ class EventAttendeesScreen extends Component {
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
         />
-        <Button
-          title="Add Attendee"
-          icon={<Icon name="plus-circle" size={25} color={Colors.white} />}
-          onPress={this.onAddClick}
-          titleStyle={styles.buttonTitle}
-          buttonStyle={styles.addButton}
-          containerStyle={styles.buttonContainer}
-        />
       </View>
     );
   }
@@ -143,22 +142,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 10,
     top: 13,
-  },
-  buttonContainer: {
-    marginTop: 30,
-    marginBottom: 30,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
-  },
-  addButton: {
-    borderRadius: 10,
-    width: '100%',
-    height: 60,
-  },
-  buttonTitle: {
-    marginLeft: 10,
-    fontSize: normalize(20),
-    color: Colors.white,
   },
 });
