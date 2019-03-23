@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import normalize from '../helpers/normalizeText';
 import { Colors } from '../Themes/';
 import { Button } from 'react-native-elements';
@@ -34,8 +34,10 @@ class SettingsScreen extends React.Component {
         ? `${dayDifference} days`
         : `${monthDifference} months`;
     return (
-      <>
-        <Text>Current subscription expires in {expirationText}</Text>
+      <View style={styles.container}>
+        <Text style={styles.subscriptionText}>
+          Current subscription ends in {expirationText}.
+        </Text>
         <Button
           buttonStyle={styles.deleteButton}
           containerStyle={styles.buttonContainer}
@@ -43,18 +45,25 @@ class SettingsScreen extends React.Component {
           title="Logout"
           titleStyle={styles.buttonTitle}
         />
-      </>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    margin: 8,
+  },
+  subscriptionText: {
+    fontSize: 15,
+    paddingHorizontal: 12,
+  },
   buttonContainer: {
     marginTop: 15,
     marginBottom: 15,
     flexDirection: 'column',
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 12,
   },
   deleteButton: {
     backgroundColor: '#ff575c',
@@ -63,7 +72,6 @@ const styles = StyleSheet.create({
     height: 60,
   },
   buttonTitle: {
-    marginLeft: 10,
     fontSize: normalize(20),
     color: Colors.white,
   },
