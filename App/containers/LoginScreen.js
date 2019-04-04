@@ -56,6 +56,7 @@ class LoginScreen extends Component {
             source={require('../../assets/gocert.jpg')}
             resizeMode="contain"
             style={{
+              maxHeight: 150,
               flex: 1,
               alignSelf: 'center',
               marginTop: 60,

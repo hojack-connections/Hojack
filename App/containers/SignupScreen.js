@@ -62,6 +62,7 @@ class SignupScreen extends Component {
             source={require('../../assets/gocert.jpg')}
             resizeMode="contain"
             style={{
+              maxHeight: 150,
               alignSelf: 'center',
               flex: 1,
               marginTop: 60,
