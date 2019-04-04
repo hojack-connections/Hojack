@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, StyleSheet, Image } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Image,
+  KeyboardAvoidingView,
+} from 'react-native';
 import { Button } from 'react-native-elements';
 import normalize from '../helpers/normalizeText';
 import { Colors } from '../Themes/';
@@ -42,18 +49,21 @@ class SignupScreen extends Component {
     const { firstname, lastname, email, password } = this.state;
 
     return (
-      <>
-        <VFlex style={{ width: '100%' }}>
+      <KeyboardAvoidingView
+        behavior="position"
+        style={{ margin: 8, height: '100%' }}
+      >
+        <VFlex style={{ alignItems: 'flex-start', height: '100%' }}>
           <Image
             source={require('../../assets/gocert.jpg')}
             resizeMode="contain"
             style={{
+              alignSelf: 'center',
+              flex: 1,
               marginTop: 60,
               marginBottom: 30,
             }}
           />
-        </VFlex>
-        <VFlex style={{ alignItems: 'flex-start', margin: 8 }}>
           <Text style={{ marginBottom: 10, fontSize: 28, width: '100%' }}>
             Create Account
           </Text>
@@ -125,7 +135,7 @@ class SignupScreen extends Component {
             </Text>
           </HFlex>
         </VFlex>
-      </>
+      </KeyboardAvoidingView>
     );
   }
 }

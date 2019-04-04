@@ -4,16 +4,13 @@ import {
   Text,
   TextInput,
   StyleSheet,
-  TouchableOpacity,
-  Platform,
-  StatusBar,
   Image,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import normalize from '../helpers/normalizeText';
-import { Colors, Styles } from '../Themes/';
+import { Colors } from '../Themes/';
 import { inject, observer } from 'mobx-react';
-import styled from 'styled-components';
 import { VFlex, HFlex } from '../components/Shared';
 
 export default
@@ -50,18 +47,21 @@ class LoginScreen extends Component {
 
   render() {
     return (
-      <>
-        <VFlex style={{ width: '100%' }}>
+      <KeyboardAvoidingView
+        behavior="position"
+        style={{ margin: 8, height: '100%' }}
+      >
+        <VFlex style={{ alignItems: 'flex-start', height: '100%' }}>
           <Image
             source={require('../../assets/gocert.jpg')}
             resizeMode="contain"
             style={{
+              flex: 1,
+              alignSelf: 'center',
               marginTop: 60,
               marginBottom: 30,
             }}
           />
-        </VFlex>
-        <VFlex style={{ alignItems: 'flex-start', margin: 8 }}>
           <Text style={{ marginBottom: 10, fontSize: 28, width: '100%' }}>
             Sign In
           </Text>
@@ -119,7 +119,7 @@ class LoginScreen extends Component {
             </Text>
           </HFlex>
         </VFlex>
-      </>
+      </KeyboardAvoidingView>
     );
   }
 }
