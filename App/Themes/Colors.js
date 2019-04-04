@@ -7,7 +7,7 @@ export default {
   blue: '#1caaff',
   gray: 'rgba(228, 228, 229, 1)',
   lightgray: '#eef2f6',
-  darkGray: '#222222',
+  darkGray: 'rgba(152, 152, 152, 1)',
   whitesmoke: '#f8f9fd',
   textGrayBlur: 'rgba(0,0,0,0.3)',
 

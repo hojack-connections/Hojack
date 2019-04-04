@@ -22,7 +22,8 @@ const handleCustomTransition = ({ scenes }) => {
   if (
     nextScene.route.routeName === 'StartTrial' ||
     nextScene.route.routeName === 'PurchaseSubscription' ||
-    nextScene.route.routeName === 'RenewSubscription'
+    nextScene.route.routeName === 'RenewSubscription' ||
+    nextScene.route.routeName === 'SettingsScreen'
   ) {
     return fromBottom();
   }

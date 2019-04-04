@@ -34,4 +34,17 @@ export default class UserStore {
       throw err;
     }
   }
+
+  async update(data) {
+    try {
+      await axios.put('/users', {
+        ...data,
+        token: this.authStore.token,
+      });
+      await this.authStore.loadCurrentUser();
+    } catch (err) {
+      console.log('Error updating user', err);
+      throw err;
+    }
+  }
 }

@@ -7,7 +7,6 @@ export const VFlex = styled.View`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 8px;
 `;
 
 /**
@@ -17,6 +16,4 @@ export const HFlex = styled.View`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 8px;
-  width: 100%;
 `;
