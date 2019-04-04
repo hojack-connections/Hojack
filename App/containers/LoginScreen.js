@@ -93,7 +93,7 @@ class LoginScreen extends Component {
               autoCorrect={false}
               underlineColorAndroid="transparent"
               placeholder="Password"
-              returnKeyType="go"
+              returnKeyType="done"
             />
           </View>
           <Button

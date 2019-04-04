@@ -25,6 +25,10 @@ class SignupScreen extends Component {
     isLoading: false,
   };
 
+  lastNameTextInputRef = React.createRef();
+  emailTextInputRef = React.createRef();
+  passwordTextInputRef = React.createRef();
+
   onSignup = () => {
     this.setState({ isLoading: true });
     this.props.user
@@ -72,45 +76,56 @@ class SignupScreen extends Component {
               style={styles.input}
               value={firstname}
               onChangeText={(firstname) => this.setState({ firstname })}
+              onSubmitEditing={() => this.lastNameTextInputRef.current.focus()}
               autoCorrect={false}
               autoCapitalize="words"
               underlineColorAndroid="transparent"
               placeholder="First Name"
+              returnKeyType="next"
             />
           </View>
           <View style={styles.inputField}>
             <TextInput
+              ref={this.lastNameTextInputRef}
               style={styles.input}
               value={lastname}
               onChangeText={(lastname) => this.setState({ lastname })}
+              onSubmitEditing={() => this.emailTextInputRef.current.focus()}
               autoCorrect={false}
               autoCapitalize="words"
               underlineColorAndroid="transparent"
               placeholder="Last Name"
+              returnKeyType="next"
             />
           </View>
           <View style={styles.inputField}>
             <TextInput
+              ref={this.emailTextInputRef}
               style={styles.input}
               value={email}
               onChangeText={(email) => this.setState({ email })}
+              onSubmitEditing={() => this.passwordTextInputRef.current.focus()}
               autoCapitalize="none"
               autoCorrect={false}
               underlineColorAndroid="transparent"
               placeholder="Email"
               keyboardType="email-address"
+              returnKeyType="next"
             />
           </View>
           <View style={styles.inputField}>
             <TextInput
+              ref={this.passwordTextInputRef}
               autoCapitalize="none"
               autoCorrect={false}
               onChangeText={(password) => this.setState({ password })}
+              onSubmitEditing={this.onSignup}
               placeholder="Password"
               secureTextEntry
               style={styles.input}
               underlineColorAndroid="transparent"
               value={password}
+              returnKeyType="done"
             />
           </View>
           <Button
