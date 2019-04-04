@@ -14,7 +14,6 @@ import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 import { inject, observer } from 'mobx-react';
 import { Button } from 'react-native-elements';
-import HeaderSubtitle from '../components/HeaderSubtitle';
 
 export default
 @inject('receiver', 'event')
@@ -31,7 +30,7 @@ class SubmitSettingsScreen extends Component {
           })
         }
       >
-        <Ionicon name="ios-create" color="white" size={30} />
+        <Ionicon name="ios-create" color={Colors.purple} size={30} />
       </TouchableOpacity>
     ),
   });
@@ -110,9 +109,6 @@ class SubmitSettingsScreen extends Component {
 
     return (
       <>
-        <HeaderSubtitle>
-          <Text style={{ color: '#538989' }}>{_event.name}</Text>
-        </HeaderSubtitle>
         <ScrollView style={Styles.container}>
           <TouchableOpacity
             style={styles.allEventsContainer}

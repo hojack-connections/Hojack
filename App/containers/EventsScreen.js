@@ -18,7 +18,7 @@ export default
 @inject('user', 'auth', 'event', 'attendee', 'subscription')
 @observer
 class EventsScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({ navigation, navigationOptions }) => ({
     title: 'Events',
     headerLeft: (
       <TouchableOpacity
@@ -36,6 +36,11 @@ class EventsScreen extends Component {
         <Text style={{ fontSize: 17, color: Colors.purple }}>Account</Text>
       </TouchableOpacity>
     ),
+    headerStyle: {
+      ...navigationOptions.headerStyle,
+      // Override in favor of the SearchBar border bottom
+      borderBottomWidth: 0,
+    },
   });
 
   state = {
@@ -87,13 +92,24 @@ class EventsScreen extends Component {
   render() {
     return (
       <View style={Styles.container}>
-        <SearchBar
-          cancelButtonProps={{ color: Colors.purple }}
-          onChangeText={(searchText) => this.setState({ searchText })}
-          placeholder="Search"
-          platform={'ios'}
-          value={this.state.searchText}
-        />
+        <View
+          style={{
+            backgroundColor: Colors.navigation,
+            borderBottomColor: Colors.gray,
+            borderBottomWidth: 1,
+          }}
+        >
+          <SearchBar
+            cancelButtonProps={{ color: Colors.purple }}
+            onChangeText={(searchText) => this.setState({ searchText })}
+            placeholder="Search"
+            platform={'ios'}
+            value={this.state.searchText}
+            containerStyle={{
+              backgroundColor: Colors.navigation,
+            }}
+          />
+        </View>
         <FlatList
           data={this.props.event.events.filter(
             (event) => event.name.indexOf(this.state.searchText) !== -1

@@ -51,7 +51,8 @@ export default createStackNavigator(
     defaultNavigationOptions: {
       headerStyle: {
         backgroundColor: Colors.navigation,
-        borderBottomWidth: 0,
+        borderBottomColor: Colors.gray,
+        borderBottomWidth: 1,
       },
       headerTitleStyle: {
         color: Colors.black,

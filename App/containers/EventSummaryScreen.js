@@ -29,7 +29,7 @@ class EventSummaryScreen extends Component {
         {navigation.getParam('isUpdating') ? (
           <ActivityIndicator animating color="white" />
         ) : (
-          <Ionicon name="ios-save" color="white" size={30} />
+          <Ionicon name="ios-save" color={Colors.purple} size={30} />
         )}
       </TouchableOpacity>
     ),
