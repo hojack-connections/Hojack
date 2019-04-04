@@ -3,7 +3,7 @@ import Colors from '../Themes/Colors';
 
 import EventsScreen from '../containers/EventsScreen';
 import AddEventScreen from '../containers/AddEventScreen';
-import SettingsScreen from '../containers/SettingsScreen';
+import AccountScreen from '../containers/AccountScreen';
 import EventSummaryScreen from '../containers/EventSummaryScreen';
 import EventAttendeesScreen from '../containers/EventAttendeesScreen';
 import AddAttendeeScreen from '../containers/AddAttendeeScreen';
@@ -23,7 +23,7 @@ const handleCustomTransition = ({ scenes }) => {
     nextScene.route.routeName === 'StartTrial' ||
     nextScene.route.routeName === 'PurchaseSubscription' ||
     nextScene.route.routeName === 'RenewSubscription' ||
-    nextScene.route.routeName === 'SettingsScreen'
+    nextScene.route.routeName === 'AccountScreen'
   ) {
     return fromBottom();
   }
@@ -38,7 +38,7 @@ export default createStackNavigator(
     // AttendeeSummaryScreen: { screen: AttendeeSummaryScreen },
     AddAttendeeScreen: { screen: AddAttendeeScreen },
     AddEventScreen: { screen: AddEventScreen },
-    SettingsScreen: { screen: SettingsScreen },
+    AccountScreen: { screen: AccountScreen },
     EventDetailScreen: { screen: EventDetailScreen },
     StartTrial: { screen: StartTrial },
     PurchaseSubscription: { screen: PurchaseSubscription },

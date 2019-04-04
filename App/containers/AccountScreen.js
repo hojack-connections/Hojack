@@ -30,7 +30,7 @@ const DefaultText = styled(TextInput)`
 export default
 @inject('auth', 'subscription', 'user')
 @observer
-class SettingsScreen extends React.Component {
+class AccountScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Account',
     headerLeft: (

@@ -31,7 +31,7 @@ class EventsScreen extends Component {
     headerRight: (
       <TouchableOpacity
         style={{ padding: 8, marginRight: 8 }}
-        onPress={() => navigation.navigate('SettingsScreen')}
+        onPress={() => navigation.navigate('AccountScreen')}
       >
         <Text style={{ fontSize: 17, color: Colors.purple }}>Account</Text>
       </TouchableOpacity>
