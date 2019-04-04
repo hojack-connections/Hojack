@@ -7,11 +7,14 @@ import {
   TouchableOpacity,
   Platform,
   StatusBar,
+  Image,
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 import { inject, observer } from 'mobx-react';
+import styled from 'styled-components';
+import { VFlex, HFlex } from '../components/Shared';
 
 export default
 @inject('user', 'auth')
@@ -20,32 +23,24 @@ class LoginScreen extends Component {
   state = {
     email: '',
     password: '',
-    warning: '',
-    isLoggingIn: false,
+    isLoading: false,
   };
 
   passwordTextInputRef;
 
   onLogin = () => {
-    this.setState({
-      isLoggingIn: true,
-      warning: '',
-    });
+    this.setState({ isLoading: true });
     this.props.user
       .login(this.state)
       .then(() => {
+        this.setState({ isLoading: false });
         if (this.props.auth.authenticated) {
           this.props.navigation.navigate('App');
         }
-        this.setState({
-          isLoggingIn: false,
-        });
       })
       .catch(() => {
         alert('There was a problem logging in. Please try again.');
-        this.setState({
-          isLoggingIn: false,
-        });
+        this.setState({ isLoading: false });
       });
   };
 
@@ -55,11 +50,22 @@ class LoginScreen extends Component {
 
   render() {
     return (
-      <View style={Styles.container}>
-        <StatusBar barStyle="dark-content" />
-        <View style={styles.subContainer}>
+      <>
+        <VFlex style={{ width: '100%' }}>
+          <Image
+            source={require('../../assets/gocert.jpg')}
+            resizeMode="contain"
+            style={{
+              marginTop: 60,
+              marginBottom: 30,
+            }}
+          />
+        </VFlex>
+        <VFlex style={{ alignItems: 'flex-start', margin: 8 }}>
+          <Text style={{ marginBottom: 10, fontSize: 28, width: '100%' }}>
+            Sign In
+          </Text>
           <View style={styles.inputField}>
-            <Text style={styles.label}>Email: </Text>
             <TextInput
               style={styles.input}
               value={this.props.email}
@@ -68,13 +74,12 @@ class LoginScreen extends Component {
               autoCapitalize="none"
               autoCorrect={false}
               underlineColorAndroid="transparent"
-              placeholder="email"
+              placeholder="Email"
               keyboardType="email-address"
               returnKeyType="next"
             />
           </View>
           <View style={styles.inputField}>
-            <Text style={styles.label}>Password: </Text>
             <TextInput
               ref={(input) => {
                 this.passwordTextInputRef = input;
@@ -87,78 +92,53 @@ class LoginScreen extends Component {
               autoCapitalize="none"
               autoCorrect={false}
               underlineColorAndroid="transparent"
-              placeholder="password"
+              placeholder="Password"
               returnKeyType="go"
             />
-          </View>
-          <View style={styles.errorField}>
-            <Text style={styles.errorLabel}>
-              {/*warning !== '' ? warning : error ? error.data : null*/}
-            </Text>
           </View>
           <Button
             title="Log In"
             disabled={this.props.email === '' || this.props.password === ''}
-            loading={this.state.isLoggingIn}
+            loading={this.state.isLoading}
             onPress={this.onLogin}
             titleStyle={styles.buttonTitle}
             buttonStyle={styles.loginButton}
             containerStyle={styles.buttonContainer}
           />
-          <TouchableOpacity
-            onPress={this.onBacktoSignup}
-            style={{ marginTop: 10 }}
-          >
+          <HFlex style={{ justifyContent: 'center', marginTop: 10 }}>
+            <Text style={{ fontSize: 18 }}>No account?</Text>
             <Text
               style={{
-                fontSize: normalize(14),
                 color: 'blue',
-                textDecorationLine: 'underline',
+                marginLeft: 8,
+                fontSize: 18,
               }}
+              onPress={this.onBacktoSignup}
             >
-              Go to Sign Up
+              Create One!
             </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+          </HFlex>
+        </VFlex>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  subContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    paddingHorizontal: 30,
-  },
   inputField: {
+    padding: 8,
+    borderRadius: 12,
     alignItems: 'center',
     flexDirection: 'row',
-    paddingVertical: Platform.OS === 'ios' ? 10 : 0,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.black,
-    height: 46,
-    marginBottom: 10,
+    marginBottom: 15,
+    backgroundColor: Colors.gray,
   },
   input: {
-    marginLeft: 15,
     flex: 1,
-  },
-  label: {
-    fontSize: normalize(16),
-    width: 120,
-  },
-  errorField: {
-    justifyContent: 'center',
-    height: 40,
-  },
-  errorLabel: {
-    fontSize: normalize(14),
-    color: 'red',
+    paddingLeft: 8,
   },
   buttonContainer: {
-    marginTop: 30,
+    marginBottom: 15,
     width: '100%',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -166,10 +146,10 @@ const styles = StyleSheet.create({
   loginButton: {
     borderRadius: 10,
     width: '100%',
-    height: 60,
+    height: 50,
+    backgroundColor: Colors.purple,
   },
   buttonTitle: {
-    marginLeft: 10,
     fontSize: normalize(20),
     color: Colors.white,
   },

@@ -6,7 +6,7 @@ import styled from 'styled-components';
 export const VFlex = styled.View`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
   padding: 8px;
 `;
 

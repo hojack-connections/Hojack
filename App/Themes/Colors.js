@@ -5,6 +5,7 @@ export default {
   navigation: 'rgba(246, 246, 247, 1)',
   darkBlack: '#252d34',
   blue: '#1caaff',
+  gray: 'rgba(228, 228, 229, 1)',
   lightgray: '#eef2f6',
   darkGray: '#222222',
   whitesmoke: '#f8f9fd',

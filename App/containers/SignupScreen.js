@@ -1,20 +1,10 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  Platform,
-  StatusBar,
-} from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image } from 'react-native';
 import { Button } from 'react-native-elements';
-
 import normalize from '../helpers/normalizeText';
-import { Colors, Styles } from '../Themes/';
-import * as EmailValidator from 'email-validator';
-
+import { Colors } from '../Themes/';
 import { inject, observer } from 'mobx-react';
+import { VFlex, HFlex } from '../components/Shared';
 
 export default
 @inject('user', 'auth')
@@ -25,31 +15,23 @@ class SignupScreen extends Component {
     lastname: '',
     email: '',
     password: '',
-    warning: '',
+    isLoading: false,
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.isRegistered && nextProps.isRegistered) {
-      this.props.navigation.navigate('LoginScreen');
-    }
-  }
-
   onSignup = () => {
-    if (!EmailValidator.validate(this.state.email)) {
-      this.setState({ warning: 'Email is not valid' });
-    } else {
-      this.setState({ warning: '' });
-      this.props.user
-        .signup(this.state)
-        .then(() => {
-          if (this.props.auth.authenticated) {
-            this.props.navigation.navigate('App');
-          }
-        })
-        .catch(() => {
-          alert('There was a problem logging in. Please try again.');
-        });
-    }
+    this.setState({ isLoading: true });
+    this.props.user
+      .signup(this.state)
+      .then(() => {
+        this.setState({ isLoading: false });
+        if (this.props.auth.authenticated) {
+          this.props.navigation.navigate('App');
+        }
+      })
+      .catch(() => {
+        this.setState({ isLoading: false });
+        alert('There was a problem creating your account. Please try again.');
+      });
   };
 
   onGotoLogin = () => {
@@ -57,15 +39,25 @@ class SignupScreen extends Component {
   };
 
   render() {
-    const { error, isFetching } = this.props;
-    const { warning, firstname, lastname, email, password } = this.state;
+    const { firstname, lastname, email, password } = this.state;
 
     return (
-      <View style={Styles.container}>
-        <StatusBar barStyle="dark-content" />
-        <View style={styles.subContainer}>
+      <>
+        <VFlex style={{ width: '100%' }}>
+          <Image
+            source={require('../../assets/gocert.jpg')}
+            resizeMode="contain"
+            style={{
+              marginTop: 60,
+              marginBottom: 30,
+            }}
+          />
+        </VFlex>
+        <VFlex style={{ alignItems: 'flex-start', margin: 8 }}>
+          <Text style={{ marginBottom: 10, fontSize: 28, width: '100%' }}>
+            Create Account
+          </Text>
           <View style={styles.inputField}>
-            <Text style={styles.label}>First Name: </Text>
             <TextInput
               style={styles.input}
               value={firstname}
@@ -77,7 +69,6 @@ class SignupScreen extends Component {
             />
           </View>
           <View style={styles.inputField}>
-            <Text style={styles.label}>Last Name: </Text>
             <TextInput
               style={styles.input}
               value={lastname}
@@ -89,7 +80,6 @@ class SignupScreen extends Component {
             />
           </View>
           <View style={styles.inputField}>
-            <Text style={styles.label}>Email: </Text>
             <TextInput
               style={styles.input}
               value={email}
@@ -102,7 +92,6 @@ class SignupScreen extends Component {
             />
           </View>
           <View style={styles.inputField}>
-            <Text style={styles.label}>Password: </Text>
             <TextInput
               autoCapitalize="none"
               autoCorrect={false}
@@ -114,80 +103,48 @@ class SignupScreen extends Component {
               value={password}
             />
           </View>
-          <View style={styles.errorField}>
-            <Text style={styles.errorLabel}>
-              {warning || (error && error.data)}
-            </Text>
-          </View>
           <Button
-            title="Register"
-            loading={isFetching}
-            disabled={
-              firstname === '' ||
-              lastname === '' ||
-              email === '' ||
-              password === ''
-            }
+            title="Sign Up"
+            loading={this.state.isLoading}
             onPress={this.onSignup}
             titleStyle={styles.buttonTitle}
             buttonStyle={styles.signupButton}
             containerStyle={styles.buttonContainer}
           />
-          <TouchableOpacity
-            onPress={this.onGotoLogin}
-            style={{ marginTop: 10 }}
-          >
+          <HFlex style={{ justifyContent: 'center', marginTop: 10 }}>
+            <Text style={{ fontSize: 18 }}>Already have an account?</Text>
             <Text
               style={{
-                fontSize: normalize(14),
                 color: 'blue',
-                textDecorationLine: 'underline',
+                marginLeft: 8,
+                fontSize: 18,
               }}
+              onPress={this.onGotoLogin}
             >
-              Already registered? Go to LogIn
+              Login
             </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+          </HFlex>
+        </VFlex>
+      </>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  subContainer: {
-    justifyContent: 'center',
-    flexDirection: 'column',
-    alignItems: 'center',
-    flex: 1,
-    paddingHorizontal: 30,
-  },
   inputField: {
+    padding: 8,
+    borderRadius: 12,
     alignItems: 'center',
     flexDirection: 'row',
-    paddingVertical: Platform.OS === 'ios' ? 10 : 0,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.black,
-    height: 46,
-    marginBottom: 10,
+    marginBottom: 15,
+    backgroundColor: Colors.gray,
   },
   input: {
-    marginLeft: 15,
     flex: 1,
-  },
-  label: {
-    fontSize: normalize(16),
-    width: 120,
-  },
-  errorField: {
-    justifyContent: 'center',
-    height: 40,
-  },
-  errorLabel: {
-    fontSize: normalize(14),
-    color: 'red',
+    paddingLeft: 8,
   },
   buttonContainer: {
-    marginTop: 30,
+    marginBottom: 15,
     width: '100%',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -195,10 +152,10 @@ const styles = StyleSheet.create({
   signupButton: {
     borderRadius: 10,
     width: '100%',
-    height: 60,
+    backgroundColor: Colors.purple,
+    height: 50,
   },
   buttonTitle: {
-    marginLeft: 10,
     fontSize: normalize(20),
     color: Colors.white,
   },

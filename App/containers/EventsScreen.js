@@ -68,11 +68,11 @@ class EventsScreen extends Component {
   renderItem = ({ item, index }) => (
     <TouchableOpacity onPress={() => this._onItemClick(index, item._id)}>
       <View style={styles.listItemContainer}>
-      <View>
-        <Text style={styles.categoryTitle}>{item.name}</Text>
-        <Text style={styles.eventDate}>
-          {moment(item.date).format('MMMM DD, YYYY')}
-        </Text>
+        <View>
+          <Text style={styles.categoryTitle}>{item.name}</Text>
+          <Text style={styles.eventDate}>
+            {moment(item.date).format('MMMM DD, YYYY')}
+          </Text>
         </View>
         <Icon
           name="chevron-right"
@@ -137,6 +137,5 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginTop: 5,
   },
-  arrow: {
-  },
+  arrow: {},
 });
