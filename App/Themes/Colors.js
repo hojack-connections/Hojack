@@ -1,8 +1,8 @@
-const colors = {
+export default {
   black: '#000000',
   white: '#FFFFFF',
-  background: '#d7dee3',
-  navigation: '#43515e',
+  background: 'rgba(243, 243, 243, 1)',
+  navigation: 'rgba(246, 246, 247, 1)',
   darkBlack: '#252d34',
   blue: '#1caaff',
   lightgray: '#eef2f6',
@@ -12,7 +12,7 @@ const colors = {
 
   /* secondary colors */
   lightgreen: '#7edb17',
-  purple: '#6d36ff',
+  purple: 'rgba(146, 62, 218, 1)',
   red: '#ff4a43',
   yellow: '#ffd03e',
   darkblue: '#1d6ef5',
@@ -26,5 +26,3 @@ const colors = {
   filterBox: 'rgb(248,249,253)',
   lightblack: 'rgba(0, 0, 0, 0.6)',
 };
-
-export default colors;

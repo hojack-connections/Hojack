@@ -1,7 +1,7 @@
 import Colors from './Colors';
 import normalize from '../helpers/normalizeText';
 
-const Styles = {
+export default {
   nav: {
     header: {
       backgroundColor: Colors.navigation,
@@ -22,5 +22,3 @@ const Styles = {
     top: 15,
   },
 };
-
-export default Styles;

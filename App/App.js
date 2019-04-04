@@ -10,7 +10,7 @@ YellowBox.ignoreWarnings([
   'Warning: isMounted(...) is deprecated',
   'Module RCTImageLoader',
 ]);
-StatusBar.setBarStyle('light-content', true);
+StatusBar.setBarStyle('dark-content', true);
 
 const AppContainer = createAppContainer(
   createSwitchNavigator({

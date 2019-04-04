@@ -54,10 +54,10 @@ export default createStackNavigator(
         borderBottomWidth: 0,
       },
       headerTitleStyle: {
-        color: Colors.white,
+        color: Colors.black,
         fontSize: 17,
       },
-      headerTintColor: 'white',
+      headerTintColor: Colors.purple,
     },
   }
 );

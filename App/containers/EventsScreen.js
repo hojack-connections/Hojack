@@ -11,8 +11,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import { Colors, Styles } from '../Themes/';
 import { inject, observer } from 'mobx-react';
-import HeaderSubtitle from '../components/HeaderSubtitle';
 import idx from 'idx';
+import { SearchBar } from 'react-native-elements';
 
 export default
 @inject('user', 'auth', 'event', 'attendee', 'subscription')
@@ -25,7 +25,7 @@ class EventsScreen extends Component {
         style={{ padding: 8, marginLeft: 8 }}
         onPress={() => navigation.navigate('AddEventScreen')}
       >
-        <Ionicon name="ios-add-circle-outline" color="white" size={30} />
+        <Ionicon name="ios-add" color={Colors.purple} size={30} />
       </TouchableOpacity>
     ),
     headerRight: (
@@ -33,10 +33,14 @@ class EventsScreen extends Component {
         style={{ padding: 8, marginRight: 8 }}
         onPress={() => navigation.navigate('SettingsScreen')}
       >
-        <Ionicon name="ios-cog" color="white" size={30} />
+        <Text style={{ fontSize: 17, color: Colors.purple }}>Account</Text>
       </TouchableOpacity>
     ),
   });
+
+  state = {
+    searchText: '',
+  };
 
   componentDidMount() {
     this.props.subscription.loadActiveSubscription().then(() => {
@@ -64,12 +68,11 @@ class EventsScreen extends Component {
   renderItem = ({ item, index }) => (
     <TouchableOpacity onPress={() => this._onItemClick(index, item._id)}>
       <View style={styles.listItemContainer}>
+      <View>
+        <Text style={styles.categoryTitle}>{item.name}</Text>
         <Text style={styles.eventDate}>
-          {moment(item.date).format('MMM DD, YYYY')}
+          {moment(item.date).format('MMMM DD, YYYY')}
         </Text>
-        <View style={styles.seperator} />
-        <View style={styles.subDetails}>
-          <Text style={styles.categoryTitle}>{item.name}</Text>
         </View>
         <Icon
           name="chevron-right"
@@ -84,16 +87,17 @@ class EventsScreen extends Component {
   render() {
     return (
       <View style={Styles.container}>
-        <HeaderSubtitle>
-          <Text style={{ color: '#895353' }}>
-            Total Attendees: {this.props.attendee.totalAttendeeCount}
-          </Text>
-          <Text style={{ color: '#538989' }}>
-            Total Events: {this.props.event.totalEventCount}
-          </Text>
-        </HeaderSubtitle>
+        <SearchBar
+          cancelButtonProps={{ color: Colors.purple }}
+          onChangeText={(searchText) => this.setState({ searchText })}
+          placeholder="Search"
+          platform={'ios'}
+          value={this.state.searchText}
+        />
         <FlatList
-          data={this.props.event.events}
+          data={this.props.event.events.filter(
+            (event) => event.name.indexOf(this.state.searchText) !== -1
+          )}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
         />
@@ -113,15 +117,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   listItemContainer: {
-    // paddingHorizontal: 30,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 30,
     paddingVertical: 10,
     backgroundColor: Colors.white,
-    height: 70,
     marginBottom: 10,
   },
   eventDate: {
-    marginLeft: 20,
-    fontWeight: '700',
+    marginTop: 4,
+    color: 'rgba(142, 142, 147, 1)',
   },
   seperator: {
     backgroundColor: Colors.black,
@@ -130,16 +137,6 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginTop: 5,
   },
-  subDetails: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 30,
-    paddingVertical: 10,
-  },
   arrow: {
-    position: 'absolute',
-    right: 10,
-    top: 44,
   },
 });
