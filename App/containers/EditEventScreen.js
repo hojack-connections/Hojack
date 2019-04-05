@@ -18,7 +18,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 export default
 @inject('event')
 @observer
-class EventSummaryScreen extends Component {
+class EditEventScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Edit Event',
     headerRight: (

@@ -4,7 +4,7 @@ import Colors from '../Themes/Colors'
 import EventsScreen from '../containers/EventsScreen'
 import AddEventScreen from '../containers/AddEventScreen'
 import AccountScreen from '../containers/AccountScreen'
-import EventSummaryScreen from '../containers/EventSummaryScreen'
+import EditEventScreen from '../containers/EditEventScreen'
 import EventAttendeesScreen from '../containers/EventAttendeesScreen'
 import AddAttendeeScreen from '../containers/AddAttendeeScreen'
 import EventDetailScreen from '../containers/EventDetailScreen'
@@ -33,7 +33,7 @@ const handleCustomTransition = ({ scenes }) => {
 export default createStackNavigator(
   {
     Home: { screen: EventsScreen },
-    EventSummaryScreen: { screen: EventSummaryScreen },
+    EditEventScreen: { screen: EditEventScreen },
     EventAttendeesScreen: { screen: EventAttendeesScreen },
     // AttendeeSummaryScreen: { screen: AttendeeSummaryScreen },
     AddAttendeeScreen: { screen: AddAttendeeScreen },

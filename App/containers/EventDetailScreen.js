@@ -30,7 +30,7 @@ class SubmitSettingsScreen extends Component {
       <TouchableOpacity
         style={{ padding: 8, marginRight: 8 }}
         onPress={() =>
-          navigation.navigate('EventSummaryScreen', {
+          navigation.navigate('EditEventScreen', {
             id: navigation.getParam('id'),
           })
         }
