@@ -10,10 +10,9 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native'
-import Ionicon from 'react-native-vector-icons/Ionicons'
 import SignatureCapture from 'react-native-signature-capture'
 import { inject, observer } from 'mobx-react'
-import Cell from '../components/Cell'
+import { Cell } from '../components/Shared'
 import normalize from '../helpers/normalizeText'
 import { Colors } from '../Themes/'
 
@@ -96,10 +95,7 @@ class AddAttendeeScreen extends Component {
     const signatureWidth = Dimensions.get('window').width - 50
     return (
       <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
-        <Cell
-          label="First Name:"
-          onPress={() => this.textFieldsRefs[0].current.focus()}
-        >
+        <Cell onPress={() => this.textFieldsRefs[0].current.focus()}>
           <TextInput
             autoFocus
             ref={this.textFieldsRefs[0]}
@@ -108,17 +104,14 @@ class AddAttendeeScreen extends Component {
             autoCorrect={false}
             editable
             onChangeText={(firstname) => this.setState({ firstname })}
-            placeholder="John"
+            placeholder="First Name"
             returnKeyType="next"
             style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.firstname}
           />
         </Cell>
-        <Cell
-          label="Last Name:"
-          onPress={() => this.textFieldsRefs[1].current.focus()}
-        >
+        <Cell onPress={() => this.textFieldsRefs[1].current.focus()}>
           <TextInput
             ref={this.textFieldsRefs[1]}
             onSubmitEditing={() => this.textFieldsRefs[2].current.focus()}
@@ -126,17 +119,14 @@ class AddAttendeeScreen extends Component {
             autoCorrect={false}
             editable
             onChangeText={(lastname) => this.setState({ lastname })}
-            placeholder="Doe"
+            placeholder="Last Name"
             returnKeyType="next"
             style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.lastname}
           />
         </Cell>
-        <Cell
-          label="Email:"
-          onPress={() => this.textFieldsRefs[2].current.focus()}
-        >
+        <Cell onPress={() => this.textFieldsRefs[2].current.focus()}>
           <TextInput
             ref={this.textFieldsRefs[2]}
             onSubmitEditing={() => this.textFieldsRefs[3].current.focus()}
@@ -152,10 +142,7 @@ class AddAttendeeScreen extends Component {
             value={this.state.email}
           />
         </Cell>
-        <Cell
-          label="Phone:"
-          onPress={() => this.textFieldsRefs[3].current.focus()}
-        >
+        <Cell onPress={() => this.textFieldsRefs[3].current.focus()}>
           <TextInput
             ref={this.textFieldsRefs[3]}
             autoCapitalize="none"
@@ -202,6 +189,7 @@ class AddAttendeeScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
+    paddingTop: 8,
   },
   textInputStyle: {
     flex: 1,

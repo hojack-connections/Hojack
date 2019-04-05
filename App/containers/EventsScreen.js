@@ -74,7 +74,7 @@ class EventsScreen extends Component {
             {moment(item.date).format('MMMM DD, YYYY')}
           </CellText>
         </View>
-        <Icon name="chevron-right" size={16} color={'#797979'} />
+        <Icon name="chevron-right" size={16} color={Colors.darkGray} />
       </Cell>
     </TouchableOpacity>
   )

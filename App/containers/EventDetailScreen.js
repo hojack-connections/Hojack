@@ -199,77 +199,76 @@ class SubmitSettingsScreen extends Component {
     const eventId = this.props.navigation.getParam('id')
     const attendees = this.props.event.attendeesById[eventId] || []
     return (
-      <View style={styles.container}>
-        <FlatList
-          data={attendees}
-          keyExtractor={(item) => item._id}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() =>
-                this.props.navigation.navigate('AttendeeDetail', {
-                  attendeeId: item._id,
-                  eventId,
-                })
-              }
-            >
-              <Cell>
-                <CellText>{`${item.firstname} ${item.lastname}`}</CellText>
-                <Icon
-                  name="chevron-right"
-                  size={16}
-                  color={'#797979'}
-                  style={styles.arrow}
-                />
-              </Cell>
-            </TouchableOpacity>
-          )}
-          ListHeaderComponent={
-            <View
+      <FlatList
+        data={attendees}
+        style={styles.container}
+        keyExtractor={(item) => item._id}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.navigate('AttendeeDetail', {
+                attendeeId: item._id,
+                eventId,
+              })
+            }
+          >
+            <Cell>
+              <CellText>{`${item.firstname} ${item.lastname}`}</CellText>
+              <Icon
+                name="chevron-right"
+                size={16}
+                color={Colors.darkGray}
+                style={styles.arrow}
+              />
+            </Cell>
+          </TouchableOpacity>
+        )}
+        ListHeaderComponent={
+          <View
+            style={{
+              borderBottomColor: Colors.gray,
+              borderBottomWidth: 1,
+              marginBottom: 8,
+            }}
+          >
+            <Text
               style={{
-                borderBottomColor: Colors.gray,
-                borderBottomWidth: 1,
-                marginBottom: 8,
+                marginLeft: 8,
+                marginBottom: 4,
+                marginTop: 8,
+                color: Colors.darkGray,
               }}
             >
-              <Text
+              ATTENDEES
+            </Text>
+          </View>
+        }
+        ListFooterComponent={
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.navigate('AddAttendeeScreen', {
+                id: eventId,
+              })
+            }
+          >
+            <Cell style={{ justifyContent: 'flex-start' }}>
+              <Ionicon
+                name="ios-add-circle-outline"
+                color={Colors.purple}
+                size={30}
+              />
+              <CellText
                 style={{
                   marginLeft: 8,
-                  marginBottom: 4,
-                  marginTop: 8,
                   color: Colors.darkGray,
                 }}
               >
-                ATTENDEES
-              </Text>
-            </View>
-          }
-          ListFooterComponent={
-            <TouchableOpacity
-              onPress={() =>
-                this.props.navigation.navigate('AddAttendeeScreen', {
-                  id: eventId,
-                })
-              }
-            >
-              <Cell style={{ justifyContent: 'flex-start' }}>
-                <Ionicon
-                  name="ios-add-circle-outline"
-                  color={Colors.purple}
-                  size={30}
-                />
-                <CellText
-                  style={{
-                    marginLeft: 8,
-                    color: Colors.darkGray,
-                  }}
-                >
-                  Add Attendee
-                </CellText>
-              </Cell>
-            </TouchableOpacity>
-          }
-        />
-      </View>
+                Add Attendee
+              </CellText>
+            </Cell>
+          </TouchableOpacity>
+        }
+      />
     )
   }
 
@@ -294,7 +293,7 @@ class SubmitSettingsScreen extends Component {
             value={this.state.sendCertificates}
           />
         </Cell>
-        <Cell style={{ marginBottom: 0 }}>
+        <Cell>
           <CellText
             style={{
               color: Colors.black,
@@ -309,10 +308,9 @@ class SubmitSettingsScreen extends Component {
           />
         </Cell>
         {receivers.map((receiver, index) => (
-          <Cell key={index} style={{ marginBottom: 0 }}>
-            <CellText style={styles.name}>{receiver.email}</CellText>
+          <Cell key={index}>
+            <CellText>{receiver.email}</CellText>
             <TouchableOpacity
-              style={{ padding: 8 }}
               onPress={() => this.removeSheetReceiver(receiver)}
             >
               <Icon color={Colors.purple} name={'minus-square'} size={20} />
@@ -396,7 +394,7 @@ class SubmitSettingsScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 8,
+    paddingTop: 8,
   },
   buttonContainer: {
     marginTop: 15,
