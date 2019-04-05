@@ -29,9 +29,13 @@ class AddAttendeeScreen extends Component {
         onPress={() => navigation.getParam('onSave')()}
       >
         {navigation.getParam('isUpdating') ? (
-          <ActivityIndicator animating color="white" />
+          <ActivityIndicator animating color={Colors.purple} />
         ) : (
-          <Ionicon name="ios-save" color="white" size={30} />
+          <Text
+            style={{ fontWeight: 'bold', fontSize: 17, color: Colors.purple }}
+          >
+            Save
+          </Text>
         )}
       </TouchableOpacity>
     ),

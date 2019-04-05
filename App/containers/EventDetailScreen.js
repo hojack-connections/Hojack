@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
   Alert,
   TextInput,
+  FlatList,
 } from 'react-native';
-import Ionicon from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 import { inject, observer } from 'mobx-react';
@@ -21,7 +22,7 @@ export default
 @observer
 class SubmitSettingsScreen extends Component {
   static navigationOptions = ({ navigation, navigationOptions }) => ({
-    title: 'Event Settings',
+    title: 'Event',
     headerRight: (
       <TouchableOpacity
         style={{ padding: 8, marginRight: 8 }}
@@ -31,7 +32,7 @@ class SubmitSettingsScreen extends Component {
           })
         }
       >
-        <Ionicon name="ios-create" color={Colors.purple} size={30} />
+        <Text style={{ fontSize: 17, color: Colors.purple }}>Edit</Text>
       </TouchableOpacity>
     ),
     headerStyle: {
@@ -189,6 +190,106 @@ class SubmitSettingsScreen extends Component {
     );
   };
 
+  renderAttendees = () => {
+    const eventId = this.props.navigation.getParam('id');
+    const attendees = this.props.event.attendeesById[eventId] || [];
+    const receivers = this.props.event.receiversByEventId[eventId] || [];
+    return (
+      <View style={{ flex: 1 }}>
+        <FlatList
+          data={attendees}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate('AttendeeDetail', {
+                  attendeeId: item._id,
+                  eventId,
+                })
+              }
+            >
+              <View
+                style={{
+                  borderBottomColor: Colors.gray,
+                  borderBottomWidth: 1,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  padding: 8,
+                  marginLeft: 8,
+                  marginBottom: 8,
+                }}
+              >
+                <Text>{`${item.firstname} ${item.lastname}`}</Text>
+                <Icon
+                  name="chevron-right"
+                  size={16}
+                  color={'#797979'}
+                  style={styles.arrow}
+                />
+              </View>
+            </TouchableOpacity>
+          )}
+          ListHeaderComponent={
+            <View
+              style={{
+                borderBottomColor: Colors.gray,
+                borderBottomWidth: 1,
+                marginBottom: 8,
+              }}
+            >
+              <Text
+                style={{
+                  marginLeft: 8,
+                  marginBottom: 4,
+                  marginTop: 8,
+                  color: Colors.darkGray,
+                }}
+              >
+                ATTENDEES
+              </Text>
+            </View>
+          }
+          ListFooterComponent={
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate('AddAttendeeScreen', {
+                  id: eventId,
+                })
+              }
+            >
+              <View
+                style={{
+                  borderBottomColor: Colors.gray,
+                  borderBottomWidth: 1,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  padding: 8,
+                  paddingTop: 0,
+                  marginLeft: 8,
+                }}
+              >
+                <Ionicon
+                  name="ios-add-circle-outline"
+                  color={Colors.purple}
+                  size={30}
+                />
+                <Text
+                  style={{
+                    marginLeft: 8,
+                    color: Colors.darkGray,
+                  }}
+                >
+                  Add Attendee
+                </Text>
+              </View>
+            </TouchableOpacity>
+          }
+        />
+      </View>
+    );
+  };
+
   render() {
     const eventId = this.props.navigation.getParam('id');
     const _event = this.props.event.eventsById[eventId] || {};
@@ -205,6 +306,15 @@ class SubmitSettingsScreen extends Component {
             padding: 8,
           }}
         >
+          <Text
+            style={{
+              fontWeight: 'bold',
+              fontSize: 30,
+              marginBottom: 16,
+            }}
+          >
+            {_event.name}
+          </Text>
           <SegmentedControlTab
             values={['Info', 'Attendees', 'Submit']}
             selectedIndex={this.state.selectedIndex}
@@ -215,7 +325,7 @@ class SubmitSettingsScreen extends Component {
           />
         </View>
         {this.state.selectedIndex === 0 ? this.renderInfo() : null}
-        {this.state.selectedIndex === 1 ? <View /> : null}
+        {this.state.selectedIndex === 1 ? this.renderAttendees() : null}
         {this.state.selectedIndex === 2 ? <View /> : null}
       </>
     );
