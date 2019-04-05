@@ -74,7 +74,7 @@ class AttendeeDetail extends Component {
 
     return (
       <ScrollView style={styles.container}>
-        <View style={styles.attendeeInfo}>
+        <View style={{ padding: 8 }}>
           <Text>{`${attendee.firstname} ${attendee.lastname}`}</Text>
           <Text>{`${attendee.email} - ${attendee.phone}`}</Text>
         </View>
@@ -163,15 +163,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
-  updateButton: {
-    borderRadius: 10,
-    width: '100%',
-    height: 60,
-  },
   sendButton: {
     borderRadius: 10,
     width: '100%',
     height: 60,
+    backgroundColor: Colors.purple,
   },
   buttonTitle: {
     marginLeft: 10,
