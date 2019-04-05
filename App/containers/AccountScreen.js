@@ -11,7 +11,7 @@ import { Colors } from '../Themes/'
 import { Button } from 'react-native-elements'
 import { inject, observer } from 'mobx-react'
 import moment from 'moment'
-import { VFlex, HFlex } from '../components/Shared'
+import { VFlex, HFlex, Cell } from '../components/Shared'
 import styled from 'styled-components'
 
 const DefaultText = styled(TextInput)`
@@ -120,25 +120,31 @@ class AccountScreen extends React.Component {
             PERSONAL INFORMATION
           </Text>
           <HFlex style={{ backgroundColor: 'white' }}>
-            <DefaultText
+          <Cell>
+            <TextInput
               placeholder="First Name"
               onChangeText={(firstname) => this.setState({ firstname })}
               value={this.state.firstname}
             />
+            </Cell>
           </HFlex>
           <HFlex style={{ backgroundColor: 'white' }}>
-            <DefaultText
+          <Cell>
+            <TextInput
               placeholder="Last Name"
               onChangeText={(lastname) => this.setState({ lastname })}
               value={this.state.lastname}
             />
+            </Cell>
           </HFlex>
           <HFlex style={{ backgroundColor: 'white' }}>
-            <DefaultText
+          <Cell>
+            <TextInput
               placeholder="Title"
               onChangeText={(title) => this.setState({ title })}
               value={this.state.title}
             />
+            </Cell>
           </HFlex>
         </VFlex>
         <HFlex style={{ flex: 1 }}>

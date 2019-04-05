@@ -18,18 +18,7 @@ import { inject, observer } from 'mobx-react'
 import { Button } from 'react-native-elements'
 import SegmentedControlTab from 'react-native-segmented-control-tab'
 import moment from 'moment'
-import styled from 'styled-components'
-
-const InfoCellView = styled.View`
-  margin-left: 8px;
-  border-bottom-color: ${Colors.gray};
-  border-bottom-width: 1px;
-`
-
-const InfoCellText = styled.Text`
-  padding: 8px;
-  font-size: 15px;
-`
+import { Cell, CellText } from '../components/Shared'
 
 export default
 @inject('receiver', 'event')
@@ -141,69 +130,67 @@ class SubmitSettingsScreen extends Component {
     const _event = this.props.event.eventsById[eventId] || {}
     return (
       <ScrollView>
-        <InfoCellView>
-          <InfoCellText>
-            {moment(_event.date).format('MMMM DD, YYYY')}
-          </InfoCellText>
-        </InfoCellView>
-        <InfoCellView>
-          <InfoCellText>
+        <Cell>
+          <CellText>{moment(_event.date).format('MMMM DD, YYYY')}</CellText>
+        </Cell>
+        <Cell>
+          <CellText>
             {_event.address || (
               <Text style={{ color: Colors.darkGray }}>Address</Text>
             )}
-          </InfoCellText>
-        </InfoCellView>
-        <InfoCellView>
-          <InfoCellText>
+          </CellText>
+        </Cell>
+        <Cell>
+          <CellText>
             {_event.city || (
               <Text style={{ color: Colors.darkGray }}>City</Text>
             )}
-          </InfoCellText>
-        </InfoCellView>
-        <InfoCellView>
-          <InfoCellText>
+          </CellText>
+        </Cell>
+        <Cell>
+          <CellText>
             {_event.state || (
               <Text style={{ color: Colors.darkGray }}>State</Text>
             )}
-          </InfoCellText>
-        </InfoCellView>
-        <InfoCellView>
-          <InfoCellText>
+          </CellText>
+        </Cell>
+        <Cell>
+          <CellText>
             {_event.zipcode || (
               <Text style={{ color: Colors.darkGray }}>Zip Code</Text>
             )}
-          </InfoCellText>
-        </InfoCellView>
-        <InfoCellView>
-          <InfoCellText>
+          </CellText>
+        </Cell>
+        <Cell>
+          <CellText>
             {_event.courseNo || (
               <Text style={{ color: Colors.darkGray }}>Course Number</Text>
             )}
-          </InfoCellText>
-        </InfoCellView>
-        <InfoCellView>
-          <InfoCellText>
+          </CellText>
+        </Cell>
+        <Cell>
+          <CellText>
             {_event.numberOfCourseCredits || (
               <Text style={{ color: Colors.darkGray }}>
                 Number of Course Credits
               </Text>
             )}
-          </InfoCellText>
-        </InfoCellView>
-        <InfoCellView>
-          <InfoCellText>
+          </CellText>
+        </Cell>
+        <Cell>
+          <CellText>
             {_event.presenterName || (
               <Text style={{ color: Colors.darkGray }}>Presenter Name</Text>
             )}
-          </InfoCellText>
-        </InfoCellView>
-        <InfoCellView>
-          <InfoCellText>
+          </CellText>
+        </Cell>
+        <Cell>
+          <CellText>
             {_event.trainingProvider || (
               <Text style={{ color: Colors.darkGray }}>Training Provider</Text>
             )}
-          </InfoCellText>
-        </InfoCellView>
+          </CellText>
+        </Cell>
       </ScrollView>
     )
   }
@@ -213,46 +200,46 @@ class SubmitSettingsScreen extends Component {
     const receivers = this.props.event.receiversByEventId[eventId] || []
     return (
       <ScrollView style={Styles.container}>
-        <View style={styles.section}>
-          <Text
+        <Cell>
+          <CellText
             style={{
               color: Colors.black,
               fontSize: normalize(17),
             }}
           >
             Send Certificates to Attendees
-          </Text>
+          </CellText>
           <Switch
             onValueChange={(sendCertificates) =>
               this.setState({ sendCertificates })
             }
             value={this.state.sendCertificates}
           />
-        </View>
-        <View style={styles.section}>
-          <Text
+        </Cell>
+        <Cell style={{ marginBottom: 0 }}>
+          <CellText
             style={{
               color: Colors.black,
               fontSize: normalize(17),
             }}
           >
             Send Attendence Summary
-          </Text>
+          </CellText>
           <Switch
             onValueChange={(sendSummary) => this.setState({ sendSummary })}
             value={this.state.sendSummary}
           />
-        </View>
+        </Cell>
         {receivers.map((receiver, index) => (
-          <View key={index} style={styles.listItemContainer}>
-            <Text style={styles.name}>{receiver.email}</Text>
+          <Cell key={index} style={{ marginBottom: 0 }}>
+            <CellText style={styles.name}>{receiver.email}</CellText>
             <TouchableOpacity
               style={{ padding: 8 }}
               onPress={() => this.removeSheetReceiver(receiver)}
             >
               <Icon color={Colors.purple} name={'minus-square'} size={20} />
             </TouchableOpacity>
-          </View>
+          </Cell>
         ))}
         <View style={styles.plusContainer}>
           <TouchableOpacity onPress={this.plusIconPressed}>
@@ -307,26 +294,15 @@ class SubmitSettingsScreen extends Component {
                 })
               }
             >
-              <View
-                style={{
-                  borderBottomColor: Colors.gray,
-                  borderBottomWidth: 1,
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  padding: 8,
-                  marginLeft: 8,
-                  marginBottom: 8,
-                }}
-              >
-                <Text>{`${item.firstname} ${item.lastname}`}</Text>
+              <Cell>
+                <CellText>{`${item.firstname} ${item.lastname}`}</CellText>
                 <Icon
                   name="chevron-right"
                   size={16}
                   color={'#797979'}
                   style={styles.arrow}
                 />
-              </View>
+              </Cell>
             </TouchableOpacity>
           )}
           ListHeaderComponent={
@@ -357,31 +333,21 @@ class SubmitSettingsScreen extends Component {
                 })
               }
             >
-              <View
-                style={{
-                  borderBottomColor: Colors.gray,
-                  borderBottomWidth: 1,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  padding: 8,
-                  paddingTop: 0,
-                  marginLeft: 8,
-                }}
-              >
+              <Cell style={{ justifyContent: 'flex-start' }}>
                 <Ionicon
                   name="ios-add-circle-outline"
                   color={Colors.purple}
                   size={30}
                 />
-                <Text
+                <CellText
                   style={{
                     marginLeft: 8,
                     color: Colors.darkGray,
                   }}
                 >
                   Add Attendee
-                </Text>
-              </View>
+                </CellText>
+              </Cell>
             </TouchableOpacity>
           }
         />

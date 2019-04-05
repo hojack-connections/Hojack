@@ -1,11 +1,5 @@
 import React, { Component } from 'react'
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-} from 'react-native'
+import { View, Text, FlatList, TouchableOpacity } from 'react-native'
 import moment from 'moment'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Ionicon from 'react-native-vector-icons/Ionicons'
@@ -13,6 +7,7 @@ import { Colors, Styles } from '../Themes/'
 import { inject, observer } from 'mobx-react'
 import idx from 'idx'
 import { SearchBar } from 'react-native-elements'
+import { Cell, CellText } from '../components/Shared'
 
 export default
 @inject('user', 'auth', 'event', 'attendee', 'subscription')
@@ -72,20 +67,15 @@ class EventsScreen extends Component {
 
   renderItem = ({ item, index }) => (
     <TouchableOpacity onPress={() => this._onItemClick(index, item._id)}>
-      <View style={styles.listItemContainer}>
+      <Cell>
         <View>
-          <Text style={styles.categoryTitle}>{item.name}</Text>
-          <Text style={styles.eventDate}>
+          <CellText>{item.name}</CellText>
+          <CellText style={{ fontSize: 15, color: Colors.darkGray }}>
             {moment(item.date).format('MMMM DD, YYYY')}
-          </Text>
+          </CellText>
         </View>
-        <Icon
-          name="chevron-right"
-          size={16}
-          color={'#797979'}
-          style={styles.arrow}
-        />
-      </View>
+        <Icon name="chevron-right" size={16} color={'#797979'} />
+      </Cell>
     </TouchableOpacity>
   )
 
@@ -121,37 +111,3 @@ class EventsScreen extends Component {
     )
   }
 }
-
-const styles = StyleSheet.create({
-  allEventsContainer: {
-    paddingHorizontal: 30,
-    height: 44,
-    marginBottom: 10,
-    backgroundColor: Colors.white,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  listItemContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 30,
-    paddingVertical: 10,
-    backgroundColor: Colors.white,
-    marginBottom: 10,
-  },
-  eventDate: {
-    marginTop: 4,
-    color: 'rgba(142, 142, 147, 1)',
-  },
-  seperator: {
-    backgroundColor: Colors.black,
-    height: 1,
-    width: '99%',
-    marginLeft: 5,
-    marginTop: 5,
-  },
-  arrow: {},
-})
