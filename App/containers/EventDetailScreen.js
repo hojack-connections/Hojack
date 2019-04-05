@@ -14,12 +14,13 @@ import normalize from '../helpers/normalizeText';
 import { Colors, Styles } from '../Themes/';
 import { inject, observer } from 'mobx-react';
 import { Button } from 'react-native-elements';
+import SegmentedControlTab from 'react-native-segmented-control-tab';
 
 export default
 @inject('receiver', 'event')
 @observer
 class SubmitSettingsScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({ navigation, navigationOptions }) => ({
     title: 'Event Settings',
     headerRight: (
       <TouchableOpacity
@@ -33,11 +34,16 @@ class SubmitSettingsScreen extends Component {
         <Ionicon name="ios-create" color={Colors.purple} size={30} />
       </TouchableOpacity>
     ),
+    headerStyle: {
+      ...navigationOptions.headerStyle,
+      borderBottomWidth: 0,
+    },
   });
 
   state = {
     isSubmitting: false,
     newSheetReceiver: '',
+    selectedIndex: 0,
   };
   inputFieldRef = React.createRef();
 
@@ -101,6 +107,88 @@ class SubmitSettingsScreen extends Component {
       .catch(() => alert('There was a problem deleting the receiver.'));
   };
 
+  handleIndexChange = (index) => {
+    this.setState({
+      selectedIndex: index,
+    });
+  };
+
+  renderInfo = () => {
+    const eventId = this.props.navigation.getParam('id');
+    const attendees = this.props.event.attendeesById[eventId] || [];
+    const receivers = this.props.event.receiversByEventId[eventId] || [];
+    return (
+      <ScrollView style={Styles.container}>
+        <TouchableOpacity
+          style={styles.allEventsContainer}
+          onPress={() => {
+            this.props.navigation.navigate('EventAttendeesScreen', {
+              id: eventId,
+            });
+          }}
+        >
+          <Text>All Attendees</Text>
+          <Text style={{ color: '#34bd3e' }}>{attendees.length}</Text>
+          <Icon
+            color={'#797979'}
+            name="chevron-right"
+            size={16}
+            style={Styles.arrow}
+          />
+        </TouchableOpacity>
+        <View style={styles.section}>
+          <Text
+            style={{
+              color: Colors.black,
+              fontSize: normalize(17),
+              fontWeight: '700',
+            }}
+          >
+            Send Attendence Summary To:
+          </Text>
+        </View>
+        {receivers.map((receiver, index) => (
+          <View key={index} style={styles.listItemContainer}>
+            <TouchableOpacity
+              onPress={() => this.removeSheetReceiver(receiver)}
+            >
+              <Icon color={Colors.black} name={'minus-square'} size={20} />
+            </TouchableOpacity>
+            <Text style={styles.name}>{receiver.email}</Text>
+          </View>
+        ))}
+        <View style={styles.plusContainer}>
+          <TouchableOpacity onPress={this.plusIconPressed}>
+            <Icon color={Colors.black} name={'plus'} size={21} />
+          </TouchableOpacity>
+          <TextInput
+            ref={this.inputFieldRef}
+            style={styles.textInput}
+            textAlign={'left'}
+            value={this.state.newSheetReceiver}
+            onChangeText={(newSheetReceiver) =>
+              this.setState({ newSheetReceiver })
+            }
+            autoCapitalize={'none'}
+            autoCorrect={false}
+            underlineColorAndroid="transparent"
+            onSubmitEditing={(e) => this.addSheetReceiver(e.nativeEvent.text)}
+            placeholder="Input a new email address"
+            returnKeyType="done"
+          />
+        </View>
+        <Button
+          buttonStyle={styles.updateButton}
+          containerStyle={styles.buttonContainer}
+          loading={this.state.isSubmitting}
+          onPress={this.onSubmit}
+          title="Send"
+          titleStyle={styles.buttonTitle}
+        />
+      </ScrollView>
+    );
+  };
+
   render() {
     const eventId = this.props.navigation.getParam('id');
     const _event = this.props.event.eventsById[eventId] || {};
@@ -109,74 +197,26 @@ class SubmitSettingsScreen extends Component {
 
     return (
       <>
-        <ScrollView style={Styles.container}>
-          <TouchableOpacity
-            style={styles.allEventsContainer}
-            onPress={() => {
-              this.props.navigation.navigate('EventAttendeesScreen', {
-                id: eventId,
-              });
-            }}
-          >
-            <Text>All Attendees</Text>
-            <Text style={{ color: '#34bd3e' }}>{attendees.length}</Text>
-            <Icon
-              color={'#797979'}
-              name="chevron-right"
-              size={16}
-              style={Styles.arrow}
-            />
-          </TouchableOpacity>
-          <View style={styles.section}>
-            <Text
-              style={{
-                color: Colors.black,
-                fontSize: normalize(17),
-                fontWeight: '700',
-              }}
-            >
-              Send Attendence Summary To:
-            </Text>
-          </View>
-          {receivers.map((receiver, index) => (
-            <View key={index} style={styles.listItemContainer}>
-              <TouchableOpacity
-                onPress={() => this.removeSheetReceiver(receiver)}
-              >
-                <Icon color={Colors.black} name={'minus-square'} size={20} />
-              </TouchableOpacity>
-              <Text style={styles.name}>{receiver.email}</Text>
-            </View>
-          ))}
-          <View style={styles.plusContainer}>
-            <TouchableOpacity onPress={this.plusIconPressed}>
-              <Icon color={Colors.black} name={'plus'} size={21} />
-            </TouchableOpacity>
-            <TextInput
-              ref={this.inputFieldRef}
-              style={styles.textInput}
-              textAlign={'left'}
-              value={this.state.newSheetReceiver}
-              onChangeText={(newSheetReceiver) =>
-                this.setState({ newSheetReceiver })
-              }
-              autoCapitalize={'none'}
-              autoCorrect={false}
-              underlineColorAndroid="transparent"
-              onSubmitEditing={(e) => this.addSheetReceiver(e.nativeEvent.text)}
-              placeholder="Input a new email address"
-              returnKeyType="done"
-            />
-          </View>
-          <Button
-            buttonStyle={styles.updateButton}
-            containerStyle={styles.buttonContainer}
-            loading={this.state.isSubmitting}
-            onPress={this.onSubmit}
-            title="Send"
-            titleStyle={styles.buttonTitle}
+        <View
+          style={{
+            backgroundColor: Colors.navigation,
+            borderBottomColor: Colors.gray,
+            borderBottomWidth: 1,
+            padding: 8,
+          }}
+        >
+          <SegmentedControlTab
+            values={['Info', 'Attendees', 'Submit']}
+            selectedIndex={this.state.selectedIndex}
+            onTabPress={this.handleIndexChange}
+            tabStyle={{ borderColor: Colors.purple }}
+            tabTextStyle={{ color: Colors.purple }}
+            activeTabStyle={{ backgroundColor: Colors.purple }}
           />
-        </ScrollView>
+        </View>
+        {this.state.selectedIndex === 0 ? this.renderInfo() : null}
+        {this.state.selectedIndex === 1 ? <View /> : null}
+        {this.state.selectedIndex === 2 ? <View /> : null}
       </>
     );
   }
