@@ -39,24 +39,34 @@ class EventsScreen extends Component {
   })
 
   state = {
+    isLoading: false,
     searchText: '',
   }
 
-  componentDidMount() {
-    this.props.subscription.loadActiveSubscription().then(() => {
-      if (this.props.subscription.hasActiveSubscription) return
-      if (this.props.subscription.freeTrialEligible) {
-        this.props.navigation.navigate('StartTrial')
-      } else if (
-        idx(this.props, (_) => _.subscription.latestSubscription.isTrial)
-      ) {
-        this.props.navigation.navigate('PurchaseSubscription')
-      } else {
-        this.props.navigation.navigate('RenewSubscription')
-      }
-    })
-    this.props.event.loadEvents()
-    this.props.attendee.loadTotalAttendeeCount()
+  componentWillMount() {
+    this.reload()
+  }
+
+  reload = () => {
+    this.setState({ isLoading: true })
+    Promise.all([
+      this.props.subscription.loadActiveSubscription().then(() => {
+        if (this.props.subscription.hasActiveSubscription) return
+        if (this.props.subscription.freeTrialEligible) {
+          this.props.navigation.navigate('StartTrial')
+        } else if (
+          idx(this.props, (_) => _.subscription.latestSubscription.isTrial)
+        ) {
+          this.props.navigation.navigate('PurchaseSubscription')
+        } else {
+          this.props.navigation.navigate('RenewSubscription')
+        }
+      }),
+      this.props.event.loadEvents(),
+      this.props.attendee.loadTotalAttendeeCount(),
+    ])
+      .then(() => this.setState({ isLoading: false }))
+      .catch(() => this.setState({ isLoading: false }))
   }
 
   _onItemClick = (index, id) => {
@@ -106,6 +116,8 @@ class EventsScreen extends Component {
           )}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
+          onRefresh={this.reload}
+          refreshing={console.log(this.state) || this.state.isLoading}
         />
       </View>
     )
