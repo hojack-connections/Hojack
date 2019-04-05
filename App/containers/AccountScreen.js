@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   TextInput,
-  View,
   Text,
   StyleSheet,
   TouchableOpacity,
@@ -41,20 +40,18 @@ class AccountScreen extends React.Component {
         <Text style={{ fontSize: 17, color: Colors.purple }}>Cancel</Text>
       </TouchableOpacity>
     ),
-    headerRight: (
+    headerRight: navigation.getParam('isUpdating') ? (
+      <ActivityIndicator animating color={Colors.purple} />
+    ) : (
       <TouchableOpacity
         style={{ padding: 8, marginRight: 8 }}
         onPress={navigation.getParam('onDone') || (() => {})}
       >
-        {navigation.getParam('isUpdating') ? (
-          <ActivityIndicator animating color={Colors.purple} />
-        ) : (
-          <Text
-            style={{ fontWeight: 'bold', fontSize: 17, color: Colors.purple }}
-          >
-            Done
-          </Text>
-        )}
+        <Text
+          style={{ fontWeight: 'bold', fontSize: 17, color: Colors.purple }}
+        >
+          Done
+        </Text>
       </TouchableOpacity>
     ),
   });
@@ -67,14 +64,10 @@ class AccountScreen extends React.Component {
 
   componentWillMount() {
     this.props.subscription.loadActiveSubscription();
-    this.props.navigation.setParams({
-      onDone: this.onDone,
-    });
-    this.setState({
-      firstname: this.props.auth.active.firstname,
-      lastname: this.props.auth.active.lastname,
-      title: this.props.auth.active.title,
-    });
+    const { onDone } = this;
+    this.props.navigation.setParams({ onDone });
+    const { firstname, lastname, title } = this.props.auth.active;
+    this.setState({ firstname, lastname, title });
   }
 
   onDone = () => {
