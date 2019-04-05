@@ -6,15 +6,13 @@ import {
   StyleSheet,
   Platform,
   Image,
-  TextInput,
   TouchableOpacity,
 } from 'react-native'
-import Ionicon from 'react-native-vector-icons/Ionicons'
 import { Button } from 'react-native-elements'
 import { inject, observer } from 'mobx-react'
 import normalize from '../helpers/normalizeText'
 import { Colors } from '../Themes/'
-import Cell from '../components/Cell'
+import { CellTextInput } from '../components/Shared'
 
 export default
 @inject('event', 'attendee', 'auth')
@@ -32,7 +30,7 @@ class AttendeeDetail extends Component {
           })
         }
       >
-        <Ionicon name="ios-create" color="white" size={30} />
+        <Text style={{ fontSize: 17, color: Colors.purple }}>Edit</Text>
       </TouchableOpacity>
     ),
   })
@@ -89,25 +87,37 @@ class AttendeeDetail extends Component {
             />
           )}
         </View>
-        <Cell
-          label="Send Test Cert:"
-          onPress={() => this.emailRef.current.focus()}
+        <View
+          style={{
+            borderBottomColor: Colors.gray,
+            borderBottomWidth: 1,
+            marginBottom: 8,
+          }}
         >
-          <TextInput
-            ref={this.emailRef}
-            onSubmitEditing={this.sendTestCert}
-            autoCapitalize="none"
-            autoCorrect={false}
-            editable
-            keyboardType="email-address"
-            onChangeText={(email) => this.setState({ email })}
-            placeholder={this.props.auth.active.email}
-            returnKeyType="done"
-            style={styles.textInputStyle}
-            underlineColorAndroid="transparent"
-            value={this.state.email}
-          />
-        </Cell>
+          <Text
+            style={{
+              marginLeft: 8,
+              marginBottom: 4,
+              marginTop: 8,
+              color: Colors.darkGray,
+            }}
+          >
+            SEND TEST CERTIFICATE
+          </Text>
+        </View>
+        <CellTextInput
+          ref={this.emailRef}
+          onSubmitEditing={this.sendTestCert}
+          autoCapitalize="none"
+          autoCorrect={false}
+          editable
+          keyboardType="email-address"
+          onChangeText={(email) => this.setState({ email })}
+          placeholder={this.props.auth.active.email}
+          returnKeyType="done"
+          underlineColorAndroid="transparent"
+          value={this.state.email}
+        />
         <Button
           title="Send Test Cert"
           loading={this.state.isSending}
@@ -124,15 +134,6 @@ class AttendeeDetail extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
-  },
-  textInputStyle: {
-    flex: 1,
-    marginRight: 10,
-    color: Colors.black,
-    fontWeight: '100',
-  },
-  attendeeInfo: {
-    padding: 20,
   },
   signatureField: {
     height: 100,
