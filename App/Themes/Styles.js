@@ -14,7 +14,7 @@ export default {
   },
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.white,
   },
   arrow: {
     position: 'absolute',
