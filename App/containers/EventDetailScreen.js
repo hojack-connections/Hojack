@@ -129,7 +129,7 @@ class SubmitSettingsScreen extends Component {
     const eventId = this.props.navigation.getParam('id')
     const _event = this.props.event.eventsById[eventId] || {}
     return (
-      <ScrollView>
+      <ScrollView style={styles.container}>
         <Cell>
           <CellText>{moment(_event.date).format('MMMM DD, YYYY')}</CellText>
         </Cell>
@@ -192,6 +192,84 @@ class SubmitSettingsScreen extends Component {
           </CellText>
         </Cell>
       </ScrollView>
+    )
+  }
+
+  renderAttendees = () => {
+    const eventId = this.props.navigation.getParam('id')
+    const attendees = this.props.event.attendeesById[eventId] || []
+    return (
+      <View style={styles.container}>
+        <FlatList
+          data={attendees}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate('AttendeeDetail', {
+                  attendeeId: item._id,
+                  eventId,
+                })
+              }
+            >
+              <Cell>
+                <CellText>{`${item.firstname} ${item.lastname}`}</CellText>
+                <Icon
+                  name="chevron-right"
+                  size={16}
+                  color={'#797979'}
+                  style={styles.arrow}
+                />
+              </Cell>
+            </TouchableOpacity>
+          )}
+          ListHeaderComponent={
+            <View
+              style={{
+                borderBottomColor: Colors.gray,
+                borderBottomWidth: 1,
+                marginBottom: 8,
+              }}
+            >
+              <Text
+                style={{
+                  marginLeft: 8,
+                  marginBottom: 4,
+                  marginTop: 8,
+                  color: Colors.darkGray,
+                }}
+              >
+                ATTENDEES
+              </Text>
+            </View>
+          }
+          ListFooterComponent={
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate('AddAttendeeScreen', {
+                  id: eventId,
+                })
+              }
+            >
+              <Cell style={{ justifyContent: 'flex-start' }}>
+                <Ionicon
+                  name="ios-add-circle-outline"
+                  color={Colors.purple}
+                  size={30}
+                />
+                <CellText
+                  style={{
+                    marginLeft: 8,
+                    color: Colors.darkGray,
+                  }}
+                >
+                  Add Attendee
+                </CellText>
+              </Cell>
+            </TouchableOpacity>
+          }
+        />
+      </View>
     )
   }
 
@@ -277,84 +355,6 @@ class SubmitSettingsScreen extends Component {
     )
   }
 
-  renderAttendees = () => {
-    const eventId = this.props.navigation.getParam('id')
-    const attendees = this.props.event.attendeesById[eventId] || []
-    return (
-      <View style={{ flex: 1 }}>
-        <FlatList
-          data={attendees}
-          keyExtractor={(item) => item._id}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() =>
-                this.props.navigation.navigate('AttendeeDetail', {
-                  attendeeId: item._id,
-                  eventId,
-                })
-              }
-            >
-              <Cell>
-                <CellText>{`${item.firstname} ${item.lastname}`}</CellText>
-                <Icon
-                  name="chevron-right"
-                  size={16}
-                  color={'#797979'}
-                  style={styles.arrow}
-                />
-              </Cell>
-            </TouchableOpacity>
-          )}
-          ListHeaderComponent={
-            <View
-              style={{
-                borderBottomColor: Colors.gray,
-                borderBottomWidth: 1,
-                marginBottom: 8,
-              }}
-            >
-              <Text
-                style={{
-                  marginLeft: 8,
-                  marginBottom: 4,
-                  marginTop: 8,
-                  color: Colors.darkGray,
-                }}
-              >
-                ATTENDEES
-              </Text>
-            </View>
-          }
-          ListFooterComponent={
-            <TouchableOpacity
-              onPress={() =>
-                this.props.navigation.navigate('AddAttendeeScreen', {
-                  id: eventId,
-                })
-              }
-            >
-              <Cell style={{ justifyContent: 'flex-start' }}>
-                <Ionicon
-                  name="ios-add-circle-outline"
-                  color={Colors.purple}
-                  size={30}
-                />
-                <CellText
-                  style={{
-                    marginLeft: 8,
-                    color: Colors.darkGray,
-                  }}
-                >
-                  Add Attendee
-                </CellText>
-              </Cell>
-            </TouchableOpacity>
-          }
-        />
-      </View>
-    )
-  }
-
   render() {
     const eventId = this.props.navigation.getParam('id')
     const _event = this.props.event.eventsById[eventId] || {}
@@ -395,14 +395,8 @@ class SubmitSettingsScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  allEventsContainer: {
-    paddingHorizontal: 30,
-    height: 44,
-    marginBottom: 10,
-    backgroundColor: Colors.white,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  container: {
+    marginTop: 8,
   },
   buttonContainer: {
     marginTop: 15,
@@ -421,25 +415,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: normalize(20),
     color: Colors.white,
-  },
-  section: {
-    backgroundColor: Colors.white,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.gray,
-  },
-  listItemContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 30,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.gray,
-    backgroundColor: Colors.white,
   },
   textInput: {
     flex: 1,
