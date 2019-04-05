@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
-import { StyleSheet, TextInput, TouchableOpacity } from 'react-native'
-import Ionicon from 'react-native-vector-icons/Ionicons'
+import { Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { Colors } from '../Themes/'
 import { inject, observer } from 'mobx-react'
-import Cell from '../components/Cell'
 import DatePicker from 'react-native-datepicker'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { Cell, CellTextInput } from '../components/Shared'
 
 export default
 @inject('event')
@@ -22,9 +21,13 @@ class AddEventScreen extends Component {
         onPress={() => navigation.getParam('onSave')()}
       >
         {navigation.getParam('isCreating') ? (
-          <ActivityIndicator animating color="white" />
+          <ActivityIndicator animating color={Colors.purple} />
         ) : (
-          <Ionicon name="ios-save" color="white" size={30} />
+          <Text
+            style={{ fontWeight: 'bold', fontSize: 17, color: Colors.purple }}
+          >
+            Done
+          </Text>
         )}
       </TouchableOpacity>
     ),
@@ -39,7 +42,7 @@ class AddEventScreen extends Component {
     zipcode: '',
     courseNo: '',
     courseName: '',
-    numberOfCourseCredits: 0,
+    numberOfCourseCredits: '',
     presenterName: '',
     trainingProvider: '',
     isCreating: false,
@@ -104,11 +107,10 @@ class AddEventScreen extends Component {
         style={styles.container}
         keyboardShouldPersistTaps="handled"
       >
-        <Cell
-          label="Event Name:"
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[0].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             autoFocus
             ref={this.textFieldsRefs[0]}
             autoCapitalize="words"
@@ -117,12 +119,11 @@ class AddEventScreen extends Component {
             onChangeText={(name) => this.setState({ name })}
             placeholder="Event Name"
             returnKeyType="next"
-            style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.name}
           />
-        </Cell>
-        <Cell label="Date:">
+        </TouchableOpacity>
+        <Cell>
           <DatePicker
             cancelBtnText="Cancel"
             confirmBtnText="Confirm"
@@ -134,14 +135,13 @@ class AddEventScreen extends Component {
             format="YYYY-MM-DD"
             mode="date"
             onDateChange={(date) => this.setState({ date })}
-            style={{ flex: 1, marginRight: 10, height: 40 }}
+            style={{ margin: 0, padding: 0 }}
           />
         </Cell>
-        <Cell
-          label="Address:"
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[1].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[1]}
             onSubmitEditing={() => this.textFieldsRefs[2].current.focus()}
             autoCapitalize="words"
@@ -150,16 +150,14 @@ class AddEventScreen extends Component {
             onChangeText={(address) => this.setState({ address })}
             placeholder="Address"
             returnKeyType="next"
-            style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.address}
           />
-        </Cell>
-        <Cell
-          label="City:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[2].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[2]}
             onSubmitEditing={() => this.textFieldsRefs[3].current.focus()}
             autoCapitalize="words"
@@ -168,16 +166,14 @@ class AddEventScreen extends Component {
             onChangeText={(city) => this.setState({ city })}
             placeholder="City"
             returnKeyType="next"
-            style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.city}
           />
-        </Cell>
-        <Cell
-          label="State:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[3].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[3]}
             onSubmitEditing={() => this.textFieldsRefs[4].current.focus()}
             autoCapitalize="none"
@@ -186,16 +182,14 @@ class AddEventScreen extends Component {
             onChangeText={(state) => this.setState({ state })}
             placeholder="State"
             returnKeyType="next"
-            style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.state}
           />
-        </Cell>
-        <Cell
-          label="Zip Code:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[4].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[4]}
             onSubmitEditing={() => this.textFieldsRefs[5].current.focus()}
             autoCapitalize="words"
@@ -205,16 +199,14 @@ class AddEventScreen extends Component {
             onChangeText={(zipcode) => this.setState({ zipcode })}
             placeholder="Zip Code"
             returnKeyType="next"
-            style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.zipcode}
           />
-        </Cell>
-        <Cell
-          label="Course #:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[5].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[5]}
             onSubmitEditing={() => this.textFieldsRefs[6].current.focus()}
             autoCapitalize="words"
@@ -224,16 +216,14 @@ class AddEventScreen extends Component {
             onChangeText={(courseNo) => this.setState({ courseNo })}
             placeholder="Course Number"
             returnKeyType="next"
-            style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.courseNo}
           />
-        </Cell>
-        <Cell
-          label="Course Name:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[6].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[6]}
             onSubmitEditing={() => this.textFieldsRefs[7].current.focus()}
             autoCapitalize="words"
@@ -242,16 +232,14 @@ class AddEventScreen extends Component {
             onChangeText={(courseName) => this.setState({ courseName })}
             placeholder="Course Name"
             returnKeyType="next"
-            style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.courseName}
           />
-        </Cell>
-        <Cell
-          label="Course Credits:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[7].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[7]}
             onSubmitEditing={() => this.textFieldsRefs[8].current.focus()}
             autoCapitalize="words"
@@ -263,16 +251,14 @@ class AddEventScreen extends Component {
             }
             placeholder="Course Credits"
             returnKeyType="next"
-            style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={`${this.state.numberOfCourseCredits}`}
           />
-        </Cell>
-        <Cell
-          label="Presenter Name:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[8].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[8]}
             onSubmitEditing={() => this.textFieldsRefs[9].current.focus()}
             autoCapitalize="words"
@@ -281,16 +267,14 @@ class AddEventScreen extends Component {
             onChangeText={(presenterName) => this.setState({ presenterName })}
             placeholder="Presenter Name"
             returnKeyType="next"
-            style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.presenterName}
           />
-        </Cell>
-        <Cell
-          label="Training Provider:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[9].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[9]}
             autoCapitalize="words"
             autoCorrect={false}
@@ -300,11 +284,10 @@ class AddEventScreen extends Component {
             }
             placeholder="Training Provider"
             returnKeyType="done"
-            style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.trainingProvider}
           />
-        </Cell>
+        </TouchableOpacity>
       </KeyboardAwareScrollView>
     )
   }
@@ -312,9 +295,7 @@ class AddEventScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 8,
     backgroundColor: Colors.white,
-  },
-  textInputStyle: {
-    textAlign: 'right',
   },
 })
