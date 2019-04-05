@@ -1,5 +1,10 @@
 import React, { Component } from 'react'
-import { Text, StyleSheet, TouchableOpacity } from 'react-native'
+import {
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native'
 import { Colors } from '../Themes/'
 import { inject, observer } from 'mobx-react'
 import DatePicker from 'react-native-datepicker'
