@@ -3,17 +3,16 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
-  TextInput,
   ActivityIndicator,
+  Text,
 } from 'react-native'
-import Ionicon from 'react-native-vector-icons/Ionicons'
 import { Button } from 'react-native-elements'
 import normalize from '../helpers/normalizeText'
 import { Colors } from '../Themes/'
 import { inject, observer } from 'mobx-react'
 import DatePicker from 'react-native-datepicker'
-import Cell from '../components/Cell'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { Cell, CellTextInput } from '../components/Shared'
 
 export default
 @inject('event')
@@ -27,9 +26,13 @@ class EditEventScreen extends Component {
         onPress={() => navigation.getParam('onSave')()}
       >
         {navigation.getParam('isUpdating') ? (
-          <ActivityIndicator animating color="white" />
+          <ActivityIndicator animating color={Colors.purple} />
         ) : (
-          <Ionicon name="ios-save" color={Colors.purple} size={30} />
+          <Text
+            style={{ fontWeight: 'bold', fontSize: 17, color: Colors.purple }}
+          >
+            Done
+          </Text>
         )}
       </TouchableOpacity>
     ),
@@ -52,6 +55,12 @@ class EditEventScreen extends Component {
     React.createRef(),
     React.createRef(),
   ]
+
+  componentWillMount() {
+    const eventId = this.props.navigation.getParam('id')
+    const _event = this.props.event.eventsById[eventId] || {}
+    this.setState({ ..._event })
+  }
 
   componentDidMount() {
     this.props.navigation.setParams({
@@ -110,14 +119,8 @@ class EditEventScreen extends Component {
     )
   }
 
-  onAttendees = () => {
-    const id = this.props.navigation.getParam('id')
-    this.props.navigation.navigate('EventAttendeesScreen', { id })
-  }
-
   render() {
     const eventId = this.props.navigation.getParam('id')
-    const attendees = this.props.event.attendeesById[eventId] || []
     const _event = this.props.event.eventsById[eventId] || {}
 
     return (
@@ -125,23 +128,21 @@ class EditEventScreen extends Component {
         style={styles.container}
         keyboardShouldPersistTaps="handled"
       >
-        <Cell
-          label="Event Name:"
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[0].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[0]}
             autoCapitalize="words"
             autoCorrect={false}
             editable
             onChangeText={(name) => this.setState({ name })}
-            placeholder={`${_event.name}`}
-            style={styles.textInputStyle}
+            placeholder="Event Name"
             underlineColorAndroid="transparent"
             value={this.state.name}
           />
-        </Cell>
-        <Cell label="Date:">
+        </TouchableOpacity>
+        <Cell>
           <DatePicker
             cancelBtnText="Cancel"
             confirmBtnText="Confirm"
@@ -157,108 +158,95 @@ class EditEventScreen extends Component {
             style={{ flex: 1, marginRight: 10, height: 40 }}
           />
         </Cell>
-        <Cell
-          label="Address:"
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[1].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[1]}
             autoCapitalize="words"
             autoCorrect={false}
             editable
             onChangeText={(address) => this.setState({ address })}
-            placeholder={`${_event.address}`}
-            style={styles.textInputStyle}
+            placeholder="Address"
             underlineColorAndroid="transparent"
             value={this.state.address}
           />
-        </Cell>
-        <Cell
-          label="City:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[2].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[2]}
             autoCapitalize="words"
             autoCorrect={false}
             editable
             onChangeText={(city) => this.setState({ city })}
-            placeholder={`${_event.city}`}
-            style={styles.textInputStyle}
+            placeholder="City"
             underlineColorAndroid="transparent"
             value={this.state.city}
           />
-        </Cell>
-        <Cell
-          label="State:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[3].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[3]}
             autoCapitalize="none"
             autoCorrect={false}
             editable
             onChangeText={(state) => this.setState({ state })}
-            placeholder={`${_event.state}`}
-            style={styles.textInputStyle}
+            placeholder="State"
             underlineColorAndroid="transparent"
             value={this.state.state}
           />
-        </Cell>
-        <Cell
-          label="Zip Code:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[4].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[4]}
             autoCapitalize="words"
             autoCorrect={false}
             editable
             keyboardType="number-pad"
             onChangeText={(zipcode) => this.setState({ zipcode })}
-            placeholder={`${_event.zipcode}`}
-            style={styles.textInputStyle}
+            placeholder="Zip Code"
             underlineColorAndroid="transparent"
             value={this.state.zipcode}
           />
-        </Cell>
-        <Cell
-          label="Course #:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[5].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[5]}
             autoCapitalize="words"
             autoCorrect={false}
             editable
             onChangeText={(courseNo) => this.setState({ courseNo })}
-            placeholder={`${_event.courseNo}`}
-            style={styles.textInputStyle}
+            placeholder="Course Number"
             underlineColorAndroid="transparent"
             value={this.state.courseNo}
           />
-        </Cell>
-        <Cell
-          label="Course Name:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[6].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[6]}
             autoCapitalize="words"
             autoCorrect={false}
             editable
             onChangeText={(courseName) => this.setState({ courseName })}
-            placeholder={`${_event.courseName}`}
-            style={styles.textInputStyle}
+            placeholder="Course Name"
             underlineColorAndroid="transparent"
             value={this.state.courseName}
           />
-        </Cell>
-        <Cell
-          label="Course Credits:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[7].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[7]}
             autoCapitalize="words"
             autoCorrect={false}
@@ -267,33 +255,29 @@ class EditEventScreen extends Component {
             onChangeText={(numberOfCourseCredits) =>
               this.setState({ numberOfCourseCredits })
             }
-            placeholder={`${_event.numberOfCourseCredits || ''}`}
-            style={styles.textInputStyle}
+            placeholder="Course Credits"
             underlineColorAndroid="transparent"
             value={`${this.state.numberOfCourseCredits || ''}`}
           />
-        </Cell>
-        <Cell
-          label="Presenter Name:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[8].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[8]}
             autoCapitalize="words"
             autoCorrect={false}
             editable
             onChangeText={(presenterName) => this.setState({ presenterName })}
-            placeholder={`${_event.presenterName}`}
-            style={styles.textInputStyle}
+            placeholder="Presenter Name"
             underlineColorAndroid="transparent"
             value={this.state.presenterName}
           />
-        </Cell>
-        <Cell
-          label="Training Provider:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[9].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[9]}
             autoCapitalize="words"
             autoCorrect={false}
@@ -301,28 +285,10 @@ class EditEventScreen extends Component {
             onChangeText={(trainingProvider) =>
               this.setState({ trainingProvider })
             }
-            placeholder={`${_event.trainingProvider}`}
-            style={styles.textInputStyle}
+            placeholder="Training Provider"
             underlineColorAndroid="transparent"
             value={this.state.trainingProvider}
           />
-        </Cell>
-        <TouchableOpacity onPress={() => this.onAttendees(eventId)}>
-          <Cell arrow label="Attendees:">
-            <TextInput
-              autoCapitalize="words"
-              autoCorrect={false}
-              editable={false}
-              pointerEvents="none"
-              style={{
-                ...styles.textInputStyle,
-                color: Colors.blue,
-                fontWeight: '700',
-              }}
-              underlineColorAndroid="transparent"
-              value={attendees.length.toString()}
-            />
-          </Cell>
         </TouchableOpacity>
         <Button
           buttonStyle={styles.deleteButton}
@@ -340,12 +306,6 @@ class EditEventScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
-  },
-  textInputStyle: {
-    flex: 1,
-    marginRight: 10,
-    color: Colors.black,
-    fontWeight: '100',
   },
   buttonContainer: {
     marginTop: 15,
