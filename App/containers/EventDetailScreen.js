@@ -8,6 +8,7 @@ import {
   Alert,
   TextInput,
   FlatList,
+  Switch,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicon from 'react-native-vector-icons/Ionicons';
@@ -16,6 +17,19 @@ import { Colors, Styles } from '../Themes/';
 import { inject, observer } from 'mobx-react';
 import { Button } from 'react-native-elements';
 import SegmentedControlTab from 'react-native-segmented-control-tab';
+import moment from 'moment';
+import styled from 'styled-components';
+
+const InfoCellView = styled.View`
+  margin-left: 8px;
+  border-bottom-color: ${Colors.gray};
+  border-bottom-width: 1px;
+`;
+
+const InfoCellText = styled.Text`
+  padding: 8px;
+  font-size: 15px;
+`;
 
 export default
 @inject('receiver', 'event')
@@ -45,6 +59,8 @@ class SubmitSettingsScreen extends Component {
     isSubmitting: false,
     newSheetReceiver: '',
     selectedIndex: 0,
+    sendCertificates: true,
+    sendSummary: true,
   };
   inputFieldRef = React.createRef();
 
@@ -116,51 +132,129 @@ class SubmitSettingsScreen extends Component {
 
   renderInfo = () => {
     const eventId = this.props.navigation.getParam('id');
-    const attendees = this.props.event.attendeesById[eventId] || [];
+    const _event = this.props.event.eventsById[eventId] || {};
+    return (
+      <ScrollView>
+        <InfoCellView>
+          <InfoCellText>
+            {moment(_event.date).format('MMMM DD, YYYY')}
+          </InfoCellText>
+        </InfoCellView>
+        <InfoCellView>
+          <InfoCellText>
+            {_event.address || (
+              <Text style={{ color: Colors.darkGray }}>Address</Text>
+            )}
+          </InfoCellText>
+        </InfoCellView>
+        <InfoCellView>
+          <InfoCellText>
+            {_event.city || (
+              <Text style={{ color: Colors.darkGray }}>City</Text>
+            )}
+          </InfoCellText>
+        </InfoCellView>
+        <InfoCellView>
+          <InfoCellText>
+            {_event.state || (
+              <Text style={{ color: Colors.darkGray }}>State</Text>
+            )}
+          </InfoCellText>
+        </InfoCellView>
+        <InfoCellView>
+          <InfoCellText>
+            {_event.zipcode || (
+              <Text style={{ color: Colors.darkGray }}>Zip Code</Text>
+            )}
+          </InfoCellText>
+        </InfoCellView>
+        <InfoCellView>
+          <InfoCellText>
+            {_event.courseNo || (
+              <Text style={{ color: Colors.darkGray }}>Course Number</Text>
+            )}
+          </InfoCellText>
+        </InfoCellView>
+        <InfoCellView>
+          <InfoCellText>
+            {_event.numberOfCourseCredits || (
+              <Text style={{ color: Colors.darkGray }}>
+                Number of Course Credits
+              </Text>
+            )}
+          </InfoCellText>
+        </InfoCellView>
+        <InfoCellView>
+          <InfoCellText>
+            {_event.presenterName || (
+              <Text style={{ color: Colors.darkGray }}>Presenter Name</Text>
+            )}
+          </InfoCellText>
+        </InfoCellView>
+        <InfoCellView>
+          <InfoCellText>
+            {_event.trainingProvider || (
+              <Text style={{ color: Colors.darkGray }}>Training Provider</Text>
+            )}
+          </InfoCellText>
+        </InfoCellView>
+      </ScrollView>
+    );
+  };
+
+  renderSubmit = () => {
+    const eventId = this.props.navigation.getParam('id');
     const receivers = this.props.event.receiversByEventId[eventId] || [];
     return (
       <ScrollView style={Styles.container}>
-        <TouchableOpacity
-          style={styles.allEventsContainer}
-          onPress={() => {
-            this.props.navigation.navigate('EventAttendeesScreen', {
-              id: eventId,
-            });
-          }}
-        >
-          <Text>All Attendees</Text>
-          <Text style={{ color: '#34bd3e' }}>{attendees.length}</Text>
-          <Icon
-            color={'#797979'}
-            name="chevron-right"
-            size={16}
-            style={Styles.arrow}
-          />
-        </TouchableOpacity>
         <View style={styles.section}>
           <Text
             style={{
               color: Colors.black,
               fontSize: normalize(17),
-              fontWeight: '700',
             }}
           >
-            Send Attendence Summary To:
+            Send Certificates to Attendees
           </Text>
+          <Switch
+            onValueChange={(sendCertificates) =>
+              this.setState({ sendCertificates })
+            }
+            value={this.state.sendCertificates}
+          />
+        </View>
+        <View style={styles.section}>
+          <Text
+            style={{
+              color: Colors.black,
+              fontSize: normalize(17),
+            }}
+          >
+            Send Attendence Summary
+          </Text>
+          <Switch
+            onValueChange={(sendSummary) => this.setState({ sendSummary })}
+            value={this.state.sendSummary}
+          />
         </View>
         {receivers.map((receiver, index) => (
           <View key={index} style={styles.listItemContainer}>
+            <Text style={styles.name}>{receiver.email}</Text>
             <TouchableOpacity
+              style={{ padding: 8 }}
               onPress={() => this.removeSheetReceiver(receiver)}
             >
-              <Icon color={Colors.black} name={'minus-square'} size={20} />
+              <Icon color={Colors.purple} name={'minus-square'} size={20} />
             </TouchableOpacity>
-            <Text style={styles.name}>{receiver.email}</Text>
           </View>
         ))}
         <View style={styles.plusContainer}>
           <TouchableOpacity onPress={this.plusIconPressed}>
-            <Icon color={Colors.black} name={'plus'} size={21} />
+            <Ionicon
+              name="ios-add-circle-outline"
+              color={Colors.purple}
+              size={30}
+            />
           </TouchableOpacity>
           <TextInput
             ref={this.inputFieldRef}
@@ -193,7 +287,6 @@ class SubmitSettingsScreen extends Component {
   renderAttendees = () => {
     const eventId = this.props.navigation.getParam('id');
     const attendees = this.props.event.attendeesById[eventId] || [];
-    const receivers = this.props.event.receiversByEventId[eventId] || [];
     return (
       <View style={{ flex: 1 }}>
         <FlatList
@@ -293,9 +386,6 @@ class SubmitSettingsScreen extends Component {
   render() {
     const eventId = this.props.navigation.getParam('id');
     const _event = this.props.event.eventsById[eventId] || {};
-    const attendees = this.props.event.attendeesById[eventId] || [];
-    const receivers = this.props.event.receiversByEventId[eventId] || [];
-
     return (
       <>
         <View
@@ -326,7 +416,7 @@ class SubmitSettingsScreen extends Component {
         </View>
         {this.state.selectedIndex === 0 ? this.renderInfo() : null}
         {this.state.selectedIndex === 1 ? this.renderAttendees() : null}
-        {this.state.selectedIndex === 2 ? <View /> : null}
+        {this.state.selectedIndex === 2 ? this.renderSubmit() : null}
       </>
     );
   }
@@ -353,6 +443,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: '100%',
     height: 60,
+    backgroundColor: Colors.purple,
   },
   buttonTitle: {
     marginLeft: 10,
@@ -360,24 +451,23 @@ const styles = StyleSheet.create({
     color: Colors.white,
   },
   section: {
-    height: 43,
     backgroundColor: Colors.white,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 20,
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: 'black',
+    borderBottomColor: Colors.gray,
   },
   listItemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 40,
-    paddingVertical: 10,
     paddingHorizontal: 30,
-    backgroundColor: Colors.white,
     borderBottomWidth: 1,
-    borderBottomColor: 'black',
+    borderBottomColor: Colors.gray,
+    backgroundColor: Colors.white,
   },
   textInput: {
     flex: 1,
@@ -388,8 +478,6 @@ const styles = StyleSheet.create({
   plusContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 46,
-    paddingVertical: 10,
     paddingLeft: 30,
     backgroundColor: Colors.white,
   },
