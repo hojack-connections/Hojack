@@ -71,14 +71,20 @@ class SubmitSettingsScreen extends Component {
   }
 
   _onSubmit = () => {
+    this.setState({ isSubmitting: true })
     const eventId = this.props.navigation.getParam('id')
     this.props.event
-      .submit(eventId)
+      .submit(eventId, {
+        sendSummary: this.state.sendSummary,
+        sendCertificates: this.state.sendCertificates,
+      })
       .then(() => this.props.event.loadEventAttendees(eventId))
       .then(() => {
+        this.setState({ isSubmitting: false })
         Alert.alert('Success', 'Submitted this event successfully!')
       })
       .catch(() => {
+        this.setState({ isSubmitting: false })
         Alert.alert('Error', 'There was a problem submitting your event.')
       })
   }

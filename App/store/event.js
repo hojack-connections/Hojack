@@ -100,10 +100,11 @@ export default class EventStore {
     }
   }
 
-  async submit(id) {
+  async submit(id, options = {}) {
     try {
       await axios.post('/events/submit', {
         _id: id,
+        ...options,
         token: this.authStore.token,
       })
     } catch (err) {
