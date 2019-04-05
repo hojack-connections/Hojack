@@ -60,6 +60,7 @@ export default
 @observer
 class StartTrial extends React.Component {
   static navigationOptions = () => ({
+    gesturesEnabled: false,
     headerStyle: {
       display: 'none',
     },

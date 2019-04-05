@@ -56,6 +56,7 @@ export default
 @observer
 class PurchaseSubscription extends React.Component {
   static navigationOptions = () => ({
+    gesturesEnabled: false,
     headerStyle: {
       display: 'none',
     },

@@ -18,6 +18,7 @@ export default
 class AccountScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Account',
+    gesturesEnabled: false,
     headerLeft: (
       <TouchableOpacity
         style={{ padding: 8, marginLeft: 8 }}
