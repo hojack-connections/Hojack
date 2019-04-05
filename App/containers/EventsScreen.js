@@ -111,9 +111,10 @@ class EventsScreen extends Component {
           />
         </View>
         <FlatList
-          data={this.props.event.events.filter(
-            (event) => event.name.indexOf(this.state.searchText) !== -1
-          )}
+          data={this.props.event.events.filter((event) => {
+            if (!this.state.searchText) return true
+            return event.name.indexOf(this.state.searchText) !== -1
+          })}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
           onRefresh={this.reload}
