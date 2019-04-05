@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   StyleSheet,
   TouchableOpacity,
   Alert,
   TextInput,
   ActivityIndicator,
-} from 'react-native';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import { Button } from 'react-native-elements';
-import normalize from '../helpers/normalizeText';
-import { Colors } from '../Themes/';
-import { inject, observer } from 'mobx-react';
-import DatePicker from 'react-native-datepicker';
-import Cell from '../components/Cell';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+} from 'react-native'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import { Button } from 'react-native-elements'
+import normalize from '../helpers/normalizeText'
+import { Colors } from '../Themes/'
+import { inject, observer } from 'mobx-react'
+import DatePicker from 'react-native-datepicker'
+import Cell from '../components/Cell'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default
 @inject('event')
@@ -33,12 +33,12 @@ class EventSummaryScreen extends Component {
         )}
       </TouchableOpacity>
     ),
-  });
+  })
 
   state = {
     isUpdating: false,
     isDeleting: false,
-  };
+  }
 
   textFieldsRefs = [
     React.createRef(),
@@ -51,35 +51,35 @@ class EventSummaryScreen extends Component {
     React.createRef(),
     React.createRef(),
     React.createRef(),
-  ];
+  ]
 
   componentDidMount() {
     this.props.navigation.setParams({
       onSave: this.onSave,
-    });
+    })
   }
 
   onSave = () => {
     this.props.navigation.setParams({
       isUpdating: true,
-    });
-    const eventId = this.props.navigation.getParam('id');
+    })
+    const eventId = this.props.navigation.getParam('id')
     this.props.event
       .update(eventId, { _id: eventId, ...this.state })
       .then(() => this.props.event.loadEvents())
       .then(() => {
         this.props.navigation.setParams({
           isUpdating: false,
-        });
-        this.props.navigation.goBack();
+        })
+        this.props.navigation.goBack()
       })
       .catch(() => {
         this.props.navigation.setParams({
           isUpdating: false,
-        });
-        alert('There was a problem updating the event.');
-      });
-  };
+        })
+        alert('There was a problem updating the event.')
+      })
+  }
 
   onDelete = () => {
     Alert.alert(
@@ -90,35 +90,35 @@ class EventSummaryScreen extends Component {
         {
           text: 'Yes',
           onPress: () => {
-            this.setState({ isDeleting: true });
-            const eventId = this.props.navigation.getParam('id');
+            this.setState({ isDeleting: true })
+            const eventId = this.props.navigation.getParam('id')
             this.props.event
               .delete(eventId)
               .then(() => {
-                this.setState({ isDeleting: false });
-                this.props.event.loadEvents();
-                this.props.navigation.goBack();
+                this.setState({ isDeleting: false })
+                this.props.event.loadEvents()
+                this.props.navigation.goBack()
               })
               .catch(() => {
-                this.setState({ isDeleting: false });
-                alert('There was a problem deleting the event.');
-              });
+                this.setState({ isDeleting: false })
+                alert('There was a problem deleting the event.')
+              })
           },
         },
       ],
       { cancelable: false }
-    );
-  };
+    )
+  }
 
   onAttendees = () => {
-    const id = this.props.navigation.getParam('id');
-    this.props.navigation.navigate('EventAttendeesScreen', { id });
-  };
+    const id = this.props.navigation.getParam('id')
+    this.props.navigation.navigate('EventAttendeesScreen', { id })
+  }
 
   render() {
-    const eventId = this.props.navigation.getParam('id');
-    const attendees = this.props.event.attendeesById[eventId] || [];
-    const _event = this.props.event.eventsById[eventId] || {};
+    const eventId = this.props.navigation.getParam('id')
+    const attendees = this.props.event.attendeesById[eventId] || []
+    const _event = this.props.event.eventsById[eventId] || {}
 
     return (
       <KeyboardAwareScrollView
@@ -333,7 +333,7 @@ class EventSummaryScreen extends Component {
           titleStyle={styles.buttonTitle}
         />
       </KeyboardAwareScrollView>
-    );
+    )
   }
 }
 
@@ -370,4 +370,4 @@ const styles = StyleSheet.create({
     fontSize: normalize(20),
     color: Colors.white,
   },
-});
+})

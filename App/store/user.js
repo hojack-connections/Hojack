@@ -1,10 +1,10 @@
-import axios from 'axios';
+import axios from 'axios'
 
 export default class UserStore {
-  authStore;
+  authStore
 
   constructor(_authStore) {
-    this.authStore = _authStore;
+    this.authStore = _authStore
   }
 
   async signup(data) {
@@ -14,11 +14,11 @@ export default class UserStore {
         lastname: data.lastname,
         email: data.email,
         password: data.password,
-      });
-      await this.login(data);
+      })
+      await this.login(data)
     } catch (err) {
-      console.log('Error signing up', err);
-      throw err;
+      console.log('Error signing up', err)
+      throw err
     }
   }
 
@@ -27,11 +27,11 @@ export default class UserStore {
       const res = await axios.post('/users/login', {
         email: data.email,
         password: data.password,
-      });
-      await this.authStore.authChanged(res.data.token);
+      })
+      await this.authStore.authChanged(res.data.token)
     } catch (err) {
-      console.log('Error logging in', err);
-      throw err;
+      console.log('Error logging in', err)
+      throw err
     }
   }
 
@@ -40,11 +40,11 @@ export default class UserStore {
       await axios.put('/users', {
         ...data,
         token: this.authStore.token,
-      });
-      await this.authStore.loadCurrentUser();
+      })
+      await this.authStore.loadCurrentUser()
     } catch (err) {
-      console.log('Error updating user', err);
-      throw err;
+      console.log('Error updating user', err)
+      throw err
     }
   }
 }

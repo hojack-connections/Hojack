@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   View,
   Text,
@@ -6,12 +6,12 @@ import {
   StyleSheet,
   Image,
   KeyboardAvoidingView,
-} from 'react-native';
-import { Button } from 'react-native-elements';
-import normalize from '../helpers/normalizeText';
-import { Colors } from '../Themes/';
-import { inject, observer } from 'mobx-react';
-import { VFlex, HFlex } from '../components/Shared';
+} from 'react-native'
+import { Button } from 'react-native-elements'
+import normalize from '../helpers/normalizeText'
+import { Colors } from '../Themes/'
+import { inject, observer } from 'mobx-react'
+import { VFlex, HFlex } from '../components/Shared'
 
 export default
 @inject('user', 'auth')
@@ -23,34 +23,34 @@ class SignupScreen extends Component {
     email: '',
     password: '',
     isLoading: false,
-  };
+  }
 
-  lastNameTextInputRef = React.createRef();
-  emailTextInputRef = React.createRef();
-  passwordTextInputRef = React.createRef();
+  lastNameTextInputRef = React.createRef()
+  emailTextInputRef = React.createRef()
+  passwordTextInputRef = React.createRef()
 
   onSignup = () => {
-    this.setState({ isLoading: true });
+    this.setState({ isLoading: true })
     this.props.user
       .signup(this.state)
       .then(() => {
-        this.setState({ isLoading: false });
+        this.setState({ isLoading: false })
         if (this.props.auth.authenticated) {
-          this.props.navigation.navigate('App');
+          this.props.navigation.navigate('App')
         }
       })
       .catch(() => {
-        this.setState({ isLoading: false });
-        alert('There was a problem creating your account. Please try again.');
-      });
-  };
+        this.setState({ isLoading: false })
+        alert('There was a problem creating your account. Please try again.')
+      })
+  }
 
   onGotoLogin = () => {
-    this.props.navigation.navigate('LoginScreen');
-  };
+    this.props.navigation.navigate('LoginScreen')
+  }
 
   render() {
-    const { firstname, lastname, email, password } = this.state;
+    const { firstname, lastname, email, password } = this.state
 
     return (
       <KeyboardAvoidingView
@@ -152,7 +152,7 @@ class SignupScreen extends Component {
           </HFlex>
         </VFlex>
       </KeyboardAvoidingView>
-    );
+    )
   }
 }
 
@@ -185,4 +185,4 @@ const styles = StyleSheet.create({
     fontSize: normalize(20),
     color: Colors.white,
   },
-});
+})

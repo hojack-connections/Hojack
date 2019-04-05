@@ -1,13 +1,13 @@
-import React from 'react';
+import React from 'react'
 import {
   View,
   Text,
   StyleSheet,
   Platform,
   TouchableWithoutFeedback,
-} from 'react-native';
-import normalize from '../helpers/normalizeText';
-import Icon from 'react-native-vector-icons/FontAwesome';
+} from 'react-native'
+import normalize from '../helpers/normalizeText'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 export default class Cell extends React.Component {
   render() {
@@ -28,7 +28,7 @@ export default class Cell extends React.Component {
           </View>
         </TouchableWithoutFeedback>
       </View>
-    );
+    )
   }
 }
 
@@ -58,4 +58,4 @@ const styles = StyleSheet.create({
     right: 10,
     top: 14,
   },
-});
+})

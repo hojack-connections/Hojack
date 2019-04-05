@@ -1,9 +1,9 @@
-import React from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { VFlex, HFlex } from '../components/Shared';
-import styled from 'styled-components';
-import Colors from '../Themes/Colors';
-import { observer, inject } from 'mobx-react';
+import React from 'react'
+import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native'
+import { VFlex, HFlex } from '../components/Shared'
+import styled from 'styled-components'
+import Colors from '../Themes/Colors'
+import { observer, inject } from 'mobx-react'
 
 const HeaderBackground = styled.View`
   background-color: ${Colors.navigation};
@@ -12,7 +12,7 @@ const HeaderBackground = styled.View`
   height: 340px;
   left: -50;
   width: 150%;
-`;
+`
 
 const HoveringBox = styled.View`
   margin: 40px;
@@ -22,38 +22,38 @@ const HoveringBox = styled.View`
   background-color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   align-items: center;
-`;
+`
 
 const ImageIcon = styled(Image)`
   width: 35px;
   height: 35px;
   margin-horizontal: 8px;
-`;
+`
 
 const ImageTextHeader = styled.Text`
   display: flex;
   flex: 1;
   font-size: 18;
   text-align: left;
-`;
+`
 
 const ImageTextDescription = styled.Text`
   display: flex;
   font-size: 16;
   color: gray;
   text-align: left;
-`;
+`
 
 const DetailsText = styled.Text`
   margin: 8px;
-`;
+`
 
 const FooterView = styled.View`
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-color: white;
   padding: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-`;
+`
 
 export default
 @inject('auth', 'subscription')
@@ -63,16 +63,16 @@ class StartTrial extends React.Component {
     headerStyle: {
       display: 'none',
     },
-  });
+  })
 
   startTrial = () => {
     this.props.subscription
       .startTrial()
       .then(() => this.props.subscription.loadActiveSubscription())
       .then(() => {
-        this.props.navigation.goBack();
-      });
-  };
+        this.props.navigation.goBack()
+      })
+  }
 
   render() {
     return (
@@ -190,6 +190,6 @@ class StartTrial extends React.Component {
           </TouchableOpacity>
         </FooterView>
       </>
-    );
+    )
   }
 }

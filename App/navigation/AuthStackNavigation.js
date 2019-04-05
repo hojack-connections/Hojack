@@ -1,7 +1,7 @@
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation'
 
-import SignupScreen from '../containers/SignupScreen';
-import LoginScreen from '../containers/LoginScreen';
+import SignupScreen from '../containers/SignupScreen'
+import LoginScreen from '../containers/LoginScreen'
 
 const AuthStackNavigation = createStackNavigator(
   {
@@ -16,6 +16,6 @@ const AuthStackNavigation = createStackNavigator(
       },
     },
   }
-);
+)
 
-export default AuthStackNavigation;
+export default AuthStackNavigation

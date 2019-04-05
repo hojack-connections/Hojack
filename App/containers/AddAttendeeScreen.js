@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   View,
   ScrollView,
@@ -9,13 +9,13 @@ import {
   TouchableOpacity,
   Platform,
   ActivityIndicator,
-} from 'react-native';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import SignatureCapture from 'react-native-signature-capture';
-import { inject, observer } from 'mobx-react';
-import Cell from '../components/Cell';
-import normalize from '../helpers/normalizeText';
-import { Colors } from '../Themes/';
+} from 'react-native'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import SignatureCapture from 'react-native-signature-capture'
+import { inject, observer } from 'mobx-react'
+import Cell from '../components/Cell'
+import normalize from '../helpers/normalizeText'
+import { Colors } from '../Themes/'
 
 export default
 @inject('event', 'auth', 'attendee')
@@ -39,38 +39,38 @@ class AddAttendeeScreen extends Component {
         )}
       </TouchableOpacity>
     ),
-  });
+  })
 
   state = {
     firstname: '',
     lastname: '',
     email: '',
     phone: '',
-  };
+  }
 
   textFieldsRefs = [
     React.createRef(),
     React.createRef(),
     React.createRef(),
     React.createRef(),
-  ];
-  signatureRef = React.createRef();
+  ]
+  signatureRef = React.createRef()
 
   componentDidMount() {
     this.props.navigation.setParams({
       onSave: this.onSave,
-    });
+    })
   }
 
   onSave = () => {
-    this.signatureRef.current.saveImage();
-  };
+    this.signatureRef.current.saveImage()
+  }
 
   onSignatureSave = (result) => {
     this.props.navigation.setParams({
       isUpdating: true,
-    });
-    const eventId = this.props.navigation.getParam('id');
+    })
+    const eventId = this.props.navigation.getParam('id')
     this.props.attendee
       .create(eventId, {
         ...this.state,
@@ -81,19 +81,19 @@ class AddAttendeeScreen extends Component {
       .then(() => {
         this.props.navigation.setParams({
           isUpdating: false,
-        });
-        this.props.navigation.goBack();
+        })
+        this.props.navigation.goBack()
       })
       .catch(() => {
         this.props.navigation.setParams({
           isUpdating: false,
-        });
-        alert('There was a problem creating the attendee.');
-      });
-  };
+        })
+        alert('There was a problem creating the attendee.')
+      })
+  }
 
   render() {
-    const signatureWidth = Dimensions.get('window').width - 50;
+    const signatureWidth = Dimensions.get('window').width - 50
     return (
       <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
         <Cell
@@ -175,7 +175,7 @@ class AddAttendeeScreen extends Component {
           <TouchableOpacity
             style={{ zIndex: 1, position: 'absolute', right: 10, top: 5 }}
             onPress={() => {
-              this.signatureRef.current.resetImage();
+              this.signatureRef.current.resetImage()
             }}
           >
             <Text style={{ color: 'blue', fontSize: 14 }}>Reset</Text>
@@ -195,7 +195,7 @@ class AddAttendeeScreen extends Component {
           />
         </View>
       </ScrollView>
-    );
+    )
   }
 }
 
@@ -256,4 +256,4 @@ const styles = StyleSheet.create({
     fontSize: normalize(14),
     color: 'red',
   },
-});
+})

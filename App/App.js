@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import { View, StatusBar, YellowBox } from 'react-native';
-import RootNavigation from './navigation/RootNavigation';
-import AuthStackNavigation from './navigation/AuthStackNavigation';
-import AuthLoading from './containers/AuthLoading';
-import { createSwitchNavigator, createAppContainer } from 'react-navigation';
-import SplashScreen from 'react-native-splash-screen';
+import React, { Component } from 'react'
+import { View, StatusBar, YellowBox } from 'react-native'
+import RootNavigation from './navigation/RootNavigation'
+import AuthStackNavigation from './navigation/AuthStackNavigation'
+import AuthLoading from './containers/AuthLoading'
+import { createSwitchNavigator, createAppContainer } from 'react-navigation'
+import SplashScreen from 'react-native-splash-screen'
 
 YellowBox.ignoreWarnings([
   'Warning: isMounted(...) is deprecated',
   'Module RCTImageLoader',
-]);
-StatusBar.setBarStyle('dark-content', true);
+])
+StatusBar.setBarStyle('dark-content', true)
 
 const AppContainer = createAppContainer(
   createSwitchNavigator({
@@ -18,11 +18,11 @@ const AppContainer = createAppContainer(
     Auth: AuthStackNavigation,
     App: RootNavigation,
   })
-);
+)
 
 export default class App extends Component {
   componentDidMount() {
-    SplashScreen.hide();
+    SplashScreen.hide()
   }
 
   render() {
@@ -35,6 +35,6 @@ export default class App extends Component {
       >
         <AppContainer />
       </View>
-    );
+    )
   }
 }

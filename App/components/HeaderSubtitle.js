@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Colors } from '../Themes';
+import styled from 'styled-components'
+import { Colors } from '../Themes'
 
 export default styled.View`
   height: 42px;
@@ -7,4 +7,4 @@ export default styled.View`
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-`;
+`

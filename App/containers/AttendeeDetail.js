@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   View,
   ScrollView,
@@ -8,13 +8,13 @@ import {
   Image,
   TextInput,
   TouchableOpacity,
-} from 'react-native';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import { Button } from 'react-native-elements';
-import { inject, observer } from 'mobx-react';
-import normalize from '../helpers/normalizeText';
-import { Colors } from '../Themes/';
-import Cell from '../components/Cell';
+} from 'react-native'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import { Button } from 'react-native-elements'
+import { inject, observer } from 'mobx-react'
+import normalize from '../helpers/normalizeText'
+import { Colors } from '../Themes/'
+import Cell from '../components/Cell'
 
 export default
 @inject('event', 'attendee', 'auth')
@@ -35,44 +35,44 @@ class AttendeeDetail extends Component {
         <Ionicon name="ios-create" color="white" size={30} />
       </TouchableOpacity>
     ),
-  });
+  })
 
   state = {
     email: '',
     isSending: false,
-  };
+  }
 
-  emailRef = React.createRef();
+  emailRef = React.createRef()
 
   componentWillMount() {
     this.props.event.loadEventAttendees(
       this.props.navigation.getParam('eventId')
-    );
+    )
   }
 
   sendTestCert = () => {
     // Send a test cert to this.state.email
-    this.setState({ isSending: true });
-    const eventId = this.props.navigation.getParam('eventId');
-    const attendeeId = this.props.navigation.getParam('attendeeId');
-    const email = this.state.email || this.props.auth.active.email;
+    this.setState({ isSending: true })
+    const eventId = this.props.navigation.getParam('eventId')
+    const attendeeId = this.props.navigation.getParam('attendeeId')
+    const email = this.state.email || this.props.auth.active.email
     this.props.event
       .sendCertificate(eventId, attendeeId, email)
       .then(() => alert('Sent test certificate'))
       .then(() => this.setState({ isSending: false, email: '' }))
       .catch(() => {
-        this.setState({ isSending: false });
-        alert('There was a problem sending your test certificate.');
-      });
-  };
+        this.setState({ isSending: false })
+        alert('There was a problem sending your test certificate.')
+      })
+  }
 
   render() {
-    const eventId = this.props.navigation.getParam('eventId');
-    const attendeeId = this.props.navigation.getParam('attendeeId');
+    const eventId = this.props.navigation.getParam('eventId')
+    const attendeeId = this.props.navigation.getParam('attendeeId')
 
-    const eventAttendees = this.props.event.attendeesById[eventId] || [];
+    const eventAttendees = this.props.event.attendeesById[eventId] || []
     const attendee =
-      eventAttendees.find((_attendee) => _attendee._id === attendeeId) || {};
+      eventAttendees.find((_attendee) => _attendee._id === attendeeId) || {}
 
     return (
       <ScrollView style={styles.container}>
@@ -117,7 +117,7 @@ class AttendeeDetail extends Component {
           containerStyle={styles.buttonContainer}
         />
       </ScrollView>
-    );
+    )
   }
 }
 
@@ -177,4 +177,4 @@ const styles = StyleSheet.create({
     fontSize: normalize(20),
     color: Colors.white,
   },
-});
+})

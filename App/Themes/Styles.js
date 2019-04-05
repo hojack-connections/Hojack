@@ -1,5 +1,5 @@
-import Colors from './Colors';
-import normalize from '../helpers/normalizeText';
+import Colors from './Colors'
+import normalize from '../helpers/normalizeText'
 
 export default {
   nav: {
@@ -21,4 +21,4 @@ export default {
     right: 10,
     top: 15,
   },
-};
+}

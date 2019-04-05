@@ -1,18 +1,18 @@
-import React from 'react';
+import React from 'react'
 import {
   TextInput,
   Text,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-} from 'react-native';
-import normalize from '../helpers/normalizeText';
-import { Colors } from '../Themes/';
-import { Button } from 'react-native-elements';
-import { inject, observer } from 'mobx-react';
-import moment from 'moment';
-import { VFlex, HFlex } from '../components/Shared';
-import styled from 'styled-components';
+} from 'react-native'
+import normalize from '../helpers/normalizeText'
+import { Colors } from '../Themes/'
+import { Button } from 'react-native-elements'
+import { inject, observer } from 'mobx-react'
+import moment from 'moment'
+import { VFlex, HFlex } from '../components/Shared'
+import styled from 'styled-components'
 
 const DefaultText = styled(TextInput)`
   flex: 1;
@@ -24,7 +24,7 @@ const DefaultText = styled(TextInput)`
   font-size: 18px;
   padding-top: 4px;
   padding-bottom: 4px;
-`;
+`
 
 export default
 @inject('auth', 'subscription', 'user')
@@ -54,52 +54,52 @@ class AccountScreen extends React.Component {
         </Text>
       </TouchableOpacity>
     ),
-  });
+  })
 
   state = {
     firstname: '',
     lastname: '',
     title: '',
-  };
+  }
 
   componentWillMount() {
-    this.props.subscription.loadActiveSubscription();
-    const { onDone } = this;
-    this.props.navigation.setParams({ onDone });
-    const { firstname, lastname, title } = this.props.auth.active;
-    this.setState({ firstname, lastname, title });
+    this.props.subscription.loadActiveSubscription()
+    const { onDone } = this
+    this.props.navigation.setParams({ onDone })
+    const { firstname, lastname, title } = this.props.auth.active
+    this.setState({ firstname, lastname, title })
   }
 
   onDone = () => {
     this.props.navigation.setParams({
       isUpdating: true,
-    });
+    })
     this.props.user
       .update(this.state)
       .then(() => this.props.navigation.goBack())
       .catch(() => {
         this.props.navigation.setParams({
           isUpdating: false,
-        });
-        alert('There was a problem updating your profile.');
-      });
-  };
+        })
+        alert('There was a problem updating your profile.')
+      })
+  }
 
   logout = () => {
     this.props.auth
       .logout()
       .then(() => this.props.navigation.navigate('Auth'))
-      .catch(() => alert('There was a problem logging you out.'));
-  };
+      .catch(() => alert('There was a problem logging you out.'))
+  }
 
   render() {
-    const { expirationDate } = this.props.subscription.activeSubscription || {};
-    const monthDifference = moment(expirationDate).diff(moment(), 'months');
-    const dayDifference = moment(expirationDate).diff(moment(), 'days');
+    const { expirationDate } = this.props.subscription.activeSubscription || {}
+    const monthDifference = moment(expirationDate).diff(moment(), 'months')
+    const dayDifference = moment(expirationDate).diff(moment(), 'days')
     const expirationText =
       monthDifference <= 1
         ? `${dayDifference} Days`
-        : `${monthDifference} Months`;
+        : `${monthDifference} Months`
     return (
       <VFlex style={{ backgroundColor: Colors.background }}>
         <Text style={{ fontSize: 20, marginVertical: 16 }}>
@@ -151,7 +151,7 @@ class AccountScreen extends React.Component {
           />
         </HFlex>
       </VFlex>
-    );
+    )
   }
 }
 
@@ -170,4 +170,4 @@ const styles = StyleSheet.create({
     fontSize: normalize(20),
     color: Colors.white,
   },
-});
+})

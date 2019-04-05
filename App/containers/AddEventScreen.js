@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import { Colors } from '../Themes/';
-import { inject, observer } from 'mobx-react';
-import Cell from '../components/Cell';
-import DatePicker from 'react-native-datepicker';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import React, { Component } from 'react'
+import { StyleSheet, TextInput, TouchableOpacity } from 'react-native'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import { Colors } from '../Themes/'
+import { inject, observer } from 'mobx-react'
+import Cell from '../components/Cell'
+import DatePicker from 'react-native-datepicker'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default
 @inject('event')
@@ -28,7 +28,7 @@ class AddEventScreen extends Component {
         )}
       </TouchableOpacity>
     ),
-  });
+  })
 
   state = {
     name: '',
@@ -43,7 +43,7 @@ class AddEventScreen extends Component {
     presenterName: '',
     trainingProvider: '',
     isCreating: false,
-  };
+  }
 
   textFieldsRefs = [
     React.createRef(),
@@ -56,38 +56,38 @@ class AddEventScreen extends Component {
     React.createRef(),
     React.createRef(),
     React.createRef(),
-  ];
+  ]
 
   componentWillMount() {
     this.props.navigation.setParams({
       onSave: this.onSave,
-    });
+    })
   }
 
   onSave = () => {
     if (this.saveDisabled()) {
-      alert('You are missing some fields, please fill them out then save.');
-      return;
+      alert('You are missing some fields, please fill them out then save.')
+      return
     }
     this.props.navigation.setParams({
       isCreating: true,
-    });
+    })
     this.props.event
       .create(this.state)
       .then(() => this.props.event.loadEvents())
       .then(() => {
         this.props.navigation.setParams({
           isCreating: false,
-        });
-        this.props.navigation.goBack();
+        })
+        this.props.navigation.goBack()
       })
       .catch(() => {
         this.props.navigation.setParams({
           isCreating: false,
-        });
-        alert('There was a problem creating your event.');
-      });
-  };
+        })
+        alert('There was a problem creating your event.')
+      })
+  }
 
   saveDisabled = () =>
     !this.state.name ||
@@ -96,7 +96,7 @@ class AddEventScreen extends Component {
     !this.state.state ||
     !this.state.zipcode ||
     !this.state.courseNo ||
-    !this.state.courseName;
+    !this.state.courseName
 
   render() {
     return (
@@ -306,7 +306,7 @@ class AddEventScreen extends Component {
           />
         </Cell>
       </KeyboardAwareScrollView>
-    );
+    )
   }
 }
 
@@ -317,4 +317,4 @@ const styles = StyleSheet.create({
   textInputStyle: {
     textAlign: 'right',
   },
-});
+})

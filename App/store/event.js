@@ -1,18 +1,18 @@
-import { observable } from 'mobx';
-import axios from 'axios';
+import { observable } from 'mobx'
+import axios from 'axios'
 
 export default class EventStore {
-  authStore;
+  authStore
 
-  @observable attendeesById = {};
-  @observable eventsById = {};
-  @observable events = [];
-  @observable receiversByEventId = {};
+  @observable attendeesById = {}
+  @observable eventsById = {}
+  @observable events = []
+  @observable receiversByEventId = {}
 
-  @observable totalEventCount = 0;
+  @observable totalEventCount = 0
 
   constructor(_authStore) {
-    this.authStore = _authStore;
+    this.authStore = _authStore
   }
 
   async create(data) {
@@ -20,10 +20,10 @@ export default class EventStore {
       await axios.post('/events', {
         ...data,
         token: this.authStore.token,
-      });
+      })
     } catch (err) {
-      console.log('Error creating event');
-      throw err;
+      console.log('Error creating event')
+      throw err
     }
   }
 
@@ -33,11 +33,11 @@ export default class EventStore {
         params: {
           token: this.authStore.token,
         },
-      });
-      this.totalEventCount = res.data.count;
+      })
+      this.totalEventCount = res.data.count
     } catch (err) {
-      console.log('Error loading total event count', err);
-      throw err;
+      console.log('Error loading total event count', err)
+      throw err
     }
   }
 
@@ -47,15 +47,15 @@ export default class EventStore {
         params: {
           token: this.authStore.token,
         },
-      });
-      this.events = res.data;
+      })
+      this.events = res.data
       this.events.forEach((event) => {
-        this.eventsById[event._id] = event;
-      });
-      await this.loadTotalEventCount();
+        this.eventsById[event._id] = event
+      })
+      await this.loadTotalEventCount()
     } catch (err) {
-      console.log('Error loading events', err);
-      throw err;
+      console.log('Error loading events', err)
+      throw err
     }
   }
 
@@ -66,11 +66,11 @@ export default class EventStore {
           eventId: id,
           token: this.authStore.token,
         },
-      });
-      this.attendeesById[id] = res.data;
+      })
+      this.attendeesById[id] = res.data
     } catch (err) {
-      console.log('Error loading attendees for event', id);
-      throw err;
+      console.log('Error loading attendees for event', id)
+      throw err
     }
   }
 
@@ -79,10 +79,10 @@ export default class EventStore {
       await axios.put('/events', {
         ...data,
         token: this.authStore.token,
-      });
+      })
     } catch (err) {
-      console.log('Error updating event', err);
-      throw err;
+      console.log('Error updating event', err)
+      throw err
     }
   }
 
@@ -93,10 +93,10 @@ export default class EventStore {
           _id: id,
           token: this.authStore.token,
         },
-      });
+      })
     } catch (err) {
-      console.log('Error deleting event', err);
-      throw err;
+      console.log('Error deleting event', err)
+      throw err
     }
   }
 
@@ -105,10 +105,10 @@ export default class EventStore {
       await axios.post('/events/submit', {
         _id: id,
         token: this.authStore.token,
-      });
+      })
     } catch (err) {
-      console.log('Error submitting event', err);
-      throw err;
+      console.log('Error submitting event', err)
+      throw err
     }
   }
 
@@ -118,10 +118,10 @@ export default class EventStore {
         eventId,
         email,
         token: this.authStore.token,
-      });
+      })
     } catch (err) {
-      console.log('Error adding receiver for event', err);
-      throw err;
+      console.log('Error adding receiver for event', err)
+      throw err
     }
   }
 
@@ -132,10 +132,10 @@ export default class EventStore {
           _id: receiverId,
           token: this.authStore.token,
         },
-      });
+      })
     } catch (err) {
-      console.log('Error deleting sheet receiver', err);
-      throw err;
+      console.log('Error deleting sheet receiver', err)
+      throw err
     }
   }
 
@@ -146,11 +146,11 @@ export default class EventStore {
           eventId,
           token: this.authStore.token,
         },
-      });
-      this.receiversByEventId[eventId] = data;
+      })
+      this.receiversByEventId[eventId] = data
     } catch (err) {
-      console.log('Error loading sheet receivers for event', err);
-      throw err;
+      console.log('Error loading sheet receivers for event', err)
+      throw err
     }
   }
 
@@ -161,10 +161,10 @@ export default class EventStore {
         attendeeId,
         email,
         token: this.authStore.token,
-      });
+      })
     } catch (err) {
-      console.log('Error sending certificate to email', err);
-      throw err;
+      console.log('Error sending certificate to email', err)
+      throw err
     }
   }
 }

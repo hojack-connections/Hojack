@@ -1,4 +1,4 @@
-import Colors from './Colors';
-import Styles from './Styles';
+import Colors from './Colors'
+import Styles from './Styles'
 
-export { Colors, Styles };
+export { Colors, Styles }

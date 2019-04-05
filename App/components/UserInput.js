@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   View,
   Text,
@@ -6,12 +6,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   Platform,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import DatePicker from 'react-native-datepicker';
+} from 'react-native'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import DatePicker from 'react-native-datepicker'
 
-import { Colors } from '../Themes/';
-import normalize from '../helpers/normalizeText';
+import { Colors } from '../Themes/'
+import normalize from '../helpers/normalizeText'
 
 class UserInput extends Component {
   renderDatePicker = () =>
@@ -55,7 +55,7 @@ class UserInput extends Component {
         underlineColorAndroid="transparent"
         value={this.props.value}
       />
-    );
+    )
 
   renderArrow = () =>
     this.props.arrow ? (
@@ -65,10 +65,10 @@ class UserInput extends Component {
         size={16}
         style={styles.arrow}
       />
-    ) : null;
+    ) : null
 
   render() {
-    const { label } = this.props;
+    const { label } = this.props
 
     return (
       <TouchableOpacity onPress={this.props.onClickEvent}>
@@ -78,7 +78,7 @@ class UserInput extends Component {
           {this.renderArrow()}
         </View>
       </TouchableOpacity>
-    );
+    )
   }
 }
 
@@ -102,6 +102,6 @@ const styles = StyleSheet.create({
     right: 10,
     top: 14,
   },
-});
+})
 
-export default UserInput;
+export default UserInput

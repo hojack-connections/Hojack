@@ -26,4 +26,4 @@ export default {
   backgroundGray: '#f7f8fc',
   filterBox: 'rgb(248,249,253)',
   lightblack: 'rgba(0, 0, 0, 0.6)',
-};
+}

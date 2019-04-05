@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   View,
   Text,
@@ -6,12 +6,12 @@ import {
   FlatList,
   TouchableHighlight,
   TouchableOpacity,
-} from 'react-native';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import moment from 'moment';
-import { inject, observer } from 'mobx-react';
-import { Colors, Styles } from '../Themes/';
+} from 'react-native'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import moment from 'moment'
+import { inject, observer } from 'mobx-react'
+import { Colors, Styles } from '../Themes/'
 
 export default
 @inject('event', 'auth')
@@ -31,9 +31,9 @@ class EventAttendeesScreen extends Component {
         <Ionicon name="ios-add-circle-outline" color="white" size={30} />
       </TouchableOpacity>
     ),
-  });
+  })
 
-  keyExtractor = (item, index) => index.toString();
+  keyExtractor = (item, index) => index.toString()
 
   renderItem = ({ item }) => (
     <TouchableHighlight
@@ -41,7 +41,7 @@ class EventAttendeesScreen extends Component {
         this.props.navigation.navigate('AttendeeDetail', {
           attendeeId: item._id,
           eventId: item.event,
-        });
+        })
       }}
     >
       <View style={styles.listItemContainer}>
@@ -61,12 +61,12 @@ class EventAttendeesScreen extends Component {
         />
       </View>
     </TouchableHighlight>
-  );
+  )
 
   render() {
-    const eventId = this.props.navigation.getParam('id');
-    const event = this.props.event.eventsById[eventId] || {};
-    const attendees = this.props.event.attendeesById[eventId] || [];
+    const eventId = this.props.navigation.getParam('id')
+    const event = this.props.event.eventsById[eventId] || {}
+    const attendees = this.props.event.attendeesById[eventId] || []
 
     return (
       <View style={Styles.container}>
@@ -95,7 +95,7 @@ class EventAttendeesScreen extends Component {
           renderItem={this.renderItem}
         />
       </View>
-    );
+    )
   }
 }
 
@@ -143,4 +143,4 @@ const styles = StyleSheet.create({
     right: 10,
     top: 13,
   },
-});
+})

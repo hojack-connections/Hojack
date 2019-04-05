@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   View,
   Text,
@@ -9,14 +9,14 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
-} from 'react-native';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import { Button } from 'react-native-elements';
-import { inject, observer } from 'mobx-react';
-import normalize from '../helpers/normalizeText';
-import { Colors } from '../Themes/';
-import Cell from '../components/Cell';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+} from 'react-native'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import { Button } from 'react-native-elements'
+import { inject, observer } from 'mobx-react'
+import normalize from '../helpers/normalizeText'
+import { Colors } from '../Themes/'
+import Cell from '../components/Cell'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default
 @inject('event', 'attendee')
@@ -36,12 +36,12 @@ class AttendeeEdit extends Component {
         )}
       </TouchableOpacity>
     ),
-  });
+  })
 
   state = {
     isUpdating: false,
     isDeleting: false,
-  };
+  }
 
   // For editable text fields, need 4 refs
   textFieldsRefs = [
@@ -49,59 +49,59 @@ class AttendeeEdit extends Component {
     React.createRef(),
     React.createRef(),
     React.createRef(),
-  ];
+  ]
 
   componentWillMount() {
     this.props.event.loadEventAttendees(
       this.props.navigation.getParam('eventId')
-    );
+    )
   }
 
   componentDidMount() {
     this.props.navigation.setParams({
       onSave: this.onSave,
-    });
+    })
   }
 
   onSave = () => {
     this.props.navigation.setParams({
       isUpdating: true,
-    });
-    const attendeeId = this.props.navigation.getParam('attendeeId');
-    const eventId = this.props.navigation.getParam('eventId');
+    })
+    const attendeeId = this.props.navigation.getParam('attendeeId')
+    const eventId = this.props.navigation.getParam('eventId')
     this.props.attendee
       .update(attendeeId, { ...this.state, _id: attendeeId })
       .then(() => this.props.event.loadEventAttendees(eventId))
       .then(() => {
         this.props.navigation.setParams({
           isUpdating: false,
-        });
-        this.props.navigation.goBack();
+        })
+        this.props.navigation.goBack()
       })
       .catch(() => {
         this.props.navigation.setParams({
           isUpdating: false,
-        });
-        alert('There was a problem updating the attendee.');
-      });
-  };
+        })
+        alert('There was a problem updating the attendee.')
+      })
+  }
 
   _onDelete = () => {
-    this.setState({ isDeleting: true });
-    const attendeeId = this.props.navigation.getParam('attendeeId');
-    const eventId = this.props.navigation.getParam('eventId');
+    this.setState({ isDeleting: true })
+    const attendeeId = this.props.navigation.getParam('attendeeId')
+    const eventId = this.props.navigation.getParam('eventId')
     this.props.attendee
       .delete(attendeeId)
       .then(() => this.props.event.loadEventAttendees(eventId))
       .then(() => {
-        this.setState({ isDeleting: false });
-        this.props.navigation.pop(2);
+        this.setState({ isDeleting: false })
+        this.props.navigation.pop(2)
       })
       .catch(() => {
-        this.setState({ isDeleting: false });
-        alert('There was a problem deleting the attendee.');
-      });
-  };
+        this.setState({ isDeleting: false })
+        alert('There was a problem deleting the attendee.')
+      })
+  }
 
   onDelete = () => {
     Alert.alert(
@@ -115,18 +115,18 @@ class AttendeeEdit extends Component {
         },
       ],
       { cancelable: false }
-    );
-  };
+    )
+  }
 
   render() {
-    const eventId = this.props.navigation.getParam('eventId');
-    const attendeeId = this.props.navigation.getParam('attendeeId');
+    const eventId = this.props.navigation.getParam('eventId')
+    const attendeeId = this.props.navigation.getParam('attendeeId')
 
-    const eventAttendees = this.props.event.attendeesById[eventId] || [];
-    const event = this.props.event.eventsById[eventId] || {};
+    const eventAttendees = this.props.event.attendeesById[eventId] || []
+    const event = this.props.event.eventsById[eventId] || {}
 
     const attendee =
-      eventAttendees.find((_attendee) => _attendee._id === attendeeId) || {};
+      eventAttendees.find((_attendee) => _attendee._id === attendeeId) || {}
     return (
       <KeyboardAwareScrollView
         style={styles.container}
@@ -234,7 +234,7 @@ class AttendeeEdit extends Component {
           containerStyle={styles.buttonContainer}
         />
       </KeyboardAwareScrollView>
-    );
+    )
   }
 }
 
@@ -292,4 +292,4 @@ const styles = StyleSheet.create({
     fontSize: normalize(20),
     color: Colors.white,
   },
-});
+})

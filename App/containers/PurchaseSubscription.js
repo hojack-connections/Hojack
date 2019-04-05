@@ -1,9 +1,9 @@
-import React from 'react';
-import { Text, Image, ScrollView } from 'react-native';
-import { VFlex } from '../components/Shared';
-import styled from 'styled-components';
-import Colors from '../Themes/Colors';
-import { observer, inject } from 'mobx-react';
+import React from 'react'
+import { Text, Image, ScrollView } from 'react-native'
+import { VFlex } from '../components/Shared'
+import styled from 'styled-components'
+import Colors from '../Themes/Colors'
+import { observer, inject } from 'mobx-react'
 
 const HeaderBackground = styled.View`
   background-color: ${Colors.navigation};
@@ -12,7 +12,7 @@ const HeaderBackground = styled.View`
   height: 340px;
   left: -50;
   width: 150%;
-`;
+`
 
 const HoveringBox = styled.View`
   margin: 40px;
@@ -22,18 +22,18 @@ const HoveringBox = styled.View`
   background-color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   align-items: center;
-`;
+`
 
 const DetailsText = styled.Text`
   margin: 8px;
-`;
+`
 
 const FooterView = styled.View`
   border: 1px solid rgba(0, 0, 0, 0.1);
   background-color: white;
   padding: 16px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-`;
+`
 
 const RoundedButton = styled.TouchableOpacity`
   align-items: center;
@@ -43,13 +43,13 @@ const RoundedButton = styled.TouchableOpacity`
   border-radius: 5px;
   padding: 20px;
   margin: 8px;
-`;
+`
 
 const ButtonText = styled.Text`
   color: ${(props) => props.color};
   font-size: 20;
   font-weight: bold;
-`;
+`
 
 export default
 @inject('auth', 'subscription', 'purchase')
@@ -59,16 +59,16 @@ class PurchaseSubscription extends React.Component {
     headerStyle: {
       display: 'none',
     },
-  });
+  })
 
   purchaseSubscription = (id) => {
     this.props.purchase
       .purchaseSubscription(id)
       .then(() => this.props.subscription.loadActiveSubscription())
       .then(() => {
-        this.props.navigation.goBack();
-      });
-  };
+        this.props.navigation.goBack()
+      })
+  }
 
   render() {
     return (
@@ -155,6 +155,6 @@ class PurchaseSubscription extends React.Component {
           </RoundedButton>
         </FooterView>
       </>
-    );
+    )
   }
 }

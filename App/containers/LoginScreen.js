@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   View,
   Text,
@@ -6,12 +6,12 @@ import {
   StyleSheet,
   Image,
   KeyboardAvoidingView,
-} from 'react-native';
-import { Button } from 'react-native-elements';
-import normalize from '../helpers/normalizeText';
-import { Colors } from '../Themes/';
-import { inject, observer } from 'mobx-react';
-import { VFlex, HFlex } from '../components/Shared';
+} from 'react-native'
+import { Button } from 'react-native-elements'
+import normalize from '../helpers/normalizeText'
+import { Colors } from '../Themes/'
+import { inject, observer } from 'mobx-react'
+import { VFlex, HFlex } from '../components/Shared'
 
 export default
 @inject('user', 'auth')
@@ -21,29 +21,29 @@ class LoginScreen extends Component {
     email: '',
     password: '',
     isLoading: false,
-  };
+  }
 
-  passwordTextInputRef;
+  passwordTextInputRef
 
   onLogin = () => {
-    this.setState({ isLoading: true });
+    this.setState({ isLoading: true })
     this.props.user
       .login(this.state)
       .then(() => {
-        this.setState({ isLoading: false });
+        this.setState({ isLoading: false })
         if (this.props.auth.authenticated) {
-          this.props.navigation.navigate('App');
+          this.props.navigation.navigate('App')
         }
       })
       .catch(() => {
-        alert('There was a problem logging in. Please try again.');
-        this.setState({ isLoading: false });
-      });
-  };
+        alert('There was a problem logging in. Please try again.')
+        this.setState({ isLoading: false })
+      })
+  }
 
   onBacktoSignup = () => {
-    this.props.navigation.goBack();
-  };
+    this.props.navigation.goBack()
+  }
 
   render() {
     return (
@@ -83,7 +83,7 @@ class LoginScreen extends Component {
           <View style={styles.inputField}>
             <TextInput
               ref={(input) => {
-                this.passwordTextInputRef = input;
+                this.passwordTextInputRef = input
               }}
               secureTextEntry
               style={styles.input}
@@ -121,7 +121,7 @@ class LoginScreen extends Component {
           </HFlex>
         </VFlex>
       </KeyboardAvoidingView>
-    );
+    )
   }
 }
 
@@ -154,4 +154,4 @@ const styles = StyleSheet.create({
     fontSize: normalize(20),
     color: Colors.white,
   },
-});
+})

@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { View } from 'react-native';
+import React, { Component } from 'react'
+import { View } from 'react-native'
 
-import { Styles } from '../Themes/';
-import { inject, observer } from 'mobx-react';
+import { Styles } from '../Themes/'
+import { inject, observer } from 'mobx-react'
 
 export default
 @inject()
@@ -12,13 +12,13 @@ class ShareScreen extends Component {
     title: 'Share',
     headerTitleStyle: Styles.nav.title,
     headerBackTitle: 'Back',
-  });
+  })
 
   render() {
     return (
       <View style={Styles.container}>
         <View style={Styles.subContainer} />
       </View>
-    );
+    )
   }
 }

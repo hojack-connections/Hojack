@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   View,
   Text,
   StyleSheet,
   FlatList,
   TouchableOpacity,
-} from 'react-native';
-import moment from 'moment';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import { Colors, Styles } from '../Themes/';
-import { inject, observer } from 'mobx-react';
-import idx from 'idx';
-import { SearchBar } from 'react-native-elements';
+} from 'react-native'
+import moment from 'moment'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import { Colors, Styles } from '../Themes/'
+import { inject, observer } from 'mobx-react'
+import idx from 'idx'
+import { SearchBar } from 'react-native-elements'
 
 export default
 @inject('user', 'auth', 'event', 'attendee', 'subscription')
@@ -41,34 +41,34 @@ class EventsScreen extends Component {
       // Override in favor of the SearchBar border bottom
       borderBottomWidth: 0,
     },
-  });
+  })
 
   state = {
     searchText: '',
-  };
+  }
 
   componentDidMount() {
     this.props.subscription.loadActiveSubscription().then(() => {
-      if (this.props.subscription.hasActiveSubscription) return;
+      if (this.props.subscription.hasActiveSubscription) return
       if (this.props.subscription.freeTrialEligible) {
-        this.props.navigation.navigate('StartTrial');
+        this.props.navigation.navigate('StartTrial')
       } else if (
         idx(this.props, (_) => _.subscription.latestSubscription.isTrial)
       ) {
-        this.props.navigation.navigate('PurchaseSubscription');
+        this.props.navigation.navigate('PurchaseSubscription')
       } else {
-        this.props.navigation.navigate('RenewSubscription');
+        this.props.navigation.navigate('RenewSubscription')
       }
-    });
-    this.props.event.loadEvents();
-    this.props.attendee.loadTotalAttendeeCount();
+    })
+    this.props.event.loadEvents()
+    this.props.attendee.loadTotalAttendeeCount()
   }
 
   _onItemClick = (index, id) => {
-    this.props.navigation.navigate('EventDetailScreen', { index, id });
-  };
+    this.props.navigation.navigate('EventDetailScreen', { index, id })
+  }
 
-  keyExtractor = (item, index) => index.toString();
+  keyExtractor = (item, index) => index.toString()
 
   renderItem = ({ item, index }) => (
     <TouchableOpacity onPress={() => this._onItemClick(index, item._id)}>
@@ -87,7 +87,7 @@ class EventsScreen extends Component {
         />
       </View>
     </TouchableOpacity>
-  );
+  )
 
   render() {
     return (
@@ -118,7 +118,7 @@ class EventsScreen extends Component {
           renderItem={this.renderItem}
         />
       </View>
-    );
+    )
   }
 }
 
@@ -154,4 +154,4 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   arrow: {},
-});
+})

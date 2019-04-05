@@ -1,34 +1,34 @@
-import { createStackNavigator } from 'react-navigation';
-import Colors from '../Themes/Colors';
+import { createStackNavigator } from 'react-navigation'
+import Colors from '../Themes/Colors'
 
-import EventsScreen from '../containers/EventsScreen';
-import AddEventScreen from '../containers/AddEventScreen';
-import AccountScreen from '../containers/AccountScreen';
-import EventSummaryScreen from '../containers/EventSummaryScreen';
-import EventAttendeesScreen from '../containers/EventAttendeesScreen';
-import AddAttendeeScreen from '../containers/AddAttendeeScreen';
-import EventDetailScreen from '../containers/EventDetailScreen';
-import StartTrial from '../containers/StartTrial';
-import PurchaseSubscription from '../containers/PurchaseSubscription';
-import RenewSubscription from '../containers/RenewSubscription';
-import AttendeeDetail from '../containers/AttendeeDetail';
-import AttendeeEdit from '../containers/AttendeeEdit';
+import EventsScreen from '../containers/EventsScreen'
+import AddEventScreen from '../containers/AddEventScreen'
+import AccountScreen from '../containers/AccountScreen'
+import EventSummaryScreen from '../containers/EventSummaryScreen'
+import EventAttendeesScreen from '../containers/EventAttendeesScreen'
+import AddAttendeeScreen from '../containers/AddAttendeeScreen'
+import EventDetailScreen from '../containers/EventDetailScreen'
+import StartTrial from '../containers/StartTrial'
+import PurchaseSubscription from '../containers/PurchaseSubscription'
+import RenewSubscription from '../containers/RenewSubscription'
+import AttendeeDetail from '../containers/AttendeeDetail'
+import AttendeeEdit from '../containers/AttendeeEdit'
 
-import { fromBottom } from 'react-navigation-transitions';
+import { fromBottom } from 'react-navigation-transitions'
 
 const handleCustomTransition = ({ scenes }) => {
   // const prevScene = scenes[scenes.length - 2];
-  const nextScene = scenes[scenes.length - 1];
+  const nextScene = scenes[scenes.length - 1]
   if (
     nextScene.route.routeName === 'StartTrial' ||
     nextScene.route.routeName === 'PurchaseSubscription' ||
     nextScene.route.routeName === 'RenewSubscription' ||
     nextScene.route.routeName === 'AccountScreen'
   ) {
-    return fromBottom();
+    return fromBottom()
   }
   // otherwise do default transition
-};
+}
 
 export default createStackNavigator(
   {
@@ -62,4 +62,4 @@ export default createStackNavigator(
       headerTintColor: Colors.purple,
     },
   }
-);
+)

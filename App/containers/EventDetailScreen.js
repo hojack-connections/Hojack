@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   View,
   ScrollView,
@@ -9,27 +9,27 @@ import {
   TextInput,
   FlatList,
   Switch,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import normalize from '../helpers/normalizeText';
-import { Colors, Styles } from '../Themes/';
-import { inject, observer } from 'mobx-react';
-import { Button } from 'react-native-elements';
-import SegmentedControlTab from 'react-native-segmented-control-tab';
-import moment from 'moment';
-import styled from 'styled-components';
+} from 'react-native'
+import Icon from 'react-native-vector-icons/FontAwesome'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import normalize from '../helpers/normalizeText'
+import { Colors, Styles } from '../Themes/'
+import { inject, observer } from 'mobx-react'
+import { Button } from 'react-native-elements'
+import SegmentedControlTab from 'react-native-segmented-control-tab'
+import moment from 'moment'
+import styled from 'styled-components'
 
 const InfoCellView = styled.View`
   margin-left: 8px;
   border-bottom-color: ${Colors.gray};
   border-bottom-width: 1px;
-`;
+`
 
 const InfoCellText = styled.Text`
   padding: 8px;
   font-size: 15px;
-`;
+`
 
 export default
 @inject('receiver', 'event')
@@ -53,7 +53,7 @@ class SubmitSettingsScreen extends Component {
       ...navigationOptions.headerStyle,
       borderBottomWidth: 0,
     },
-  });
+  })
 
   state = {
     isSubmitting: false,
@@ -61,27 +61,27 @@ class SubmitSettingsScreen extends Component {
     selectedIndex: 0,
     sendCertificates: true,
     sendSummary: true,
-  };
-  inputFieldRef = React.createRef();
+  }
+  inputFieldRef = React.createRef()
 
   componentDidMount() {
-    const eventId = this.props.navigation.getParam('id');
-    this.props.event.loadEventAttendees(eventId);
-    this.props.event.loadReceiversForEvent(eventId);
+    const eventId = this.props.navigation.getParam('id')
+    this.props.event.loadEventAttendees(eventId)
+    this.props.event.loadReceiversForEvent(eventId)
   }
 
   _onSubmit = () => {
-    const eventId = this.props.navigation.getParam('id');
+    const eventId = this.props.navigation.getParam('id')
     this.props.event
       .submit(eventId)
       .then(() => this.props.event.loadEventAttendees(eventId))
       .then(() => {
-        Alert.alert('Success', 'Submitted this event successfully!');
+        Alert.alert('Success', 'Submitted this event successfully!')
       })
       .catch(() => {
-        Alert.alert('Error', 'There was a problem submitting your event.');
-      });
-  };
+        Alert.alert('Error', 'There was a problem submitting your event.')
+      })
+  }
 
   onSubmit = () => {
     Alert.alert(
@@ -95,44 +95,44 @@ class SubmitSettingsScreen extends Component {
         },
       ],
       { cancelable: false }
-    );
-  };
+    )
+  }
 
   plusIconPressed = () => {
     if (this.state.newSheetReceiver === '') {
-      this.inputFieldRef.current.focus();
+      this.inputFieldRef.current.focus()
     } else {
-      this.props.onAddItem(this.state.newSheetReceiver);
+      this.props.onAddItem(this.state.newSheetReceiver)
     }
-  };
+  }
 
   addSheetReceiver = (email) => {
-    if (email === '') return;
-    const eventId = this.props.navigation.getParam('id');
+    if (email === '') return
+    const eventId = this.props.navigation.getParam('id')
     this.props.event
       .addReceiverForEvent(eventId, email)
       .then(() => this.props.event.loadReceiversForEvent(eventId))
       .then(() => this.setState({ newSheetReceiver: '' }))
-      .catch(() => alert('There was a problem adding the receiver.'));
-  };
+      .catch(() => alert('There was a problem adding the receiver.'))
+  }
 
   removeSheetReceiver = (receiver) => {
-    const eventId = this.props.navigation.getParam('id');
+    const eventId = this.props.navigation.getParam('id')
     this.props.event
       .deleteReceiver(receiver._id)
       .then(() => this.props.event.loadReceiversForEvent(eventId))
-      .catch(() => alert('There was a problem deleting the receiver.'));
-  };
+      .catch(() => alert('There was a problem deleting the receiver.'))
+  }
 
   handleIndexChange = (index) => {
     this.setState({
       selectedIndex: index,
-    });
-  };
+    })
+  }
 
   renderInfo = () => {
-    const eventId = this.props.navigation.getParam('id');
-    const _event = this.props.event.eventsById[eventId] || {};
+    const eventId = this.props.navigation.getParam('id')
+    const _event = this.props.event.eventsById[eventId] || {}
     return (
       <ScrollView>
         <InfoCellView>
@@ -199,12 +199,12 @@ class SubmitSettingsScreen extends Component {
           </InfoCellText>
         </InfoCellView>
       </ScrollView>
-    );
-  };
+    )
+  }
 
   renderSubmit = () => {
-    const eventId = this.props.navigation.getParam('id');
-    const receivers = this.props.event.receiversByEventId[eventId] || [];
+    const eventId = this.props.navigation.getParam('id')
+    const receivers = this.props.event.receiversByEventId[eventId] || []
     return (
       <ScrollView style={Styles.container}>
         <View style={styles.section}>
@@ -281,12 +281,12 @@ class SubmitSettingsScreen extends Component {
           titleStyle={styles.buttonTitle}
         />
       </ScrollView>
-    );
-  };
+    )
+  }
 
   renderAttendees = () => {
-    const eventId = this.props.navigation.getParam('id');
-    const attendees = this.props.event.attendeesById[eventId] || [];
+    const eventId = this.props.navigation.getParam('id')
+    const attendees = this.props.event.attendeesById[eventId] || []
     return (
       <View style={{ flex: 1 }}>
         <FlatList
@@ -380,12 +380,12 @@ class SubmitSettingsScreen extends Component {
           }
         />
       </View>
-    );
-  };
+    )
+  }
 
   render() {
-    const eventId = this.props.navigation.getParam('id');
-    const _event = this.props.event.eventsById[eventId] || {};
+    const eventId = this.props.navigation.getParam('id')
+    const _event = this.props.event.eventsById[eventId] || {}
     return (
       <>
         <View
@@ -418,7 +418,7 @@ class SubmitSettingsScreen extends Component {
         {this.state.selectedIndex === 1 ? this.renderAttendees() : null}
         {this.state.selectedIndex === 2 ? this.renderSubmit() : null}
       </>
-    );
+    )
   }
 }
 
@@ -481,4 +481,4 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     backgroundColor: Colors.white,
   },
-});
+})
