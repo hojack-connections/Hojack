@@ -317,7 +317,7 @@ class SubmitSettingsScreen extends Component {
             </TouchableOpacity>
           </Cell>
         ))}
-        <View style={styles.plusContainer}>
+        <Cell>
           <TouchableOpacity onPress={this.plusIconPressed}>
             <Ionicon
               name="ios-add-circle-outline"
@@ -327,7 +327,7 @@ class SubmitSettingsScreen extends Component {
           </TouchableOpacity>
           <TextInput
             ref={this.inputFieldRef}
-            style={styles.textInput}
+            style={{ flex: 1, marginLeft: 16 }}
             textAlign={'left'}
             value={this.state.newSheetReceiver}
             onChangeText={(newSheetReceiver) =>
@@ -340,7 +340,7 @@ class SubmitSettingsScreen extends Component {
             placeholder="Input a new email address"
             returnKeyType="done"
           />
-        </View>
+        </Cell>
         <Button
           buttonStyle={styles.updateButton}
           containerStyle={styles.buttonContainer}
@@ -413,17 +413,5 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: normalize(20),
     color: Colors.white,
-  },
-  textInput: {
-    flex: 1,
-    marginLeft: 50,
-    marginRight: 10,
-    height: 46,
-  },
-  plusContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: 30,
-    backgroundColor: Colors.white,
   },
 })
