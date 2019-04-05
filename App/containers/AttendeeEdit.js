@@ -6,17 +6,15 @@ import {
   Platform,
   Image,
   Alert,
-  TextInput,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native'
-import Ionicon from 'react-native-vector-icons/Ionicons'
 import { Button } from 'react-native-elements'
 import { inject, observer } from 'mobx-react'
 import normalize from '../helpers/normalizeText'
 import { Colors } from '../Themes/'
-import Cell from '../components/Cell'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { CellTextInput } from '../components/Shared'
 
 export default
 @inject('event', 'attendee')
@@ -30,9 +28,13 @@ class AttendeeEdit extends Component {
         onPress={() => navigation.getParam('onSave')()}
       >
         {navigation.getParam('isUpdating') ? (
-          <ActivityIndicator animating color="white" />
+          <ActivityIndicator animating color={Colors.purple} />
         ) : (
-          <Ionicon name="ios-save" color="white" size={30} />
+          <Text
+            style={{ fontWeight: 'bold', fontSize: 17, color: Colors.purple }}
+          >
+            Done
+          </Text>
         )}
       </TouchableOpacity>
     ),
@@ -52,6 +54,12 @@ class AttendeeEdit extends Component {
   ]
 
   componentWillMount() {
+    const eventId = this.props.navigation.getParam('eventId')
+    const attendeeId = this.props.navigation.getParam('attendeeId')
+    const eventAttendees = this.props.event.attendeesById[eventId] || []
+    const attendee =
+      eventAttendees.find((_attendee) => _attendee._id === attendeeId) || {}
+    this.setState({ ...attendee })
     this.props.event.loadEventAttendees(
       this.props.navigation.getParam('eventId')
     )
@@ -132,11 +140,10 @@ class AttendeeEdit extends Component {
         style={styles.container}
         keyboardShouldPersistTaps="handled"
       >
-        <Cell
-          label="First Name:"
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[0].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             autoFocus
             ref={this.textFieldsRefs[0]}
             onSubmitEditing={() => this.textFieldsRefs[1].current.focus()}
@@ -144,36 +151,32 @@ class AttendeeEdit extends Component {
             autoCorrect={false}
             editable
             onChangeText={(firstname) => this.setState({ firstname })}
-            placeholder={attendee.firstname}
+            placeholder="First Name"
             returnKeyType="next"
-            style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.firstname}
           />
-        </Cell>
-        <Cell
-          label="Last Name:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[1].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[1]}
             onSubmitEditing={() => this.textFieldsRefs[2].current.focus()}
             autoCapitalize="words"
             autoCorrect={false}
             editable
             onChangeText={(lastname) => this.setState({ lastname })}
-            placeholder={attendee.lastname}
+            placeholder="Last Name"
             returnKeyType="next"
-            style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.lastname}
           />
-        </Cell>
-        <Cell
-          label="Email:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[2].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[2]}
             onSubmitEditing={() => this.textFieldsRefs[3].current.focus()}
             autoCapitalize="none"
@@ -181,41 +184,35 @@ class AttendeeEdit extends Component {
             editable
             keyboardType="email-address"
             onChangeText={(email) => this.setState({ email })}
-            placeholder={attendee.email}
+            placeholder="Email"
             returnKeyType="next"
-            style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.email}
           />
-        </Cell>
-        <Cell
-          label="Phone:"
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => this.textFieldsRefs[3].current.focus()}
         >
-          <TextInput
+          <CellTextInput
             ref={this.textFieldsRefs[3]}
             autoCapitalize="words"
             autoCorrect={false}
             editable
             keyboardType="phone-pad"
             onChangeText={(phone) => this.setState({ phone })}
-            placeholder={attendee.phone}
+            placeholder="Phone Number"
             returnKeyType="done"
-            style={styles.textInputStyle}
             underlineColorAndroid="transparent"
             value={this.state.phone}
           />
-        </Cell>
-        <Cell label="Event:">
-          <TextInput
-            autoCapitalize="words"
-            autoCorrect={false}
-            editable={false}
-            placeholder={event.name}
-            style={styles.textInputStyle}
-            underlineColorAndroid="transparent"
-          />
-        </Cell>
+        </TouchableOpacity>
+        <CellTextInput
+          autoCapitalize="words"
+          autoCorrect={false}
+          editable={false}
+          placeholder={event.name}
+          underlineColorAndroid="transparent"
+        />
         <View style={styles.signatureField}>
           <Text style={styles.signatureLabel}>Signature:</Text>
           {attendee.signature !== '' && (
@@ -241,12 +238,6 @@ class AttendeeEdit extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.white,
-  },
-  textInputStyle: {
-    flex: 1,
-    marginRight: 10,
-    color: Colors.black,
-    fontWeight: '100',
   },
   signatureField: {
     height: 100,
