@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  TextInput,
   Text,
   StyleSheet,
   TouchableOpacity,
@@ -11,20 +10,7 @@ import { Colors } from '../Themes/'
 import { Button } from 'react-native-elements'
 import { inject, observer } from 'mobx-react'
 import moment from 'moment'
-import { VFlex, HFlex, Cell } from '../components/Shared'
-import styled from 'styled-components'
-
-const DefaultText = styled(TextInput)`
-  flex: 1;
-  margin-left: 16px;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  border-bottom-color: ${Colors.gray};
-  border-bottom-width: 1px;
-  font-size: 18px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-`
+import { VFlex, HFlex, CellTextInput } from '../components/Shared'
 
 export default
 @inject('auth', 'subscription', 'user')
@@ -120,31 +106,25 @@ class AccountScreen extends React.Component {
             PERSONAL INFORMATION
           </Text>
           <HFlex style={{ backgroundColor: 'white' }}>
-          <Cell>
-            <TextInput
+            <CellTextInput
               placeholder="First Name"
               onChangeText={(firstname) => this.setState({ firstname })}
               value={this.state.firstname}
             />
-            </Cell>
           </HFlex>
           <HFlex style={{ backgroundColor: 'white' }}>
-          <Cell>
-            <TextInput
+            <CellTextInput
               placeholder="Last Name"
               onChangeText={(lastname) => this.setState({ lastname })}
               value={this.state.lastname}
             />
-            </Cell>
           </HFlex>
           <HFlex style={{ backgroundColor: 'white' }}>
-          <Cell>
-            <TextInput
+            <CellTextInput
               placeholder="Title"
               onChangeText={(title) => this.setState({ title })}
               value={this.state.title}
             />
-            </Cell>
           </HFlex>
         </VFlex>
         <HFlex style={{ flex: 1 }}>

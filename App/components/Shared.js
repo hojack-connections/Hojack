@@ -46,6 +46,18 @@ export const Cell = (props) => (
   </OuterCell>
 )
 
+export const CellTextInput = styled.TextInput`
+  flex: 1;
+  margin-left: 16px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  border-bottom-color: ${Colors.gray};
+  border-bottom-width: 1px;
+  font-size: 18px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+`
+
 export const CellText = styled.Text`
   font-size: 15px;
 `
