@@ -1,6 +1,7 @@
 import * as RNIap from 'react-native-iap'
 import axios from 'axios'
-import { Platform } from 'react-native'
+import { Platform, NativeModules } from 'react-native'
+const { InAppUtils } = NativeModules
 
 export default class PurchaseStore {
   authStore
@@ -10,6 +11,25 @@ export default class PurchaseStore {
     RNIap.initConnection()
   }
 
+  async syncReceipts() {
+    try {
+      const receiptData = await new Promise((rs, rj) => {
+        InAppUtils.receiptData((err, receiptData) => {
+          if (err) return rj(err)
+          rs(receiptData)
+        })
+      })
+      await axios.post('/subscriptions', {
+        token: this.authStore.token,
+        receiptData,
+        platform: Platform.OS === 'ios' ? 'ios' : 'android',
+      })
+    } catch (err) {
+      console.log('Error synchronizing receipts')
+      throw err
+    }
+  }
+
   async purchaseSubscription(id) {
     try {
       const subs = await RNIap.getSubscriptions([id])
@@ -17,7 +37,7 @@ export default class PurchaseStore {
         throw new Error('Invalid subscription identifier supplied')
       }
       const purchase = await RNIap.buySubscription(id)
-      await axios.post(`/subscriptions`, {
+      await axios.post('/subscriptions', {
         token: this.authStore.token,
         receiptData: purchase.transactionReceipt,
         platform: Platform.OS === 'ios' ? 'ios' : 'android',

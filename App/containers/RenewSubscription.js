@@ -62,6 +62,14 @@ class PurchaseSubscription extends React.Component {
     },
   })
 
+  async componentDidMount() {
+    await this.props.purchase.syncReceipts()
+    await this.props.subscription.loadActiveSubscription()
+    if (this.props.subscription.hasActiveSubscription) {
+      this.props.navigation.goBack()
+    }
+  }
+
   purchaseSubscription = (id) => {
     this.props.purchase
       .purchaseSubscription(id)
