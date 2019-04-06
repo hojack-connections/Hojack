@@ -8,9 +8,10 @@ import { inject, observer } from 'mobx-react'
 import idx from 'idx'
 import { SearchBar } from 'react-native-elements'
 import { Cell, CellText } from '../components/Shared'
+import { toJS } from 'mobx'
 
 export default
-@inject('user', 'auth', 'event', 'attendee', 'subscription')
+@inject('event', 'attendee', 'subscription', 'purchase')
 @observer
 class EventsScreen extends Component {
   static navigationOptions = ({ navigation, navigationOptions }) => ({
@@ -73,7 +74,8 @@ class EventsScreen extends Component {
     this.props.navigation.navigate('EventDetailScreen', { index, id })
   }
 
-  keyExtractor = (item, index) => index.toString()
+  // Used to force a re-render
+  keyExtractor = () => Math.random().toString()
 
   renderItem = ({ item, index }) => (
     <TouchableOpacity onPress={() => this._onItemClick(index, item._id)}>
@@ -90,6 +92,11 @@ class EventsScreen extends Component {
   )
 
   render() {
+    const { events } = this.props.event
+    const filteredEvents = toJS(events).filter((_event) => {
+      if (!this.state.searchText) return true
+      return _event.name.indexOf(this.state.searchText) !== -1
+    })
     return (
       <View style={Styles.container}>
         <View
@@ -111,14 +118,11 @@ class EventsScreen extends Component {
           />
         </View>
         <FlatList
-          data={this.props.event.events.filter((event) => {
-            if (!this.state.searchText) return true
-            return event.name.indexOf(this.state.searchText) !== -1
-          })}
+          data={filteredEvents}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
           onRefresh={this.reload}
-          refreshing={console.log(this.state) || this.state.isLoading}
+          refreshing={this.state.isLoading}
         />
       </View>
     )

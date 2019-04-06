@@ -29,12 +29,12 @@ export default class EventStore {
 
   async loadTotalEventCount() {
     try {
-      const res = await axios.get('/users/events/count', {
+      const { data } = await axios.get('/users/events/count', {
         params: {
           token: this.authStore.token,
         },
       })
-      this.totalEventCount = res.data.count
+      this.totalEventCount = data.count
     } catch (err) {
       console.log('Error loading total event count', err)
       throw err
@@ -43,13 +43,13 @@ export default class EventStore {
 
   async loadEvents() {
     try {
-      const res = await axios.get('/users/events', {
+      const { data } = await axios.get('/users/events', {
         params: {
           token: this.authStore.token,
         },
       })
-      this.events = res.data
-      this.events.forEach((event) => {
+      this.events = data
+      data.forEach((event) => {
         this.eventsById[event._id] = event
       })
       await this.loadTotalEventCount()

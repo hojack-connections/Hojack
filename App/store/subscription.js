@@ -19,14 +19,14 @@ export default class SubscriptionStore {
 
   async loadActiveSubscription() {
     try {
-      const res = await axios.get(`/subscriptions/status`, {
+      const { data } = await axios.get(`/subscriptions/status`, {
         params: {
           token: this.authStore.token,
         },
       })
-      this.activeSubscription = res.data.activeSubscription
-      this.freeTrialEligible = res.data.freeTrialEligible
-      this.latestSubscription = res.data.latestSubscription
+      this.activeSubscription = data.activeSubscription
+      this.freeTrialEligible = data.freeTrialEligible
+      this.latestSubscription = data.latestSubscription
     } catch (err) {
       console.log('Error loading active subscription', err)
       throw err

@@ -103,10 +103,10 @@ class EditEventScreen extends Component {
             const eventId = this.props.navigation.getParam('id')
             this.props.event
               .delete(eventId)
+              .then(() => this.props.event.loadEvents())
               .then(() => {
                 this.setState({ isDeleting: false })
-                this.props.event.loadEvents()
-                this.props.navigation.goBack()
+                this.props.navigation.popToTop()
               })
               .catch(() => {
                 this.setState({ isDeleting: false })
