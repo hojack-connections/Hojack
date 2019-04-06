@@ -202,7 +202,7 @@ class SubmitSettingsScreen extends Component {
       <FlatList
         data={attendees}
         style={styles.container}
-        keyExtractor={(item) => item._id}
+        keyExtractor={() => Math.random().toString()}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() =>
