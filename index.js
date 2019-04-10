@@ -13,7 +13,7 @@ import Config from 'react-native-config'
 import axios from 'axios'
 
 axios.defaults.baseURL = 'https://api.gocert.io'
-// axios.defaults.baseURL = 'http://localhost:4000';
+// axios.defaults.baseURL = 'http://localhost:4000'
 axios.defaults.headers.common.APP_SECRET = Config.APP_SECRET
 
 const auth = new AuthStore()
