@@ -97,7 +97,7 @@ class SubmitSettingsScreen extends Component {
     if (this.state.newSheetReceiver === '') {
       this.inputFieldRef.current.focus()
     } else {
-      this.props.onAddItem(this.state.newSheetReceiver)
+      this.addSheetReceiver(this.state.newSheetReceiver)
     }
   }
 
