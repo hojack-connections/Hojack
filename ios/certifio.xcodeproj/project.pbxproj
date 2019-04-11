@@ -1655,6 +1655,7 @@
 				PRODUCT_NAME = certifio;
 				PROVISIONING_PROFILE = "8ba4a638-dc18-4bfa-af31-ecd25d39c557";
 				PROVISIONING_PROFILE_SPECIFIER = "hojack-031919";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1688,6 +1689,7 @@
 				PRODUCT_NAME = certifio;
 				PROVISIONING_PROFILE = "8ba4a638-dc18-4bfa-af31-ecd25d39c557";
 				PROVISIONING_PROFILE_SPECIFIER = "hojack-031619";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
