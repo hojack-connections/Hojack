@@ -5,7 +5,6 @@ import EventsScreen from '../containers/EventsScreen'
 import AddEventScreen from '../containers/AddEventScreen'
 import AccountScreen from '../containers/AccountScreen'
 import EditEventScreen from '../containers/EditEventScreen'
-import EventAttendeesScreen from '../containers/EventAttendeesScreen'
 import AddAttendeeScreen from '../containers/AddAttendeeScreen'
 import EventDetailScreen from '../containers/EventDetailScreen'
 import StartTrial from '../containers/StartTrial'
@@ -34,7 +33,6 @@ export default createStackNavigator(
   {
     Home: { screen: EventsScreen },
     EditEventScreen: { screen: EditEventScreen },
-    EventAttendeesScreen: { screen: EventAttendeesScreen },
     // AttendeeSummaryScreen: { screen: AttendeeSummaryScreen },
     AddAttendeeScreen: { screen: AddAttendeeScreen },
     AddEventScreen: { screen: AddEventScreen },
