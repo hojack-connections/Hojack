@@ -47,15 +47,13 @@ class LoginScreen extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView
-        behavior="position"
-        style={{ margin: 8, height: '100%' }}
-      >
-        <VFlex style={{ alignItems: 'flex-start', height: '100%' }}>
+      <KeyboardAvoidingView behavior="position" style={{ margin: 8 }}>
+        <VFlex style={{ alignItems: 'flex-start' }}>
           <Image
             source={require('../../assets/gocert.jpg')}
             resizeMode="contain"
             style={{
+              minHeight: 100,
               maxHeight: 150,
               flex: 1,
               alignSelf: 'center',
