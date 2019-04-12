@@ -9,6 +9,7 @@ import idx from 'idx'
 import { SearchBar } from 'react-native-elements'
 import { Cell, CellText } from '../components/Shared'
 import { toJS } from 'mobx'
+import CustomList from '../components/CustomList'
 
 export default
 @inject('event', 'attendee', 'subscription', 'purchase')
@@ -117,7 +118,7 @@ class EventsScreen extends Component {
             }}
           />
         </View>
-        <FlatList
+        <CustomList
           data={filteredEvents}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}

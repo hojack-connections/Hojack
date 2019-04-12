@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Alert,
   TextInput,
-  FlatList,
   Switch,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -19,6 +18,7 @@ import { Button } from 'react-native-elements'
 import SegmentedControlTab from 'react-native-segmented-control-tab'
 import moment from 'moment'
 import { Cell, CellText } from '../components/Shared'
+import CustomList from '../components/CustomList'
 
 export default
 @inject('receiver', 'event')
@@ -199,10 +199,10 @@ class SubmitSettingsScreen extends Component {
     const eventId = this.props.navigation.getParam('id')
     const attendees = this.props.event.attendeesById[eventId] || []
     return (
-      <FlatList
+      <CustomList
         data={attendees}
         style={styles.container}
-        keyExtractor={() => Math.random().toString()}
+        keyExtractor={() => Math.random()}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() =>
@@ -245,6 +245,7 @@ class SubmitSettingsScreen extends Component {
         }
         ListFooterComponent={
           <TouchableOpacity
+            style={{ flex: 1 }}
             onPress={() =>
               this.props.navigation.navigate('AddAttendeeScreen', {
                 id: eventId,
