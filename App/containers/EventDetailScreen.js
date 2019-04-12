@@ -8,6 +8,7 @@ import {
   Alert,
   TextInput,
   Switch,
+  FlatList,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Ionicon from 'react-native-vector-icons/Ionicons'
@@ -18,7 +19,7 @@ import { Button } from 'react-native-elements'
 import SegmentedControlTab from 'react-native-segmented-control-tab'
 import moment from 'moment'
 import { Cell, CellText } from '../components/Shared'
-import CustomList from '../components/CustomList'
+import { Observer } from 'mobx-react/native'
 
 export default
 @inject('receiver', 'event')
@@ -199,29 +200,33 @@ class SubmitSettingsScreen extends Component {
     const eventId = this.props.navigation.getParam('id')
     const attendees = this.props.event.attendeesById[eventId] || []
     return (
-      <CustomList
+      <FlatList
         data={attendees}
         style={styles.container}
-        keyExtractor={() => Math.random()}
+        keyExtractor={() => Math.random().toString()}
         renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() =>
-              this.props.navigation.navigate('AttendeeDetail', {
-                attendeeId: item._id,
-                eventId,
-              })
-            }
-          >
-            <Cell>
-              <CellText>{`${item.firstname} ${item.lastname}`}</CellText>
-              <Icon
-                name="chevron-right"
-                size={16}
-                color={Colors.darkGray}
-                style={styles.arrow}
-              />
-            </Cell>
-          </TouchableOpacity>
+          <Observer>
+            {() => (
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.navigation.navigate('AttendeeDetail', {
+                    attendeeId: item._id,
+                    eventId,
+                  })
+                }
+              >
+                <Cell>
+                  <CellText>{`${item.firstname} ${item.lastname}`}</CellText>
+                  <Icon
+                    name="chevron-right"
+                    size={16}
+                    color={Colors.darkGray}
+                    style={styles.arrow}
+                  />
+                </Cell>
+              </TouchableOpacity>
+            )}
+          </Observer>
         )}
         ListHeaderComponent={
           <View
