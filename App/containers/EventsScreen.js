@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList, TouchableOpacity } from 'react-native'
+import { Keyboard, View, Text, FlatList, TouchableOpacity } from 'react-native'
 import moment from 'moment'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Ionicon from 'react-native-vector-icons/Ionicons'
@@ -100,7 +100,11 @@ class EventsScreen extends Component {
     const { events } = this.props.event
     const filteredEvents = toJS(events).filter((_event) => {
       if (!this.state.searchText) return true
-      return _event.name.indexOf(this.state.searchText) !== -1
+      return (
+        _event.name
+          .toLowerCase()
+          .indexOf(this.state.searchText.toLowerCase()) !== -1
+      )
     })
     return (
       <View style={Styles.container}>
@@ -114,6 +118,10 @@ class EventsScreen extends Component {
           <SearchBar
             cancelButtonProps={{ color: Colors.purple }}
             onChangeText={(searchText) => this.setState({ searchText })}
+            onCancel={() => {
+              this.setState({ searchText: '' })
+              Keyboard.dismiss()
+            }}
             placeholder="Search"
             platform={'ios'}
             value={this.state.searchText}
