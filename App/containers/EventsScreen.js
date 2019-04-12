@@ -9,7 +9,7 @@ import idx from 'idx'
 import { SearchBar } from 'react-native-elements'
 import { Cell, CellText } from '../components/Shared'
 import { toJS } from 'mobx'
-import CustomList from '../components/CustomList'
+import { Observer } from 'mobx-react/native'
 
 export default
 @inject('event', 'attendee', 'subscription', 'purchase')
@@ -79,17 +79,21 @@ class EventsScreen extends Component {
   keyExtractor = () => Math.random().toString()
 
   renderItem = ({ item, index }) => (
-    <TouchableOpacity onPress={() => this._onItemClick(index, item._id)}>
-      <Cell>
-        <View>
-          <CellText>{item.name}</CellText>
-          <CellText style={{ fontSize: 15, color: Colors.darkGray }}>
-            {moment(item.date).format('MMMM DD, YYYY')}
-          </CellText>
-        </View>
-        <Icon name="chevron-right" size={16} color={Colors.darkGray} />
-      </Cell>
-    </TouchableOpacity>
+    <Observer>
+      {() => (
+        <TouchableOpacity onPress={() => this._onItemClick(index, item._id)}>
+          <Cell>
+            <View>
+              <CellText>{item.name}</CellText>
+              <CellText style={{ fontSize: 15, color: Colors.darkGray }}>
+                {moment(item.date).format('MMMM DD, YYYY')}
+              </CellText>
+            </View>
+            <Icon name="chevron-right" size={16} color={Colors.darkGray} />
+          </Cell>
+        </TouchableOpacity>
+      )}
+    </Observer>
   )
 
   render() {
@@ -118,7 +122,7 @@ class EventsScreen extends Component {
             }}
           />
         </View>
-        <CustomList
+        <FlatList
           data={filteredEvents}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
