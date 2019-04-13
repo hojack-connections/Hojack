@@ -13,6 +13,12 @@ export default class PurchaseStore {
 
   async syncReceipts() {
     try {
+      await new Promise((rs, rj) => {
+        InAppUtils.refreshReceiptIfNeeded((err) => {
+          if (err) return rj(err)
+          return rs()
+        })
+      })
       const receiptData = await new Promise((rs, rj) => {
         InAppUtils.receiptData((err, receiptData) => {
           if (err) return rj(err)
