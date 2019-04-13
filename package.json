@@ -28,7 +28,7 @@
     "react-native-elements": "1.0.0-beta5",
     "react-native-gesture-handler": "^1.1.0",
     "react-native-iap": "^2.4.2",
-    "react-native-in-app-utils": "^6.0.1",
+    "react-native-in-app-utils": "github:jchancehud/react-native-in-app-utils#receipt-refresh",
     "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-native-segmented-control-tab": "^3.4.0",
     "react-native-signature-capture": "git+https://github.com/JChanceHud/react-native-signature-capture.git",
