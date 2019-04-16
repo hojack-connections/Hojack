@@ -77,6 +77,7 @@ class PurchaseSubscription extends React.Component {
       .then(() => {
         this.props.navigation.goBack()
       })
+      .catch((err) => alert('Caught error', JSON.stringify(err)))
       .catch(() => alert('There was a problem purchasing the subscription.'))
   }
 

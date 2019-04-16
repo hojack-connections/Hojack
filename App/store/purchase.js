@@ -21,10 +21,12 @@ export default class PurchaseStore {
       })
       const receiptData = await new Promise((rs, rj) => {
         InAppUtils.receiptData((err, receiptData) => {
-          if (err) return rj(err)
+          if (err === 'not_available') return rs()
+          else if (err) return rj(err)
           rs(receiptData)
         })
       })
+      if (!receiptData) return alert('No receipt data found')
       await axios.post('/subscriptions', {
         token: this.authStore.token,
         receiptData,
