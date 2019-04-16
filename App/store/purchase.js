@@ -26,7 +26,7 @@ export default class PurchaseStore {
           rs(receiptData)
         })
       })
-      if (!receiptData) return alert('No receipt data found')
+      if (!receiptData) return
       await axios.post('/subscriptions', {
         token: this.authStore.token,
         receiptData,
