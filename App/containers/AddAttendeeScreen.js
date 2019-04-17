@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     fontWeight: '100',
   },
   signatureField: {
-    height: 100,
+    height: Platform.isPad ? 200 : 100,
     marginTop: 30,
     marginBottom: 30,
     marginLeft: 20,
