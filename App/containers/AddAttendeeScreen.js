@@ -172,7 +172,6 @@ class AddAttendeeScreen extends Component {
             style={{
               width: signatureWidth,
               paddingTop: 10,
-              backgroundColor: 'transparent',
             }}
             showNativeButtons={false}
             showBorder={false}
