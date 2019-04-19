@@ -3,6 +3,8 @@ package com.certifio;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+
+import org.devio.rn.splashscreen.SplashScreen;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.dooboolab.RNIap.RNIapPackage;
@@ -47,11 +49,5 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public ReactNativeHost getReactNativeHost() {
     return mReactNativeHost;
-  }
-
-  @Override
-  public void onCreate() {
-    super.onCreate();
-    SoLoader.init(this, /* native exopackage */ false);
   }
 }
