@@ -101,7 +101,7 @@ android {
     defaultConfig {
         applicationId "com.certifio"
         minSdkVersion 22
-        targetSdkVersion 28
+        targetSdkVersion 24
         versionCode 6
         versionName "1.1"
         ndk {
