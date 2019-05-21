@@ -96,14 +96,22 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
+    signingConfigs{
+        gocert {
+            keyAlias 'upload'
+            keyPassword "certifio_password"
+            storeFile file('../../../keystore.jks')
+            storePassword "certifio_password"
+        }
+    }
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.certifio"
         minSdkVersion 22
-        targetSdkVersion 24
-        versionCode 6
-        versionName "1.1"
+        targetSdkVersion 26
+        versionCode 15
+        versionName "1.2"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -117,9 +125,16 @@ android {
 //        }
 //    }
     buildTypes {
-        release {
-            minifyEnabled enableProguardInReleaseBuilds
+        debug {
+
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.gocert
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            shrinkResources true
+            signingConfig signingConfigs.gocert
         }
     }
     // applicationVariants are e.g. debug, release
