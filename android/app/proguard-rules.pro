@@ -50,6 +50,9 @@
 
 -dontwarn com.facebook.react.**
 
+-keep class com.facebook.react.devsupport.** { *; }
+-dontwarn com.facebook.react.devsupport.**
+
 # TextLayoutBuilder uses a non-public Android constructor within StaticLayout.
 # See libs/proxy/src/main/java/com/facebook/fbui/textlayoutbuilder/proxy for details.
 -dontwarn android.text.StaticLayout
