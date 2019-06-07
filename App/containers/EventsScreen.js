@@ -5,7 +5,6 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import { Colors, Styles } from '../Themes/'
 import { inject, observer } from 'mobx-react'
-import idx from 'idx'
 import { SearchBar } from 'react-native-elements'
 import { Cell, CellText } from '../components/Shared'
 import { toJS } from 'mobx'
@@ -51,23 +50,7 @@ class EventsScreen extends Component {
 
   reload = () => {
     this.setState({ isLoading: true })
-    /**
-     * Temporarily disabling subscription checking logic.
-     * This is the only place it's implemented in the UI.
-     **/
     Promise.all([
-      // this.props.subscription.loadActiveSubscription().then(() => {
-      //   if (this.props.subscription.hasActiveSubscription) return
-      //   if (this.props.subscription.freeTrialEligible) {
-      //     this.props.navigation.navigate('StartTrial')
-      //   } else if (
-      //     idx(this.props, (_) => _.subscription.latestSubscription.isTrial)
-      //   ) {
-      //     this.props.navigation.navigate('PurchaseSubscription')
-      //   } else {
-      //     this.props.navigation.navigate('RenewSubscription')
-      //   }
-      // }),
       this.props.event.loadEvents(),
       this.props.attendee.loadTotalAttendeeCount(),
     ])

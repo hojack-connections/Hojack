@@ -9,7 +9,6 @@ import normalize from '../helpers/normalizeText'
 import { Colors } from '../Themes/'
 import { Button } from 'react-native-elements'
 import { inject, observer } from 'mobx-react'
-import moment from 'moment'
 import { VFlex, HFlex, CellTextInput } from '../components/Shared'
 
 export default
@@ -80,26 +79,8 @@ class AccountScreen extends React.Component {
   }
 
   render() {
-    /**
-     * Disabling subscription display on Account settings screen
-     **/
-    // const { expirationDate } = this.props.subscription.activeSubscription || {}
-    // const monthDifference = moment(expirationDate).diff(moment(), 'months')
-    // const dayDifference = moment(expirationDate).diff(moment(), 'days')
-    // const expirationText =
-    //   monthDifference <= 1
-    //     ? `${dayDifference} Days`
-    //     : `${monthDifference} Months`
     return (
       <VFlex style={{ backgroundColor: Colors.background }}>
-        {/**
-        <Text style={{ fontSize: 20, marginVertical: 16 }}>
-          Subscription Expires in
-        </Text>
-        <Text style={{ color: Colors.purple, fontSize: 30 }}>
-          {expirationText}
-        </Text>
-        **/}
         <VFlex style={{ marginVertical: 16 }}>
           <Text
             style={{
