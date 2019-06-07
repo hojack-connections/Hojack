@@ -80,21 +80,26 @@ class AccountScreen extends React.Component {
   }
 
   render() {
-    const { expirationDate } = this.props.subscription.activeSubscription || {}
-    const monthDifference = moment(expirationDate).diff(moment(), 'months')
-    const dayDifference = moment(expirationDate).diff(moment(), 'days')
-    const expirationText =
-      monthDifference <= 1
-        ? `${dayDifference} Days`
-        : `${monthDifference} Months`
+    /**
+     * Disabling subscription display on Account settings screen
+     **/
+    // const { expirationDate } = this.props.subscription.activeSubscription || {}
+    // const monthDifference = moment(expirationDate).diff(moment(), 'months')
+    // const dayDifference = moment(expirationDate).diff(moment(), 'days')
+    // const expirationText =
+    //   monthDifference <= 1
+    //     ? `${dayDifference} Days`
+    //     : `${monthDifference} Months`
     return (
       <VFlex style={{ backgroundColor: Colors.background }}>
+        {/**
         <Text style={{ fontSize: 20, marginVertical: 16 }}>
           Subscription Expires in
         </Text>
         <Text style={{ color: Colors.purple, fontSize: 30 }}>
           {expirationText}
         </Text>
+        **/}
         <VFlex style={{ marginVertical: 16 }}>
           <Text
             style={{
